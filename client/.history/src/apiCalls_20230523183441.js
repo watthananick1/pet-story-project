@@ -16,15 +16,14 @@ export const loginCall = async (userCredential, dispatch) => {
     console.log('token: ' + JSON.stringify(decodedUser));
 
     // Dispatch LOGIN_SUCCESS action with the decoded user data
-    dispatch({ type: "LOGIN_SUCCESS", payload: user });
+    dispatch({ type: "LOGIN_SUCCESS", payload: user.data });
   } catch (err) {
     // Dispatch LOGIN_FAILURE action with the error
     dispatch({ type: "LOGIN_FAILURE", payload: err.response.data.error });
   }
 };
 
-
-
+// Example of fetching additional user data separately
 export const fetchUserData = async (userId, dispatch) => {
   try {
     const res = await axios.get(`/users?member_id=${userId}&firstName=`);
@@ -37,4 +36,3 @@ export const fetchUserData = async (userId, dispatch) => {
     console.error("Failed to fetch user data:", err);
   }
 };
-

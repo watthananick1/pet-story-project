@@ -24,7 +24,7 @@ export const loginCall = async (userCredential, dispatch) => {
 };
 
 
-
+// Example of fetching additional user data separately
 export const fetchUserData = async (userId, dispatch) => {
   try {
     const res = await axios.get(`/users?member_id=${userId}&firstName=`);
@@ -37,4 +37,3 @@ export const fetchUserData = async (userId, dispatch) => {
     console.error("Failed to fetch user data:", err);
   }
 };
-

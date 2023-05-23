@@ -98,12 +98,7 @@ app.use("/api/posts", postRoute);
 app.use("/api/comments", commentRoute);
 app.use("/api/typePets", typePetRoute);
 
-app.get('/api/protected', authMiddleware, (req, res) => {
-  // Access the user's information from req.user
-  const userId = req.user.uid;
-  // Handle the protected route logic here
-  res.send(`Protected route accessed by user with ID: ${userId}`);
-});
+
 
 app.use("*", (request, response, next) => {
   logger.warn(`Undefined route: ${request.originalUrl}`);
