@@ -6075,3 +6075,4 @@
 {"level":"warn","message":"Undefined route: /auth/login","service":"user-service"}
 {"level":"warn","message":"Undefined route: /auth/login","service":"user-service"}
 {"level":"warn","message":"Undefined route: /auth/login","service":"user-service"}
+{"level":"warn","message":"Undefined route: /auth/login","service":"user-service"}
