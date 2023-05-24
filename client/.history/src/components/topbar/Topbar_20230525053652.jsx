@@ -93,7 +93,7 @@ export default function Topbar() {
           <Avatar
             aria-label="profile"
             src={user?.profilePicture}
-            sx={{ width: 35, height: 35,  mt: 0.5, mb: 0.5,}}
+            sx={{ width: 39, height: 39, mt: 0.5, mr: 0.5,  }}
             onClick={handleClick} // Added event handler
           />
           <Menu
