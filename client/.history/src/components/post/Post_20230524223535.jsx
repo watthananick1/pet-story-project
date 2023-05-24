@@ -253,7 +253,7 @@ export default function Post({ post }) {
       setNewCommentText("");
   
       // Fetch the updated comments
-      const resComments = await axios.get(`/api/comments/${post.id}/comments`);
+      const resComments = await axios.get(`/comments/${post.id}/comments`);
       setComments(resComments.data);
     } catch (err) {
       console.log(err);

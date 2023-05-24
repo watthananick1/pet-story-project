@@ -244,7 +244,7 @@ export default function Post({ post }) {
   const submitComment = async () => {
     try {
       // Submit the comment
-      await axios.post(`/api/comments/${post.id}/comments`, {
+      await axios.post(`/comments/${post.id}/comments`, {
         content: newCommentText,
         member_id: currentUser.member_id,
       });
@@ -253,7 +253,7 @@ export default function Post({ post }) {
       setNewCommentText("");
   
       // Fetch the updated comments
-      const resComments = await axios.get(`/api/comments/${post.id}/comments`);
+      const resComments = await axios.get(`/comments/${post.id}/comments`);
       setComments(resComments.data);
     } catch (err) {
       console.log(err);

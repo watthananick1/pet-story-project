@@ -165,7 +165,7 @@ export default function Post({ post }) {
         console.log(message);
     
         // Fetch the updated comments after deleting the comment
-        const resComments = await axios.get(`/api/comments/${post.id}/comments`);
+        const resComments = await axios.get(`/comments/${post.id}/comments`);
         setComments(resComments.data);
     
         handleClose();
@@ -180,7 +180,7 @@ export default function Post({ post }) {
 
   const likeHandler = async () => {
     try {
-      await axios.put(`/api/posts/${post.id}/like`, { member_id: currentUser.member_id });
+      await axios.put(`/posts/${post.id}/like`, { member_id: currentUser.member_id });
     } catch (err) {
       console.log(err);
     }
@@ -244,7 +244,7 @@ export default function Post({ post }) {
   const submitComment = async () => {
     try {
       // Submit the comment
-      await axios.post(`/api/comments/${post.id}/comments`, {
+      await axios.post(`/comments/${post.id}/comments`, {
         content: newCommentText,
         member_id: currentUser.member_id,
       });
@@ -253,7 +253,7 @@ export default function Post({ post }) {
       setNewCommentText("");
   
       // Fetch the updated comments
-      const resComments = await axios.get(`/api/comments/${post.id}/comments`);
+      const resComments = await axios.get(`/comments/${post.id}/comments`);
       setComments(resComments.data);
     } catch (err) {
       console.log(err);
