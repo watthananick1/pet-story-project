@@ -11,6 +11,7 @@ export default function Register() {
   const confirmPassword = useRef();
   const dateOfBirth = useRef();
   const history = useHistory();
+  
 
   const handleClick = async (e) => {
     e.preventDefault();
@@ -33,11 +34,15 @@ export default function Register() {
       };
       try {
         const res = await axios.post("/api/auth/register", user);
-        localStorage.setItem('Uid', res.member_id);
-        history.push({
-          pathname: "/typepet",
-          state: res.member_id  // pass the user object as a prop
-        }); // redirect to the TypePet page
+        if (res.status === 200) {
+          localStorage.setItem('Uid', res.data.member_id);
+          history.push({
+            pathname: "/typepet",
+            state: res.data.member_id  // pass the user object as a prop
+          }); // redirect to the TypePet page
+        } else {
+          console.log("Registration failed. Status:", res.status);
+        }
       } catch (err) {
         console.log(err);
       }
