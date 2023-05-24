@@ -283,10 +283,7 @@ export default function Post({ post }) {
                 onClose={handleClose}
                 keepMounted
               >
-                <MenuItem onClick={handleEditPost}>
-                  <span><EditIcon /></span>
-                  <span>Edit</span>
-                </MenuItem>
+                <MenuItem onClick={handleEditPost}>Edit</MenuItem>
                 <MenuItem 
                   onClick={handleDeletePost} 
                 >  
@@ -382,10 +379,7 @@ export default function Post({ post }) {
                       open={Boolean(anchorElComment)}
                       onClose={handleCloseComment}
                     >
-                      <MenuItem onClick={handleEditPost}>
-                        <span><EditIcon /></span>
-                        <span>Edit</span>
-                      </MenuItem>
+                      <MenuItem onClick={handleEditPost}>Edit</MenuItem>
                       <MenuItem 
                         onClick={() => handleDeleteComment(commentIdToDelete)}
                       >

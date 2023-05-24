@@ -284,9 +284,10 @@ export default function Post({ post }) {
                 keepMounted
               >
                 <MenuItem onClick={handleEditPost}>
-                  <span><EditIcon /></span>
-                  <span>Edit</span>
-                </MenuItem>
+                <MenuItem onClick={handleEditPost}>
+                        <EditIcon />
+                        Edit
+                      </MenuItem>
                 <MenuItem 
                   onClick={handleDeletePost} 
                 >  
@@ -383,8 +384,8 @@ export default function Post({ post }) {
                       onClose={handleCloseComment}
                     >
                       <MenuItem onClick={handleEditPost}>
-                        <span><EditIcon /></span>
-                        <span>Edit</span>
+                        <EditIcon />
+                        Edit
                       </MenuItem>
                       <MenuItem 
                         onClick={() => handleDeleteComment(commentIdToDelete)}

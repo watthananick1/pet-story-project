@@ -383,8 +383,8 @@ export default function Post({ post }) {
                       onClose={handleCloseComment}
                     >
                       <MenuItem onClick={handleEditPost}>
-                        <span><EditIcon /></span>
-                        <span>Edit</span>
+                        <EditIcon />
+                        Edit
                       </MenuItem>
                       <MenuItem 
                         onClick={() => handleDeleteComment(commentIdToDelete)}
