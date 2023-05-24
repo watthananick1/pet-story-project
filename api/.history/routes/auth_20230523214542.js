@@ -8,6 +8,7 @@ import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import crypto from 'crypto';
 
+
 const firebaseConfig = {
   apiKey: 'AIzaSyCFUBWxesLk-BX8KwwQfaI8Gs3cUCcBVWA',
   authDomain: 'pet-story-f51e3.firebaseapp.com',
