@@ -1,21 +1,23 @@
 import "./share.css";
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/storage';
-import {
-  PermMedia,
-  Cancel,
-} from "@material-ui/icons";
+import React, { useContext, useRef, useState, useEffect } from "react";
+import { AuthContext } from "../../context/AuthContext";
+import axios from "axios";
+
 import {
   Avatar,
   TextField,
   Button,
   Chip,
 } from "@mui/material";
-import { useContext, useRef, useState, useEffect } from "react";
-import { AuthContext } from "../../context/AuthContext";
-import axios from "axios";
+import LoadingButton from '@mui/lab/LoadingButton';
+import {
+  PermMedia,
+  Cancel,
+  Send as SendIcon,
+} from "@mui/icons-material";
 import { SortableContainer, SortableElement } from "react-sortable-hoc";
-import ReactLoading from 'react-loading';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -39,7 +41,6 @@ export default function Share({ setPosts }) {
   const [error, setError] = useState(null);
   const [typeData, setTypeData] = useState(null);
   const [loading, setLoading] = useState(false); // New loading state
-
   const onSortEnd = ({ oldIndex, newIndex }) => {
     setFiles(arrayMove(files, oldIndex, newIndex));
   };
@@ -209,10 +210,10 @@ const SortableList = SortableContainer(({ items }) => (
           <Avatar
             aria-label="recipe"
             src={user.profilePicture}
-            style={{ width: "39px", height: "39px" }}
+            sx={{ width: "39px", height: "39px", mr: 1 }}
           ></Avatar>
           <input
-            placeholder={"What's in your mind " + user.firstName + "?"}
+            placeholder={" What's in your mind " + user.firstName + "?"}
             className="shareInput"
             ref={desc}
           />
@@ -250,29 +251,33 @@ const SortableList = SortableContainer(({ items }) => (
             </label>
             <div className="shareOption">
               {typePets && typePets.length > 0 && (
-              <div className="tagContainer">
-                {typePets.map((typePet) => (
-                  <Chip
-                    key={typePet.id_TypePet}
-                    label={typePet.nameType}
-                    clickable
-                    color={selectedTags.includes(typePet.nameType) ? "primary" : "default"}
-                    onClick={() => handleTagClick(typePet.nameType)}
-                    className="topChip"
-                  />
-                ))}
-              </div>
-            )}
+                <div className="tagContainer">
+                  {typePets.map((typePet) => (
+                    <Chip
+                      key={typePet.id_TypePet}
+                      label={typePet.nameType}
+                      clickable
+                      color={selectedTags.includes(typePet.nameType) ? "primary" : "default"}
+                      onClick={() => handleTagClick(typePet.nameType)}
+                      className="topChip"
+                    />
+                  ))}
+                </div>
+              )}
             </div>
           </div>
-          
-          <button className="shareButton" type="submit" disabled={loading}>
-            {loading ? (
-             <>
-              <ReactLoading type="spin" color="#6200E8" height={20} width={20} />
-           </>) 
-           : ("Share")}
-          </button>
+          <LoadingButton
+            // className="shareButton"
+            size="small"
+            type="submit"
+            sx={{ backgroundColor: "#6200E8" }}
+            endIcon={<SendIcon />}
+            loading={loading}
+            loadingPosition="end"
+            variant="contained"
+          >
+            <span>Share</span>
+          </LoadingButton>
         </form>
       </div>
     </div>
