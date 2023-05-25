@@ -127,6 +127,7 @@ router.put("/:id", async (req, res) => {
       res.status(403).json({ message: "You can update only your post" });
     } else {
       await postRef.update({
+        title: req.body.title,
         content: req.body.content,
         updatedAt: new Date(),
     });
