@@ -1,5 +1,5 @@
 import "./post.css";
-import { useState, useEffect, useContext, useRef } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { format } from "timeago.js";
 import { Link } from "react-router-dom";
@@ -46,7 +46,6 @@ export default function Post({ post }) {
   const maxDisplayedComments = 3;
   const { user: currentUser } = useContext(AuthContext);
   const [openModal, setOpenModal] = useState(false);
-  const containerRef = useRef(null);
 
   // const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
@@ -204,8 +203,10 @@ export default function Post({ post }) {
     setIsLiked(!isLiked);
   };
 
-  const SortableItem = SortableElement(({ item, containerRef }) => {
-    const isImage = post.title === 'image';
+  const SortableItem = SortableElement(({ item }) => {
+    const isImage =  post.title === 'image';
+    // console.log(isImage);
+  
   
     if (isImage) {
       return (
@@ -216,14 +217,6 @@ export default function Post({ post }) {
     } else {
       return (
         <div className="shareVideoItem">
-          {/* <ReactPlayer 
-            url={item.url} 
-            className="shareVideo" 
-            width="640"
-            height="360" 
-            controls={true}
-            // playing={true}
-          /> */}
           <ReactPlayer
             url={item.url} 
             className="shareVideo" 
@@ -232,21 +225,21 @@ export default function Post({ post }) {
             controls
             onClick={(event) => event.preventDefault()}
           />
+
         </div>
       );
     }
   });
   
-  const SortableList = SortableContainer(({ items }) => {
-  
-    return (
-      <div className="shareImgContainer" ref={containerRef}>
-        {items.map((item, index) => (
-          <SortableItem key={index} item={item} index={index} containerRef={containerRef} />
-        ))}
-      </div>
-    );
-  });
+  const SortableList = SortableContainer(({ items }) => (
+    <div className="shareImgContainer">
+      {items.map((item, index) => (
+        <div key={index}>
+          <SortableItem item={item} index={index} />
+        </div>
+      ))}
+    </div>
+  ));
 
   const submitComment = async () => {
     try {
@@ -306,13 +299,11 @@ export default function Post({ post }) {
         />
        <CardContent>
         <Typography variant="body1" className="postText">
-          <span>{post?.content}</span>
+          {post?.content}
         </Typography>
         <Typography variant="body2" className="postText">
           {post?.tagpet.map((pet) => (
-            <span>
-              <Chip key={pet} label={`#${pet}`} className="postChip" style={{ color: '#6200E8' }}/>
-            </span>
+            <Chip key={pet} label={`#${pet}`} className="postChip" style={{ color: '#6200E8' }}/>
           ))}
         </Typography>
         <SortableList
@@ -348,9 +339,7 @@ export default function Post({ post }) {
               >
                 <Comment />
                 <p className="postCommentText" underline="none">
-                  <span>
-                    {comments.length} comments
-                   </span>
+                   {comments.length} comments
                 </p>
               </IconButton>
             </CardActions>

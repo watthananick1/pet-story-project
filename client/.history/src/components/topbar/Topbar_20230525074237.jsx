@@ -132,9 +132,7 @@ export default function Topbar() {
             anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
           >
             <MenuItem onClick={handleProfileClick}>
-              <span>
-                <Avatar /> 
-                <span>Profile</span>
+              <span><Avatar /> Profile
               </span>
             </MenuItem>
             <Divider />

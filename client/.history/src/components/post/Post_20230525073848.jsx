@@ -349,7 +349,7 @@ export default function Post({ post }) {
                 <Comment />
                 <p className="postCommentText" underline="none">
                   <span>
-                    {comments.length} comments
+                   {comments.length} comments
                    </span>
                 </p>
               </IconButton>

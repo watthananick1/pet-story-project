@@ -310,9 +310,8 @@ export default function Post({ post }) {
         </Typography>
         <Typography variant="body2" className="postText">
           {post?.tagpet.map((pet) => (
-            <span>
-              <Chip key={pet} label={`#${pet}`} className="postChip" style={{ color: '#6200E8' }}/>
-            </span>
+            
+            <Chip key={pet} label={`#${pet}`} className="postChip" style={{ color: '#6200E8' }}/>
           ))}
         </Typography>
         <SortableList
@@ -348,9 +347,7 @@ export default function Post({ post }) {
               >
                 <Comment />
                 <p className="postCommentText" underline="none">
-                  <span>
-                    {comments.length} comments
-                   </span>
+                   {comments.length} comments
                 </p>
               </IconButton>
             </CardActions>

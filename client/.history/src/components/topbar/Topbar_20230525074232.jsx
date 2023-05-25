@@ -133,9 +133,7 @@ export default function Topbar() {
           >
             <MenuItem onClick={handleProfileClick}>
               <span>
-                <Avatar /> 
-                <span>Profile</span>
-              </span>
+              </span><Avatar /> Profile
             </MenuItem>
             <Divider />
             <MenuItem onClick={handleClose}>

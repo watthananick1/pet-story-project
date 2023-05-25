@@ -132,10 +132,7 @@ export default function Topbar() {
             anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
           >
             <MenuItem onClick={handleProfileClick}>
-              <span>
-                <Avatar /> 
-                <span>Profile</span>
-              </span>
+              <Avatar /> Profile
             </MenuItem>
             <Divider />
             <MenuItem onClick={handleClose}>
@@ -148,7 +145,7 @@ export default function Topbar() {
               <ListItemIcon>
                 <Logout fontSize="small" />
               </ListItemIcon>
-              <span>Logout</span>
+              <></>Logout
             </MenuItem>
           </Menu>
         </div>

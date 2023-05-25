@@ -46,7 +46,7 @@ export default function Post({ post }) {
   const maxDisplayedComments = 3;
   const { user: currentUser } = useContext(AuthContext);
   const [openModal, setOpenModal] = useState(false);
-  const containerRef = useRef(null);
+  
 
   // const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
@@ -306,13 +306,11 @@ export default function Post({ post }) {
         />
        <CardContent>
         <Typography variant="body1" className="postText">
-          <span>{post?.content}</span>
+          {post?.content}
         </Typography>
         <Typography variant="body2" className="postText">
           {post?.tagpet.map((pet) => (
-            <span>
-              <Chip key={pet} label={`#${pet}`} className="postChip" style={{ color: '#6200E8' }}/>
-            </span>
+            <Chip key={pet} label={`#${pet}`} className="postChip" style={{ color: '#6200E8' }}/>
           ))}
         </Typography>
         <SortableList
@@ -348,9 +346,7 @@ export default function Post({ post }) {
               >
                 <Comment />
                 <p className="postCommentText" underline="none">
-                  <span>
-                    {comments.length} comments
-                   </span>
+                   {comments.length} comments
                 </p>
               </IconButton>
             </CardActions>
