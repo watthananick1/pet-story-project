@@ -3,9 +3,6 @@ import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { format } from "timeago.js";
 import { Link } from "react-router-dom";
-import NestedModal from "../modelEdit/ModalEdit";
-import ReactDOM from 'react-dom';
-
 import {
   Card,
   CardContent,
@@ -20,6 +17,8 @@ import {
   Chip,
   Menu, 
   MenuItem,
+  Modal,
+  Box
 } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -45,12 +44,24 @@ export default function Post({ post }) {
   const [loadingComment, setLoadingComment] = useState(false);
   const maxDisplayedComments = 3;
   const { user: currentUser } = useContext(AuthContext);
-  const [openModal, setOpenModal] = useState(false);
-
   // const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
   const createdAt = new Date(post.createdAt.seconds * 1000);
   const formattedDate = format(createdAt);
+  
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    pt: 2,
+    px: 4,
+    pb: 3,
+  };
 
   useEffect(() => {
     setIsLiked(post.likes.includes(currentUser.member_id));
@@ -67,7 +78,6 @@ export default function Post({ post }) {
       }
     };
     
-
     const fetchComments = async () => {
 
       try {
@@ -138,12 +148,9 @@ export default function Post({ post }) {
     };
   
     const handleEditPost = () => {
-      // Set a state variable to show the edit modal
-      setOpenModal(true);
+      // Handle edit action here
       handleClose();
     };
-    
-    
   
     const handleDeletePost = async () => {
       const requestBody = {
@@ -217,6 +224,14 @@ export default function Post({ post }) {
     } else {
       return (
         <div className="shareVideoItem">
+          {/* <ReactPlayer 
+            url={item.url} 
+            className="shareVideo" 
+            width="640"
+            height="360" 
+            controls={true}
+            // playing={true}
+          /> */}
           <ReactPlayer
             url={item.url} 
             className="shareVideo" 
@@ -425,7 +440,6 @@ export default function Post({ post }) {
           )}
         </Collapse>
       </Card>
-      {openModal && <NestedModal onClose={() => setOpenModal(false)} postContent={post?.content} />}
     </div>
   );
 }

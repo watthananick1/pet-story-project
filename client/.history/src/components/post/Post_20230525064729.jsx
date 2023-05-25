@@ -138,11 +138,9 @@ export default function Post({ post }) {
     };
   
     const handleEditPost = () => {
-      // Set a state variable to show the edit modal
-      setOpenModal(true);
+      ReactDOM.render(<NestedModal />, document.getElementById('modal-root'));
       handleClose();
     };
-    
     
   
     const handleDeletePost = async () => {
@@ -217,6 +215,14 @@ export default function Post({ post }) {
     } else {
       return (
         <div className="shareVideoItem">
+          {/* <ReactPlayer 
+            url={item.url} 
+            className="shareVideo" 
+            width="640"
+            height="360" 
+            controls={true}
+            // playing={true}
+          /> */}
           <ReactPlayer
             url={item.url} 
             className="shareVideo" 
@@ -425,7 +431,6 @@ export default function Post({ post }) {
           )}
         </Collapse>
       </Card>
-      {openModal && <NestedModal onClose={() => setOpenModal(false)} postContent={post?.content} />}
     </div>
   );
 }

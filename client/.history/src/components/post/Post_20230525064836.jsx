@@ -217,6 +217,14 @@ export default function Post({ post }) {
     } else {
       return (
         <div className="shareVideoItem">
+          {/* <ReactPlayer 
+            url={item.url} 
+            className="shareVideo" 
+            width="640"
+            height="360" 
+            controls={true}
+            // playing={true}
+          /> */}
           <ReactPlayer
             url={item.url} 
             className="shareVideo" 
@@ -425,7 +433,8 @@ export default function Post({ post }) {
           )}
         </Collapse>
       </Card>
-      {openModal && <NestedModal onClose={() => setOpenModal(false)} postContent={post?.content} />}
+      {openModal && <NestedModal onClose={() => setOpenModal(false)} />}
+
     </div>
   );
 }

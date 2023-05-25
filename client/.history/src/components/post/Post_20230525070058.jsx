@@ -425,7 +425,7 @@ export default function Post({ post }) {
           )}
         </Collapse>
       </Card>
-      {openModal && <NestedModal onClose={() => setOpenModal(false)} postContent={post?.content} />}
+      {openModal && <NestedModal onClose={() => setOpenModal(false)}  />}
     </div>
   );
 }
