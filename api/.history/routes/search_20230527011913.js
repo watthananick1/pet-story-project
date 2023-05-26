@@ -10,6 +10,7 @@ router.post('/', async (req, res) => {
     if (!searchTerm) {
       return res.status(400).json({ error: 'Search term is required' });
     } else {
+  
       const searchResults = await Promise.all([
         search('Users', searchTerm, ['firstName', 'lastName']),
         search('Posts', searchTerm, ['content']),

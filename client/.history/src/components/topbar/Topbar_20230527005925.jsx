@@ -23,6 +23,18 @@ export default function Topbar() {
   const open = Boolean(anchorEl);
   // const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   
+  useEffect(() => {
+    const getFriends = async () => {
+      try {
+        const friendList = await axios.get(`/api/users/friends/${user.member_id}`);
+        setFriends(friendList.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getFriends();
+  }, [user]);
+  
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };

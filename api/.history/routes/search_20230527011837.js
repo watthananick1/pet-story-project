@@ -10,27 +10,27 @@ router.post('/', async (req, res) => {
     if (!searchTerm) {
       return res.status(400).json({ error: 'Search term is required' });
     } else {
-      const searchResults = await Promise.all([
-        search('Users', searchTerm, ['firstName', 'lastName']),
-        search('Posts', searchTerm, ['content']),
-        search('Posts', searchTerm, ['tagpet'])
-      ]);
-  
-      const formattedResults = [];
-  
-      // Format and combine search results of different types
-      searchResults.forEach((results, index) => {
-        const type = getTypeByIndex(index);
-        const formatted = formatSearchResults(results, type);
-        formattedResults.push(...formatted);
-      });
-  
-      res.json({ results: formattedResults });
-    }
+
+    const searchResults = await Promise.all([
+      search('Users', searchTerm, ['firstName', 'lastName']),
+      search('Posts', searchTerm, ['content']),
+      search('Posts', searchTerm, ['tagpet'])
+    ]);
+
+    const formattedResults = [];
+
+    // Format and combine search results of different types
+    searchResults.forEach((results, index) => {
+      const type = getTypeByIndex(index);
+      const formatted = formatSearchResults(results, type);
+      formattedResults.push(...formatted);
+    });
+
+    res.json({ results: formattedResults });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'An error occurred while searching' });
-  }
+  }}
 });
 
 // Determine the type based on the search results index

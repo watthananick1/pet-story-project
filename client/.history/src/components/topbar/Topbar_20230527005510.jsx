@@ -1,7 +1,7 @@
 import "./topbar.css";
 import { Search, Person, Chat, Notifications } from "@material-ui/icons";
 import { Link } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import axios from 'axios';
 import SearchData from "../search/Search";
@@ -68,9 +68,15 @@ export default function Topbar() {
         </Link>
       </div>
       <div className="topbarCenter">
-        <div className="searchbar">
+      <div className="searchbar">
           <Search className="searchIcon" />
-          <SearchData options={[]} value={searchValue} onChange={handleSearchChange} />
+          {/* <input
+            placeholder="Search for friend, post or video"
+            className="searchInput"
+            style={{ backgroundColor: "#fff", color: "#6309DE" }}
+            value={searchValue}
+            onChange={handleSearchChange}
+          /> */}
         </div>
       </div>
       <div className="topbarRight">

@@ -70,7 +70,7 @@ export default function Topbar() {
       <div className="topbarCenter">
         <div className="searchbar">
           <Search className="searchIcon" />
-          <SearchData options={[]} value={searchValue} onChange={handleSearchChange} />
+          <SearchData options={null} value={searchValue} onChange={handleSearchChange} />
         </div>
       </div>
       <div className="topbarRight">
