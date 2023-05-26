@@ -16,6 +16,8 @@ export const loginCall = async (userCredential, dispatch) => {
   }
 };
 
+
+
 export const fetchUserData = async (userId, dispatch) => {
   try {
     const res = await axios.get(`/api/users?member_id=${userId}&firstName=`);

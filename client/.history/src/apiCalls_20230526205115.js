@@ -10,11 +10,15 @@ export const loginCall = async (userCredential, dispatch) => {
     
     console.log('User=',data)
     fetchUserData(data, dispatch)
+    // Dispatch LOGIN_SUCCESS action with the decoded user data
+    // dispatch({ type: "LOGIN_SUCCESS", payload: data.data });
   } catch (err) {
     // Dispatch LOGIN_FAILURE action with the error
     dispatch({ type: "LOGIN_FAILURE", payload: err.response.data.error });
   }
 };
+
+
 
 export const fetchUserData = async (userId, dispatch) => {
   try {

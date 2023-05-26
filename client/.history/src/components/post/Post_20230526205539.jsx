@@ -57,7 +57,7 @@ export default function Post({ post, onPostUpdate }) {
   const createdAt = new Date(post.createdAt.seconds * 1000);
   const formattedDate = format(createdAt);
 
-  //++++++++++++++++++ fetch Data +++++++++++++++++++
+  //fetch Data ------------------------------------------
   useEffect(() => {
     setIsLiked(post.likes.includes(currentUser.member_id));
   }, [currentUser.member_id, post.likes]);
