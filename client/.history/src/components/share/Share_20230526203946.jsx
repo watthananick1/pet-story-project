@@ -44,8 +44,6 @@ export default function Share({ onNewPost }) {
     setFiles(arrayMove(files, oldIndex, newIndex));
   };
   
-  //++++++++++ on Click Button +++++++++++
-  
   const handleFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files).slice(0, 6); // Limit to 6 files
   
@@ -64,9 +62,11 @@ export default function Share({ onNewPost }) {
       setError("The file size exceeds the specified size.");
       return false; // Invalid file
     });
-
+  
+    // Set files only once with the filtered validFiles array
     setFiles(validFiles);
-
+    
+    // You can perform additional validations or checks on the validFiles array here
     console.log('Valid files:', validFiles);
   };
 
@@ -135,8 +135,6 @@ export default function Share({ onNewPost }) {
     };
     getTypePets();
   }, []);
-  
-  //----------- ITEM OF SHARE ------------------------
 
   const SortableItem = SortableElement(({ item, index }) => {
   if (item.type === 'image') {
@@ -184,7 +182,7 @@ const SortableList = SortableContainer(({ items }) => (
     return array;
   }
   
-  //--------------- Tag Pet ----------------------------------
+  //Ta
   const handleTagClick = (tag) => {
     if (selectedTags.includes(tag)) {
       setSelectedTags(selectedTags.filter((t) => t !== tag));
@@ -193,6 +191,9 @@ const SortableList = SortableContainer(({ items }) => (
     }
   };
   
+  console.log(selectedTags);
+  
+
   return (
     <div className="share">
       <div className="shareWrapper">

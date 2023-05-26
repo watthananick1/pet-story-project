@@ -184,7 +184,7 @@ const SortableList = SortableContainer(({ items }) => (
     return array;
   }
   
-  //--------------- Tag Pet ----------------------------------
+  //--------------- Tag ----------------------------------
   const handleTagClick = (tag) => {
     if (selectedTags.includes(tag)) {
       setSelectedTags(selectedTags.filter((t) => t !== tag));

@@ -44,8 +44,6 @@ export default function Share({ onNewPost }) {
     setFiles(arrayMove(files, oldIndex, newIndex));
   };
   
-  //++++++++++ on Click Button +++++++++++
-  
   const handleFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files).slice(0, 6); // Limit to 6 files
   
@@ -69,6 +67,8 @@ export default function Share({ onNewPost }) {
 
     console.log('Valid files:', validFiles);
   };
+  
+  //++++++++++ on Click Button +++++++++++
 
   const removeFile = (index) => {
     const updatedFiles = [...files];
@@ -184,7 +184,7 @@ const SortableList = SortableContainer(({ items }) => (
     return array;
   }
   
-  //--------------- Tag Pet ----------------------------------
+  //--------------- Tag ----------------------------------
   const handleTagClick = (tag) => {
     if (selectedTags.includes(tag)) {
       setSelectedTags(selectedTags.filter((t) => t !== tag));
