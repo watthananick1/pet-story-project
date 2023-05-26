@@ -13,6 +13,8 @@ const firebaseConfig = {
     appId: process.env.REACT_APP_FIREBASE_APP_ID,
   };
   
-firebase.initializeApp(firebaseConfig);
+  firebase.initializeApp(firebaseConfig);
+
 const db = firebase.firestore();
+
 const router = Router();

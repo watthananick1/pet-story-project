@@ -98,7 +98,6 @@ app.use("/api/users", usersRouter);
 app.use("/api/posts", postRoute);
 app.use("/api/comments", commentRoute);
 app.use("/api/typePets", typePetRoute);
-app.use("/api/search", searchRoute);
 
 app.get('/api/protected', authMiddleware, (req, res) => {
   // Access the user's information from req.user

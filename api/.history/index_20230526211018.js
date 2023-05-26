@@ -16,7 +16,7 @@ import authRoute from "../api/routes/auth.js";
 import postRoute from "../api/routes/posts.js";
 import commentRoute from "../api/routes/comments.js";
 import typePetRoute from "../api/routes/typePets.js";
-import searchRoute from "../api/routes/search.js";
+
 
 import authMiddleware from "./models/authMiddleware.js"
 
@@ -98,7 +98,6 @@ app.use("/api/users", usersRouter);
 app.use("/api/posts", postRoute);
 app.use("/api/comments", commentRoute);
 app.use("/api/typePets", typePetRoute);
-app.use("/api/search", searchRoute);
 
 app.get('/api/protected', authMiddleware, (req, res) => {
   // Access the user's information from req.user
