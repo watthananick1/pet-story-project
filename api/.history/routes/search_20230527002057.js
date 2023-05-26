@@ -53,11 +53,12 @@ function formatSearchResults(results, type) {
 
 // Search a collection for the given search term in the specified columns
 async function search(collection, searchTerm, columns) {
-  const querySnapshot = await db.collection(collection).get();
+  const queryPromises = [];
+  const snapshot = await db.collection(collection).get();
 
   const results = [];
 
-  querySnapshot.forEach((doc) => {
+  snapshot.forEach((doc) => {
     const data = doc.data();
 
     // Check each column for the search term

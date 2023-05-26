@@ -53,20 +53,22 @@ function formatSearchResults(results, type) {
 
 // Search a collection for the given search term in the specified columns
 async function search(collection, searchTerm, columns) {
-  const querySnapshot = await db.collection(collection).get();
-
   const results = [];
 
-  querySnapshot.forEach((doc) => {
-    const data = doc.data();
+  for (const column of columns) {
+    const querySnapshot = await db.collection(collection)
+      .where(column, 'array-contains', searchTerm)
+      .get();
 
-    // Check each column for the search term
-    columns.forEach((column) => {
-      if (data[column] && data[column].includes(searchTerm)) {
-        results.push(data);
-      }
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      results.push(data);
     });
-  });
+  }
+
+  return results;
+}
+
 
   return results;
 }

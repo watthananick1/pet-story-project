@@ -57,7 +57,7 @@ async function search(collection, searchTerm, columns) {
 
   const results = [];
 
-  querySnapshot.forEach((doc) => {
+  snapshot.forEach((doc) => {
     const data = doc.data();
 
     // Check each column for the search term
