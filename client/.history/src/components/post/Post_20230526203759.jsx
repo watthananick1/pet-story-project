@@ -269,7 +269,11 @@ export default function Post({ post, onPostUpdate }) {
   
       // Clear the comment input field
       setNewCommentText("");
-
+      
+      // Clear the edited comment state
+      // setEditedComment(null);
+  
+      // Fetch the updated comments
       const resComments = await axios.get(`/api/comments/${post.id}/comments`);
       setComments(resComments.data);
     } catch (err) {
@@ -473,7 +477,7 @@ export default function Post({ post, onPostUpdate }) {
           onContentID={post?.id}
           onCommentsID={dataEditID}
           onLoading={true}
-          onPostUpdate={handlePostUpdate}
+          onPostUpdate={handlePostUpdate} // Pass the function here
         />
       )}
     </div>

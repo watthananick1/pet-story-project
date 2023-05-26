@@ -59,8 +59,8 @@ export default function Share({ onNewPost }) {
       if (file.type.startsWith('video/') && file.size <= videoMaxSize) {
         return true; // Valid video file
       }
-      setError("The file size exceeds the specified size.");
       return false; // Invalid file
+      
     });
   
     // Set files only once with the filtered validFiles array
@@ -111,6 +111,7 @@ export default function Share({ onNewPost }) {
       setSelectedTags([]);
       desc.current.value = "";
 
+      // Call the callback function to trigger a reload of posts in the Feed component
       if (onNewPost) {
         onNewPost();
       }

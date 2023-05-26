@@ -57,7 +57,7 @@ export default function Post({ post, onPostUpdate }) {
   const createdAt = new Date(post.createdAt.seconds * 1000);
   const formattedDate = format(createdAt);
 
-  //fetch Data ------------------------------------------
+  //fetch Data
   useEffect(() => {
     setIsLiked(post.likes.includes(currentUser.member_id));
   }, [currentUser.member_id, post.likes]);
@@ -110,10 +110,9 @@ export default function Post({ post, onPostUpdate }) {
     }
   }, [comments, showComments]);  
   
-  //on Click Button +++++++++++
+  //on Click Button
   
-  //Post----------------------------------------------------
-  
+  //Post
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -152,62 +151,7 @@ export default function Post({ post, onPostUpdate }) {
     }
   };
   
-  const handleDeletePost = async () => {
-    const requestBody = {
-      member_id: currentUser.member_id
-    };
-    
-    try {
-      const response = await axios.delete(`/api/posts/${post.id}`, { data: requestBody });
-      const message = response.data.message;
-      // Handle the response message here
-      console.log(message);
-      window.location.reload();
-      handleClose();
-    } catch (err) {
-      console.log(err);
-    }
-  };
   
-  //ITEM OF POST ----------------------------------------------
-  
-  const SortableItem = SortableElement(({ item, containerRef }) => {
-    const isImage = post.title === 'image';
-  
-    if (isImage) {
-      return (
-        <div className="shareImgItem">
-          <img src={item.url} alt="Gallery Image" className="shareImg" />
-        </div>
-      );
-    } else {
-      return (
-        <div className="shareVideoItem">
-          <ReactPlayer
-            url={item.url} 
-            className="shareVideo" 
-            width="640"
-            height="360" 
-            controls
-            onClick={(event) => event.preventDefault()}
-          />
-        </div>
-      );
-    }
-  });
-  
-  const SortableList = SortableContainer(({ items }) => {
-  
-    return (
-      <div className="shareImgContainer" ref={containerRef}>
-        {items.map((item, index) => (
-          <SortableItem key={index} item={item} index={index} containerRef={containerRef} />
-        ))}
-      </div>
-    );
-  });
-  
-  //Comment-------------------------------------------
   
   const handleClickComment = (event, id) => {
     setAnchorElComment(event.currentTarget);
@@ -233,6 +177,10 @@ export default function Post({ post, onPostUpdate }) {
     handleCloseComment();
   };
 
+  
+
+  
+  
   const handleDeleteComment = async (commentId) => {
     console.log(`Delete Comment ${commentId}`);
     const requestBody = {
@@ -258,26 +206,6 @@ export default function Post({ post, onPostUpdate }) {
       handleClose();
     } 
   };
-  
-  const submitComment = async () => {
-    try {
-      // Submit the comment
-      await axios.post(`/api/comments/${post.id}/comments`, {
-        content: newCommentText,
-        member_id: currentUser.member_id,
-      });
-  
-      // Clear the comment input field
-      setNewCommentText("");
-
-      const resComments = await axios.get(`/api/comments/${post.id}/comments`);
-      setComments(resComments.data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-  
-  //Like ------------------------------------------------
 
   const likeHandler = async () => {
     try {
@@ -294,6 +222,73 @@ export default function Post({ post, onPostUpdate }) {
     setIsLiked(!isLiked);
   };
 
+  const SortableItem = SortableElement(({ item, containerRef }) => {
+    const isImage = post.title === 'image';
+  
+    if (isImage) {
+      return (
+        <div className="shareImgItem">
+          <img src={item.url} alt="Gallery Image" className="shareImg" />
+        </div>
+      );
+    } else {
+      return (
+        <div className="shareVideoItem">
+          {/* <ReactPlayer 
+            url={item.url} 
+            className="shareVideo" 
+            width="640"
+            height="360" 
+            controls={true}
+            // playing={true}
+          /> */}
+          <ReactPlayer
+            url={item.url} 
+            className="shareVideo" 
+            width="640"
+            height="360" 
+            controls
+            onClick={(event) => event.preventDefault()}
+          />
+        </div>
+      );
+    }
+  });
+  
+  const SortableList = SortableContainer(({ items }) => {
+  
+    return (
+      <div className="shareImgContainer" ref={containerRef}>
+        {items.map((item, index) => (
+          <SortableItem key={index} item={item} index={index} containerRef={containerRef} />
+        ))}
+      </div>
+    );
+  });
+
+  const submitComment = async () => {
+    try {
+      // Submit the comment
+      await axios.post(`/api/comments/${post.id}/comments`, {
+        content: newCommentText,
+        member_id: currentUser.member_id,
+      });
+  
+      // Clear the comment input field
+      setNewCommentText("");
+      
+      // Clear the edited comment state
+      // setEditedComment(null);
+  
+      // Fetch the updated comments
+      const resComments = await axios.get(`/api/comments/${post.id}/comments`);
+      setComments(resComments.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  
+  
   return (
     <div className="post">
       <Card className="postWrapper">
@@ -473,7 +468,7 @@ export default function Post({ post, onPostUpdate }) {
           onContentID={post?.id}
           onCommentsID={dataEditID}
           onLoading={true}
-          onPostUpdate={handlePostUpdate}
+          onPostUpdate={handlePostUpdate} // Pass the function here
         />
       )}
     </div>

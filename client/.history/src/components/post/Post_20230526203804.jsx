@@ -473,7 +473,7 @@ export default function Post({ post, onPostUpdate }) {
           onContentID={post?.id}
           onCommentsID={dataEditID}
           onLoading={true}
-          onPostUpdate={handlePostUpdate}
+          onPostUpdate={handlePostUpdate} // Pass the function here
         />
       )}
     </div>

@@ -111,6 +111,7 @@ export default function Share({ onNewPost }) {
       setSelectedTags([]);
       desc.current.value = "";
 
+      // Call the callback function to trigger a reload of posts in the Feed component
       if (onNewPost) {
         onNewPost();
       }

@@ -259,24 +259,6 @@ export default function Post({ post, onPostUpdate }) {
     } 
   };
   
-  const submitComment = async () => {
-    try {
-      // Submit the comment
-      await axios.post(`/api/comments/${post.id}/comments`, {
-        content: newCommentText,
-        member_id: currentUser.member_id,
-      });
-  
-      // Clear the comment input field
-      setNewCommentText("");
-
-      const resComments = await axios.get(`/api/comments/${post.id}/comments`);
-      setComments(resComments.data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-  
   //Like ------------------------------------------------
 
   const likeHandler = async () => {
@@ -473,7 +455,7 @@ export default function Post({ post, onPostUpdate }) {
           onContentID={post?.id}
           onCommentsID={dataEditID}
           onLoading={true}
-          onPostUpdate={handlePostUpdate}
+          onPostUpdate={handlePostUpdate} // Pass the function here
         />
       )}
     </div>

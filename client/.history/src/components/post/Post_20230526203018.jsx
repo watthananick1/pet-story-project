@@ -57,7 +57,7 @@ export default function Post({ post, onPostUpdate }) {
   const createdAt = new Date(post.createdAt.seconds * 1000);
   const formattedDate = format(createdAt);
 
-  //fetch Data ------------------------------------------
+  //fetch Data
   useEffect(() => {
     setIsLiked(post.likes.includes(currentUser.member_id));
   }, [currentUser.member_id, post.likes]);
@@ -110,16 +110,25 @@ export default function Post({ post, onPostUpdate }) {
     }
   }, [comments, showComments]);  
   
-  //on Click Button +++++++++++
-  
-  //Post----------------------------------------------------
-  
+  //on Click
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
     
+  const handleClickComment = (event, id) => {
+    setAnchorElComment(event.currentTarget);
+    const comment = comments.find(c => c.id === id);
+    console.log(comment)
+    setdataEdit(comment);
+    setCommentIdToDelete(id);
+  };  
+  
   const handleClose = () => {
     setAnchorEl(null);
+  };
+  
+  const handleCloseComment = () => {
+    setAnchorElComment(null);
   };
   
   const handleEditPost = () => {
@@ -127,7 +136,16 @@ export default function Post({ post, onPostUpdate }) {
     setOpenModal(true);
     handleClose();
   };
-  
+    
+  const handleEditComment = (id) => {
+    const comment = comments.find(c => c.id === id);
+    setdataEdit(comment);
+    setdataEditID(id);
+    setTypeModal("Comment")
+    setOpenModal(true);
+    handleCloseComment();
+  };
+
   const handlePostUpdate = (updatedPost) => {
     if (typeModal === 'Post') {
       // Handle updated post
@@ -151,7 +169,7 @@ export default function Post({ post, onPostUpdate }) {
       console.log('Err Edit Type');
     }
   };
-  
+
   const handleDeletePost = async () => {
     const requestBody = {
       member_id: currentUser.member_id
@@ -169,70 +187,6 @@ export default function Post({ post, onPostUpdate }) {
     }
   };
   
-  //ITEM OF POST ----------------------------------------------
-  
-  const SortableItem = SortableElement(({ item, containerRef }) => {
-    const isImage = post.title === 'image';
-  
-    if (isImage) {
-      return (
-        <div className="shareImgItem">
-          <img src={item.url} alt="Gallery Image" className="shareImg" />
-        </div>
-      );
-    } else {
-      return (
-        <div className="shareVideoItem">
-          <ReactPlayer
-            url={item.url} 
-            className="shareVideo" 
-            width="640"
-            height="360" 
-            controls
-            onClick={(event) => event.preventDefault()}
-          />
-        </div>
-      );
-    }
-  });
-  
-  const SortableList = SortableContainer(({ items }) => {
-  
-    return (
-      <div className="shareImgContainer" ref={containerRef}>
-        {items.map((item, index) => (
-          <SortableItem key={index} item={item} index={index} containerRef={containerRef} />
-        ))}
-      </div>
-    );
-  });
-  
-  //Comment-------------------------------------------
-  
-  const handleClickComment = (event, id) => {
-    setAnchorElComment(event.currentTarget);
-    const comment = comments.find(c => c.id === id);
-    console.log(comment)
-    setdataEdit(comment);
-    setCommentIdToDelete(id);
-  };  
-  
-  
-  const handleCloseComment = () => {
-    setAnchorElComment(null);
-  };
-  
-
-    
-  const handleEditComment = (id) => {
-    const comment = comments.find(c => c.id === id);
-    setdataEdit(comment);
-    setdataEditID(id);
-    setTypeModal("Comment")
-    setOpenModal(true);
-    handleCloseComment();
-  };
-
   const handleDeleteComment = async (commentId) => {
     console.log(`Delete Comment ${commentId}`);
     const requestBody = {
@@ -258,26 +212,6 @@ export default function Post({ post, onPostUpdate }) {
       handleClose();
     } 
   };
-  
-  const submitComment = async () => {
-    try {
-      // Submit the comment
-      await axios.post(`/api/comments/${post.id}/comments`, {
-        content: newCommentText,
-        member_id: currentUser.member_id,
-      });
-  
-      // Clear the comment input field
-      setNewCommentText("");
-
-      const resComments = await axios.get(`/api/comments/${post.id}/comments`);
-      setComments(resComments.data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-  
-  //Like ------------------------------------------------
 
   const likeHandler = async () => {
     try {
@@ -294,6 +228,73 @@ export default function Post({ post, onPostUpdate }) {
     setIsLiked(!isLiked);
   };
 
+  const SortableItem = SortableElement(({ item, containerRef }) => {
+    const isImage = post.title === 'image';
+  
+    if (isImage) {
+      return (
+        <div className="shareImgItem">
+          <img src={item.url} alt="Gallery Image" className="shareImg" />
+        </div>
+      );
+    } else {
+      return (
+        <div className="shareVideoItem">
+          {/* <ReactPlayer 
+            url={item.url} 
+            className="shareVideo" 
+            width="640"
+            height="360" 
+            controls={true}
+            // playing={true}
+          /> */}
+          <ReactPlayer
+            url={item.url} 
+            className="shareVideo" 
+            width="640"
+            height="360" 
+            controls
+            onClick={(event) => event.preventDefault()}
+          />
+        </div>
+      );
+    }
+  });
+  
+  const SortableList = SortableContainer(({ items }) => {
+  
+    return (
+      <div className="shareImgContainer" ref={containerRef}>
+        {items.map((item, index) => (
+          <SortableItem key={index} item={item} index={index} containerRef={containerRef} />
+        ))}
+      </div>
+    );
+  });
+
+  const submitComment = async () => {
+    try {
+      // Submit the comment
+      await axios.post(`/api/comments/${post.id}/comments`, {
+        content: newCommentText,
+        member_id: currentUser.member_id,
+      });
+  
+      // Clear the comment input field
+      setNewCommentText("");
+      
+      // Clear the edited comment state
+      // setEditedComment(null);
+  
+      // Fetch the updated comments
+      const resComments = await axios.get(`/api/comments/${post.id}/comments`);
+      setComments(resComments.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  
+  
   return (
     <div className="post">
       <Card className="postWrapper">
@@ -473,7 +474,7 @@ export default function Post({ post, onPostUpdate }) {
           onContentID={post?.id}
           onCommentsID={dataEditID}
           onLoading={true}
-          onPostUpdate={handlePostUpdate}
+          onPostUpdate={handlePostUpdate} // Pass the function here
         />
       )}
     </div>
