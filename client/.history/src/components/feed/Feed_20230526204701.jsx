@@ -48,8 +48,6 @@ export default function Feed({ firstName }) {
       console.log('Component unmounted', source);
     };
   }, [user.member_id, timestamp]);
-  
-  //++++++++++ function Re-Load New Post +++++++++++
 
   const handleNewPost = () => {
     setTimestamp(Date.now());

@@ -11,8 +11,6 @@ export default function Feed({ firstName }) {
   const { user } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const [timestamp, setTimestamp] = useState(Date.now());
-  
-  //++++++++++++++++++ fetch Data +++++++++++++++++++
 
   useEffect(() => {
     const source = axios.CancelToken.source();
@@ -48,8 +46,6 @@ export default function Feed({ firstName }) {
       console.log('Component unmounted', source);
     };
   }, [user.member_id, timestamp]);
-  
-  //++++++++++ function Re-Load New Post +++++++++++
 
   const handleNewPost = () => {
     setTimestamp(Date.now());

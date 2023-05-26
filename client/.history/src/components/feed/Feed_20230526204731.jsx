@@ -49,7 +49,7 @@ export default function Feed({ firstName }) {
     };
   }, [user.member_id, timestamp]);
   
-  //++++++++++ function Re-Load New Post +++++++++++
+  //++++++++++ on Click Button +++++++++++
 
   const handleNewPost = () => {
     setTimestamp(Date.now());
