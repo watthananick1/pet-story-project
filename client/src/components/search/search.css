@@ -1,0 +1,11 @@
+
+  .searchInput {
+    border: none;
+    width: 100%; /* Updated width to occupy full space */
+    padding: 5px; /* Added padding for input */
+  }
+  
+  .searchInput:focus {
+    outline: none;
+  }
+  

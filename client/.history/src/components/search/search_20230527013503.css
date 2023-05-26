@@ -1,0 +1,19 @@
+.searchbar {
+    width: 100%;
+    height: 30px;
+    background-color: white;
+    border-radius: 30px;
+    display: flex;
+      align-items: center;
+  }
+  
+  .searchInput {
+    border: none;
+    width: 100%; /* Updated width to occupy full space */
+    padding: 5px; /* Added padding for input */
+  }
+  
+  .searchInput:focus {
+    outline: none;
+  }
+  

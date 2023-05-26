@@ -31,36 +31,32 @@ const SearchData = ({ value }) => {
   };
 
   return (
-    <Stack spacing={2} sx={{ width: '100%' }}>
-      <Autocomplete
-        sx={{
-          width: '100%',
-          backgroundColor: 'white'
-        }}
-        freeSolo
-        id="search-input"
-        options={[]}
-        value={searchValue || ''}
-        onChange={handleSearchChange}
-        renderInput={(params) => (
-          <TextField
-            sx={{
-              width: '100%',
-              height: '30px',
-              backgroundColor: 'white',
-              borderRadius: '30px',
-              display: 'flex',
-              outline: 'none'
-            }}
-            {...params}
-            label="Search"
-            InputProps={{
-              ...params.InputProps,
-              type: 'search',
-            }}
-          />
-        )}
-      />
+    <Stack spacing={2} sx={{ width: '100%', borderRadius: '30px' }}>
+      <div className="searchbar">
+        <Autocomplete
+          sx={{ width: '100%', height: '30px', borderRadius: '30px', backgroundColor: 'white'}}
+          freeSolo
+          id="search-input"
+          options={[]}
+          value={searchValue || ''}
+          onChange={handleSearchChange}
+          renderInput={(params) => (
+            <TextField
+              sx={{
+                border: 'none',
+                width: '100%',
+                backgroundColor: 'white'
+              }}
+              {...params}
+              label="Search"
+              InputProps={{
+                ...params.InputProps,
+                type: 'search',
+              }}
+            />
+          )}
+        />
+      </div>
     </Stack>
   );
 };

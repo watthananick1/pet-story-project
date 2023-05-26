@@ -39,18 +39,19 @@ const SearchData = ({ value }) => {
         }}
         freeSolo
         id="search-input"
-        options={[]}
+        options={searchOptions || []}
         value={searchValue || ''}
         onChange={handleSearchChange}
         renderInput={(params) => (
           <TextField
             sx={{
+              border: 'none',
               width: '100%',
               height: '30px',
               backgroundColor: 'white',
               borderRadius: '30px',
               display: 'flex',
-              outline: 'none'
+              outline: "none"
             }}
             {...params}
             label="Search"

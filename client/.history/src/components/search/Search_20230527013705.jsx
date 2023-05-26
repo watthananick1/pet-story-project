@@ -14,7 +14,6 @@ const SearchData = ({ value }) => {
       const getSearchData = async () => {
         try {
           const response = await axios.post(`/api/search`, { searchTerm: searchValue });
-          console.log(response.data);
           setSearchOptions(response.data);
         } catch (error) {
           console.log(error);
@@ -23,8 +22,6 @@ const SearchData = ({ value }) => {
       getSearchData();
     }
   }, [searchValue]);
-  
-  console.log(searchOptions);
 
   const handleSearchChange = (event, value) => {
     setSearchValue(value);
@@ -32,25 +29,18 @@ const SearchData = ({ value }) => {
 
   return (
     <Stack spacing={2} sx={{ width: '100%' }}>
+    <div className="searchbar">
       <Autocomplete
-        sx={{
-          width: '100%',
-          backgroundColor: 'white'
-        }}
         freeSolo
         id="search-input"
-        options={[]}
+        options={searchOptions || []}
         value={searchValue || ''}
         onChange={handleSearchChange}
         renderInput={(params) => (
           <TextField
             sx={{
-              width: '100%',
-              height: '30px',
-              backgroundColor: 'white',
-              borderRadius: '30px',
-              display: 'flex',
-              outline: 'none'
+              border: 'none',
+              width: '70%',
             }}
             {...params}
             label="Search"
@@ -61,8 +51,11 @@ const SearchData = ({ value }) => {
           />
         )}
       />
-    </Stack>
+    </div>
+  </Stack>
+
   );
 };
+
 
 export default SearchData;

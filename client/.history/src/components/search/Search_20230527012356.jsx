@@ -1,4 +1,4 @@
-import "./search.css";
+
 import { useEffect, useState } from "react";
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
@@ -13,8 +13,7 @@ const SearchData = ({ value }) => {
     if (searchValue !== undefined && searchValue !== null) {
       const getSearchData = async () => {
         try {
-          const response = await axios.post(`/api/search`, { searchTerm: searchValue });
-          console.log(response.data);
+          const response = await axios.post(`/api/search`, { searchTerm: value });
           setSearchOptions(response.data);
         } catch (error) {
           console.log(error);
@@ -23,35 +22,22 @@ const SearchData = ({ value }) => {
       getSearchData();
     }
   }, [searchValue]);
-  
-  console.log(searchOptions);
 
   const handleSearchChange = (event, value) => {
     setSearchValue(value);
   };
 
   return (
-    <Stack spacing={2} sx={{ width: '100%' }}>
+    <Stack spacing={2} sx={{ width: 300 }}>
       <Autocomplete
-        sx={{
-          width: '100%',
-          backgroundColor: 'white'
-        }}
         freeSolo
         id="search-input"
-        options={[]}
-        value={searchValue || ''}
+        options={searchOptions || []}
+        value={searchValue || 'Search'}
         onChange={handleSearchChange}
         renderInput={(params) => (
           <TextField
-            sx={{
-              width: '100%',
-              height: '30px',
-              backgroundColor: 'white',
-              borderRadius: '30px',
-              display: 'flex',
-              outline: 'none'
-            }}
+          className="searchInput"
             {...params}
             label="Search"
             InputProps={{

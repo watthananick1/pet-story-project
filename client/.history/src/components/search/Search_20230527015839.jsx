@@ -39,7 +39,7 @@ const SearchData = ({ value }) => {
         }}
         freeSolo
         id="search-input"
-        options={[]}
+        options={searchOptions || []}
         value={searchValue || ''}
         onChange={handleSearchChange}
         renderInput={(params) => (
