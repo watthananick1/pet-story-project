@@ -24,14 +24,14 @@ export default function Rightbar({ user }) {
   useEffect(() => {
     const getFriends = async () => {
       try {
-        const friendList = await axios.get(`/api/users/friends/${currentUser.member_id}`);
+        const friendList = await axios.get(`/api/users/friends/${user.member_id}`);
         setFriends(friendList.data);
       } catch (err) {
         console.log(err);
       }
     };
     getFriends();
-  }, [currentUser]);
+  }, [user]);
   
   //++++++++++ on Click Button +++++++++++
 
@@ -39,12 +39,12 @@ export default function Rightbar({ user }) {
     try {
       if (followed) {
         await axios.put(`/api/users/${user?.member_id}/unfollow`, {
-          member_id: currentUser?.member_id,
+          userId: currentUser?.member_id,
         });
         dispatch({ type: "UNFOLLOW", payload: user?.member_id });
       } else {
         await axios.put(`/api/users/${user?.member_id}/follow`, {
-          member_id: currentUser?.member_id,
+          userId: currentUser?.member_id,
         });
         dispatch({ type: "FOLLOW", payload: user?.member_id });
       }
