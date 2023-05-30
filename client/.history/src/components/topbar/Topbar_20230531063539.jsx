@@ -115,9 +115,9 @@ export default function Topbar() {
               },
             }}
             size="small"
+            // value={searchValue}
             onClick={handleClick}
             id="custom-input-demo"
-            loading={loading}
             options={searchOptions}
             getOptionLabel={(option) => `${option.firstName} ${option.lastName}` || option.content || ""}
             renderInput={(params) => (
@@ -129,14 +129,18 @@ export default function Topbar() {
                   mt: 2,
                   mb: 2,
                   boxShadow: 'none',
-                  width: '97%',
-                  borderRadius: 30,
+                  width: '100%',
+                  borderRadius: 30,',
                   outline: 'none'
                 }} 
                 onChange={handleSearchChange}
                 placeholder= "Search"
                 />
-                
+                {loading && (
+                  <div className="searchResultsContainer">
+                    <CircularProgress />
+                  </div>
+                )}
               </>
             )}
             renderOption={(props, option) => {
@@ -163,8 +167,7 @@ export default function Topbar() {
                 );
               }
               return null;
-            }
-          }
+            }}
           />
         </div>
       </div>

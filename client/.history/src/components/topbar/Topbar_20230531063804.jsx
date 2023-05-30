@@ -129,12 +129,13 @@ export default function Topbar() {
                   mt: 2,
                   mb: 2,
                   boxShadow: 'none',
-                  width: '97%',
+                  width: '100%',
                   borderRadius: 30,
                   outline: 'none'
                 }} 
                 onChange={handleSearchChange}
                 placeholder= "Search"
+                loading={loading}
                 />
                 
               </>

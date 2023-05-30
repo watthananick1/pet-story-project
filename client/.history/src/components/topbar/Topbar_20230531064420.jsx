@@ -129,7 +129,7 @@ export default function Topbar() {
                   mt: 2,
                   mb: 2,
                   boxShadow: 'none',
-                  width: '97%',
+                  width: '90%',
                   borderRadius: 30,
                   outline: 'none'
                 }} 
