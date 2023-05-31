@@ -54,6 +54,7 @@ router.put("/:id/like", async (req, res) => {
       
       queryUserSnapshot.forEach((doc) => {
         user = doc.data();
+        console.log(user);
       });
       
       querySnapshot.forEach((doc) => {
@@ -62,26 +63,14 @@ router.put("/:id/like", async (req, res) => {
         // posts.push(post);
         // Filter posts based on user's interested pet type
         if (user.typePets.some((typePet) => post.tagpet.includes(typePet))) {
-          if (post.status === 'normal'){
-            posts.push(post);
-          } else {
-            console.log('Failed to get posts status');
-          }
-        } else {
-          console.log('Failed to get posts tagpet');
+          posts.push(post);
         }
       });
   
       if (sortParam === 'date') {
-        // Sort by date in descending order based on createdAt
-        posts.sort((a, b) => {
-          const date1 = new Date(a.createdAt.seconds * 1000 + a.createdAt.nanoseconds / 1000000);
-          const date2 = new Date(b.createdAt.seconds * 1000 + b.createdAt.nanoseconds / 1000000);
-          
-          return date2.getTime() - date1.getTime();
-        });
-      }
-       else if (sortParam === 'popularity') {
+        // Sort by date in descending order
+        posts.sort((a, b) => b.createdAt - a.createdAt);
+      } else if (sortParam === 'popularity') {
         // Sort by number of likes in descending order
         posts.sort((a, b) => {
           const likesA = a.likes ? a.likes.length : 0;
@@ -98,10 +87,12 @@ router.put("/:id/like", async (req, res) => {
   
       res.status(200).json(posts);
     } catch (err) {
-      console.error('Failed to get posts:', err);
       res.status(500).json({ message: 'Failed to get posts', error: err });
     }
   });
+  
+
+  
 
 //get comments for a post
 router.get("/:id/comments", async (req, res) => {

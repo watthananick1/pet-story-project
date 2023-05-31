@@ -65,10 +65,10 @@ router.put("/:id/like", async (req, res) => {
           if (post.status === 'normal'){
             posts.push(post);
           } else {
-            console.log('Failed to get posts status');
+            res.status(500).json({ message: 'Failed to get posts status', error: err });
           }
         } else {
-          console.log('Failed to get posts tagpet');
+          res.status(500).json({ message: 'Failed to get posts tagpet', error: err });
         }
       });
   
@@ -102,6 +102,9 @@ router.put("/:id/like", async (req, res) => {
       res.status(500).json({ message: 'Failed to get posts', error: err });
     }
   });
+  
+
+  
 
 //get comments for a post
 router.get("/:id/comments", async (req, res) => {
