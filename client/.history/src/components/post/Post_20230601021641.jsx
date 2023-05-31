@@ -32,6 +32,9 @@ import ReactLoading from 'react-loading';
 
 export default function Post({ post, onPostUpdate }) {
   const { user } = useContext(AuthContext);
+  const [editing, setEditing] = useState(false);
+  const [updatedContent, setUpdatedContent] = useState(post.content);
+  const [loading, setLoading] = useState(false);
   const [like, setLike] = useState(post.likes.length);
   const [isLiked, setIsLiked] = useState(false);
   const [comments, setComments] = useState([]);
@@ -49,7 +52,6 @@ export default function Post({ post, onPostUpdate }) {
   const [typeModal, setTypeModal] = useState("Post");
   const containerRef = useRef(null);
   const [dataEdit, setdataEdit] = useState([]);
-  const [dataPUser, setdataPUser] = useState([]);
   const [dataEditID, setdataEditID] = useState(null);
 
   const createdAt = new Date(post.createdAt.seconds * 1000);
@@ -65,13 +67,13 @@ export default function Post({ post, onPostUpdate }) {
 
     const fetchUserPost = async () => {
       try {
-        const res = await axios.get(`api/users/GETuser/${post.member_id}`);
-        const userData = res.data;
-        console.log('User=',userData);
-        setdataPUser(userData);
+        const resComments = await axios.get(`/api/comments/${post.id}/comments`);
+        setComments(resComments.data);
+        setLoadingComment(true);
       } catch (err) {
-        // Handle error
-        console.error("Failed to fetch user data:", err);
+        console.log(err);
+      } finally {
+        setLoadingComment(false);
       }
     };
     const fetchComments = async () => {
@@ -86,7 +88,7 @@ export default function Post({ post, onPostUpdate }) {
       }
     };
     
-    fetchUserPost();
+    fetchComments();
     fetchComments();
 
     return () => {
@@ -98,7 +100,7 @@ export default function Post({ post, onPostUpdate }) {
     if (showComments) {
       const fetchData = async () => {
         const promises = comments.map((comment) => {
-          return axios.get(`/api/users/GETuser/${comment.memberId}`);
+          return axios.get(`/api/users?member_id=${comment.memberId}&firstName=`);
         });
   
         try {
@@ -307,12 +309,12 @@ export default function Post({ post, onPostUpdate }) {
       <Card className="postWrapper">
         <CardHeader
           avatar={
-            <Link to={`/profile/${dataPUser.firstName}`}>
-              <Avatar aria-label="recipe" src={dataPUser.profilePicture} style={{ width: '39px', height: '39px' }}>
+            <Link to={`/profile/${user.firstName}`}>
+              <Avatar aria-label="recipe" src={user.profilePicture} style={{ width: '39px', height: '39px' }}>
               </Avatar>
             </Link>
           }
-          title={`${dataPUser.firstName} ${dataPUser.lastName}`}
+          title={`${user.firstName} ${user.lastName}`}
           subheader={formattedDate}
           action={
             <>

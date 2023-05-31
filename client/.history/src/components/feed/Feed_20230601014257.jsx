@@ -21,7 +21,7 @@ export default function Feed({ firstName }) {
       try {
         const res = await axios.get(`/api/posts/${user.member_id}/date`, {
           cancelToken: source.token,
-          // params: { timestamp } // Pass the timestamp as a query parameter
+          params: { timestamp } // Pass the timestamp as a query parameter
         });
         setPosts(
           res.data.sort((p1, p2) => {

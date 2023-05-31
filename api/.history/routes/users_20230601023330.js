@@ -98,7 +98,7 @@ router.get("/user/:firstName", async (req, res) => {
 });
 
 // Get a user by Id
-router.get("/GETuser/:id", async (req, res) => {
+router.get("/Guser/:id", async (req, res) => {
   const member_id = req.params.id;
   const users = [];
   console.log(member_id);
@@ -106,6 +106,7 @@ router.get("/GETuser/:id", async (req, res) => {
     const userSnapshot = await usersCollection.where('member_id', '==', member_id).get();
     userSnapshot.forEach((doc) => {
       const userData = doc.data();
+      console.log(userData);
       const { password, updatedAt, ...other } = userData;
       users.push(other);
     });
@@ -114,6 +115,7 @@ router.get("/GETuser/:id", async (req, res) => {
   } catch (err) {
     res.status(500).json(err);
   }
+  console.log(users);
 });
 
 

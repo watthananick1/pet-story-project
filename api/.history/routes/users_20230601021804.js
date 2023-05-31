@@ -97,26 +97,6 @@ router.get("/user/:firstName", async (req, res) => {
   }
 });
 
-// Get a user by Id
-router.get("/GETuser/:id", async (req, res) => {
-  const member_id = req.params.id;
-  const users = [];
-  console.log(member_id);
-  try {
-    const userSnapshot = await usersCollection.where('member_id', '==', member_id).get();
-    userSnapshot.forEach((doc) => {
-      const userData = doc.data();
-      const { password, updatedAt, ...other } = userData;
-      users.push(other);
-    });
-    
-    res.status(200).json(users);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
-
 // Get friends of a user
 router.get("/friends/:member_id", async (req, res) => {
   const member_id = req.params.member_id;
@@ -141,7 +121,24 @@ router.get("/friends/:member_id", async (req, res) => {
 
 
 // get friends
-//  
+// router.get("/friends/:member_id", async (req, res) => {
+//   try {
+//     const userDoc = await usersCollection.doc(req.params.member_id).get();
+//     const user = userDoc.data();
+//     const friends = await Promise.all(
+//       user.followings.map((friendId) => {
+//         return usersCollection.doc(friendId).get().then(doc => doc.data());
+//       })
+//     );
+//     let friendList = friends.map((friend) => {
+//       const { member_id, firstName, lastName, profilePicture } = friend;
+//       return { member_id: member_id, firstName, lastName, profilePicture };
+//     });
+//     res.status(200).json(friendList)
+//   } catch (err) {
+//     res.status(500).json(err);
+//   } 
+// });
 
 
 // follow a user

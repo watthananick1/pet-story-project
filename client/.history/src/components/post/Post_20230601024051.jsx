@@ -65,7 +65,7 @@ export default function Post({ post, onPostUpdate }) {
 
     const fetchUserPost = async () => {
       try {
-        const res = await axios.get(`api/users/GETuser/${post.member_id}`);
+        const res = await axios.get(`/api/users/GETuser/${post.member_id}`);
         const userData = res.data;
         console.log('User=',userData);
         setdataPUser(userData);
@@ -98,7 +98,7 @@ export default function Post({ post, onPostUpdate }) {
     if (showComments) {
       const fetchData = async () => {
         const promises = comments.map((comment) => {
-          return axios.get(`/api/users/GETuser/${comment.memberId}`);
+          return axios.get(`/api/users?member_id=${comment.memberId}&firstName=`);
         });
   
         try {
@@ -312,7 +312,7 @@ export default function Post({ post, onPostUpdate }) {
               </Avatar>
             </Link>
           }
-          title={`${dataPUser.firstName} ${dataPUser.lastName}`}
+          title={`${user.firstName} ${user.lastName}`}
           subheader={formattedDate}
           action={
             <>

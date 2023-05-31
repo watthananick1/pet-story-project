@@ -65,7 +65,7 @@ export default function Post({ post, onPostUpdate }) {
 
     const fetchUserPost = async () => {
       try {
-        const res = await axios.get(`api/users/GETuser/${post.member_id}`);
+        const res = await axios.get(`/api/users/GETuser/${post.member_id}`);
         const userData = res.data;
         console.log('User=',userData);
         setdataPUser(userData);

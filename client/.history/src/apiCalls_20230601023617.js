@@ -18,7 +18,7 @@ export const loginCall = async (userCredential, dispatch) => {
 
 export const fetchUserData = async (userId, dispatch) => {
   try {
-    const res = await axios.get(`/api/users/GETuser/${userId}`);
+    const res = await axios.get(`/api/users/GET${userId}`);
     const userData = res.data;
     console.log('User=',userData)
     // Dispatch action to update user data in the state

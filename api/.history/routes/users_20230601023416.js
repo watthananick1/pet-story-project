@@ -106,6 +106,7 @@ router.get("/GETuser/:id", async (req, res) => {
     const userSnapshot = await usersCollection.where('member_id', '==', member_id).get();
     userSnapshot.forEach((doc) => {
       const userData = doc.data();
+      console.log(userData);
       const { password, updatedAt, ...other } = userData;
       users.push(other);
     });

@@ -98,24 +98,24 @@ router.get("/user/:firstName", async (req, res) => {
 });
 
 // Get a user by Id
-router.get("/GETuser/:id", async (req, res) => {
+router.get("/user/:id", async (req, res) => {
   const member_id = req.params.id;
-  const users = [];
   console.log(member_id);
   try {
-    const userSnapshot = await usersCollection.where('member_id', '==', member_id).get();
+    const userSnapshot = await usersCollection.where("member_id", "==", member_id).get();
+    const users = [];
     userSnapshot.forEach((doc) => {
       const userData = doc.data();
+      console.log(userData);
       const { password, updatedAt, ...other } = userData;
       users.push(other);
     });
-    
-    res.status(200).json(users);
+    console.log(users);
+    res.status(200).json(userSnapshot.docs());
   } catch (err) {
     res.status(500).json(err);
   }
 });
-
 
 // Get friends of a user
 router.get("/friends/:member_id", async (req, res) => {
