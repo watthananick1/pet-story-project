@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import { appFirebase, db, storage } from "../routes/firebase.js";
-import { collection, getDocs, query, where, doc, updateDoc, arrayRemove, arrayUnion, getDoc } from 'firebase/firestore';
-
+import { collection, getDocs, query, where } from 'firebase/firestore';
 
 
 const postsCollection = collection(db, "Posts");
@@ -15,43 +14,100 @@ const router = Router();
 router.put("/:id/like", async (req, res) => {
   try {
     const postId = req.params.id;
-    // console.log("Post ID:", postId);
+    const postRef = getDocs(postsCollection, );
+    const post = await getDoc(postRef);
 
-    const postRef = doc(db, "Posts", postId);
-    // console.log("Post Ref:", postRef);
-
-    const postSnapshot = await getDoc(postRef); // Make sure to use getDoc here
-    // console.log("Post Snapshot:", postSnapshot);
-
-    if (!postSnapshot.exists()) {
+    if (!post.exists()) {
       res.status(404).json({ message: "Post not found" });
       return;
     }
 
-    const postLikes = postSnapshot.data().likes || [];
+    const postLikes = post.data().likes || [];
     const memberId = req.body.member_id;
-
-    // console.log("Post Likes:", postLikes);
-    // console.log("Member ID:", memberId);
 
     if (postLikes.includes(memberId)) {
       await updateDoc(postRef, {
-        likes: arrayRemove(memberId)
+        likes: FieldValue.arrayRemove(memberId)
       });
-      console.log("Post disliked");
       res.status(200).json("The post has been disliked");
     } else {
       await updateDoc(postRef, {
-        likes: arrayUnion(memberId)
+        likes: FieldValue.arrayUnion(memberId)
       });
-      console.log("Post liked");
       res.status(200).json("The post has been liked");
     }
   } catch (err) {
-    console.error("Error:", err);
     res.status(500).json(err);
   }
 });
+  
+  // // Get posts for a specific member with sorting options
+  // router.get('/:id/:sort', async (req, res) => {
+  //   try {
+  //     const memberId = req.params.id;
+  //     const sortParam = req.params.sort;
+      
+  //     const queryUser = db.collection('Users').where('member_id', '==', memberId);
+  //     const queryUserSnapshot = await queryUser.get();
+  //     const user = queryUserSnapshot.docs[0].data(); // 
+
+  //     // Query the Posts collection
+  //     const query = db.collection('Posts');
+  //     const querySnapshot = await query.get();
+      
+  //     console.log(queryUserSnapshot);
+  //     const posts = [];
+      
+  //     queryUserSnapshot.forEach((doc) => {
+  //       user = doc.data();
+  //     });
+      
+  //     querySnapshot.forEach((doc) => {
+  //       const post = doc.data();
+        
+  //       // posts.push(post);
+  //       // Filter posts based on user's interested pet type
+  //       if (user.typePets.some((typePet) => post.tagpet.includes(typePet))) {
+  //         if (post.status === 'normal'){
+  //           posts.push(post);
+  //         } else {
+  //           console.log('Failed to get posts status');
+  //         }
+  //       } else {
+  //         console.log('Failed to get posts tagpet');
+  //       }
+  //     });
+  
+  //     if (sortParam === 'date') {
+  //       // Sort by date in descending order based on createdAt
+  //       posts.sort((a, b) => {
+  //         const date1 = new Date(a.createdAt.seconds * 1000 + a.createdAt.nanoseconds / 1000000);
+  //         const date2 = new Date(b.createdAt.seconds * 1000 + b.createdAt.nanoseconds / 1000000);
+          
+  //         return date2.getTime() - date1.getTime();
+  //       });
+  //     }
+  //      else if (sortParam === 'popularity') {
+  //       // Sort by number of likes in descending order
+  //       posts.sort((a, b) => {
+  //         const likesA = a.likes ? a.likes.length : 0;
+  //         const likesB = b.likes ? b.likes.length : 0;
+  //         return likesB - likesA;
+  //       });
+  //     } else if (sortParam === 'relevance') {
+  //       // Sort by relevance in descending order
+  //       posts.sort((a, b) => b.relevanceField - a.relevanceField);
+  //     } else {
+  //       // Invalid or no sorting parameter provided, default to sorting by date
+  //       posts.sort((a, b) => b.createdAt - a.createdAt);
+  //     }
+  
+  //     res.status(200).json(posts);
+  //   } catch (err) {
+  //     console.error('Failed to get posts:', err);
+  //     res.status(500).json({ message: 'Failed to get posts', error: err });
+  //   }
+  // });
   
 // Get posts for a specific member with sorting options
 router.get('/:id/:sort', async (req, res) => {

@@ -15,13 +15,13 @@ const router = Router();
 router.put("/:id/like", async (req, res) => {
   try {
     const postId = req.params.id;
-    // console.log("Post ID:", postId);
+    console.log("Post ID:", postId);
 
     const postRef = doc(db, "Posts", postId);
-    // console.log("Post Ref:", postRef);
+    console.log("Post Ref:", postRef);
 
     const postSnapshot = await getDoc(postRef); // Make sure to use getDoc here
-    // console.log("Post Snapshot:", postSnapshot);
+    console.log("Post Snapshot:", postSnapshot);
 
     if (!postSnapshot.exists()) {
       res.status(404).json({ message: "Post not found" });
@@ -31,8 +31,8 @@ router.put("/:id/like", async (req, res) => {
     const postLikes = postSnapshot.data().likes || [];
     const memberId = req.body.member_id;
 
-    // console.log("Post Likes:", postLikes);
-    // console.log("Member ID:", memberId);
+    console.log("Post Likes:", postLikes);
+    console.log("Member ID:", memberId);
 
     if (postLikes.includes(memberId)) {
       await updateDoc(postRef, {

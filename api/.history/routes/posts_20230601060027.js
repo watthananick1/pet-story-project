@@ -31,8 +31,8 @@ router.put("/:id/like", async (req, res) => {
     const postLikes = postSnapshot.data().likes || [];
     const memberId = req.body.member_id;
 
-    // console.log("Post Likes:", postLikes);
-    // console.log("Member ID:", memberId);
+    console.log("Post Likes:", postLikes);
+    console.log("Member ID:", memberId);
 
     if (postLikes.includes(memberId)) {
       await updateDoc(postRef, {
