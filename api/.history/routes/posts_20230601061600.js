@@ -1,25 +1,26 @@
 import { Router } from 'express';
 import { appFirebase, db, storage } from "../routes/firebase.js";
-
 import { 
-  collection, 
-  getDocs, 
-  query, 
-  where, 
-  doc, 
-  updateDoc, 
-  arrayRemove, 
-  arrayUnion, 
-  getDoc,
-  setDoc,
-  deleteDoc
+collection, 
+getDocs, 
+query, 
+where, 
+doc, 
+updateDoc, 
+arrayRemove, 
+arrayUnion, 
+getDoc,
+setDoc,
+
 } from 'firebase/firestore';
+
+
 
 const postsCollection = collection(db, "Posts");
 const usersCollection = collection(db, "Users");
+// const storage = appFirebase.storage();
 
 const router = Router();
-
 
 
 // Like / Dislike a post
@@ -177,26 +178,25 @@ router.delete("/:id", async (req, res) => {
     const postId = req.params.id;
     const postRef = doc(postsCollection, postId);
     const post = await getDoc(postRef);
-    console.log("Post:", post);
     if (!post.exists()) {
       res.status(404).json({ message: "Post not found" });
     } else if (post.data().member_id !== req.body.member_id) {
       res.status(403).json({ message: "You can delete only your post" });
     } else {
+      // Delete the associated files from appFirebase Storage
       const imageUrls = post.data().img;
-      console.log("Image URLs:", imageUrls);
       const deletePromises = imageUrls.map((imageUrl) => {
         const fileRef = storage.refFromURL(imageUrl);
         return fileRef.delete();
       });
-      if (imageUrls.length > 0) {
-        await Promise.all(deletePromises);
-      }
+      await Promise.all(deletePromises);
+
+      // Delete the post from Firestore
       await deleteDoc(postRef);
+
       res.status(200).json({ message: "Post deleted successfully" });
     }
   } catch (err) {
-    console.error("Error:", err);
     res.status(500).json({ message: "Failed to delete post", error: err });
   }
 });

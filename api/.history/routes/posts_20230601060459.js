@@ -1,25 +1,14 @@
 import { Router } from 'express';
 import { appFirebase, db, storage } from "../routes/firebase.js";
+import { collection, getDocs, query, where, doc, updateDoc, arrayRemove, arrayUnion, getDoc } from 'firebase/firestore';
 
-import { 
-  collection, 
-  getDocs, 
-  query, 
-  where, 
-  doc, 
-  updateDoc, 
-  arrayRemove, 
-  arrayUnion, 
-  getDoc,
-  setDoc,
-  deleteDoc
-} from 'firebase/firestore';
+
 
 const postsCollection = collection(db, "Posts");
 const usersCollection = collection(db, "Users");
+// const storage = appFirebase.storage();
 
 const router = Router();
-
 
 
 // Like / Dislike a post
@@ -126,8 +115,8 @@ router.get('/:id/:sort', async (req, res) => {
 
 router.post("/", async (req, res) => {
   try {
-    const postRef = doc(postsCollection);
-    const postId = postRef.id;
+    const postRef = postCollection.doc(); // Create a new document reference with an auto-generated ID
+    const postId = postRef.id; // Get the ID of the newly created document
     const newPost = {
       id: postId,
       title: req.body.title,
@@ -140,30 +129,32 @@ router.post("/", async (req, res) => {
       updatedAt: new Date(),
       comment: req.body.comment,
       status: req.body.status
-    };
-    await setDoc(postRef, newPost);
-    res.status(201).json(newPost);
+    }; // Create a new post object with the provided data
+
+    await postRef.set(newPost); // Set the data of the document with the new post object
+    res.status(201).json(newPost); // Send a success response with the created post
   } catch (err) {
-    res.status(500).json({ message: "Failed to create post", error: err });
+    res.status(500).json({ message: "Failed to create post", error: err }); // Send an error response if the creation fails
   }
 });
+
 
 //update a post
 router.put("/:id", async (req, res) => {
   try {
     const postId = req.params.id;
-    const postRef = doc(postsCollection, postId);
-    const post = await getDoc(postRef);
-    if (!post.exists()) {
+    const postRef = postCollection.doc(postId);
+    const post = await postRef.get();
+    if (!post.exists) {
       res.status(404).json({ message: "Post not found" });
     } else if (post.data().member_id !== req.body.member_id) {
       res.status(403).json({ message: "You can update only your post" });
     } else {
-      await updateDoc(postRef, {
+      await postRef.update({
         content: req.body.content,
         status: req.body.status,
         updatedAt: new Date(),
-      });
+    });
       res.status(200).json({ message: "Post updated successfully" });
     }
   } catch (err) {
@@ -171,35 +162,35 @@ router.put("/:id", async (req, res) => {
   }
 });
 
+
+
 //delete a post
 router.delete("/:id", async (req, res) => {
   try {
     const postId = req.params.id;
-    const postRef = doc(postsCollection, postId);
-    const post = await getDoc(postRef);
-    console.log("Post:", post);
-    if (!post.exists()) {
+    const postRef = postCollection.doc(postId);
+    const post = await postRef.get();
+    if (!post.exists) {
       res.status(404).json({ message: "Post not found" });
     } else if (post.data().member_id !== req.body.member_id) {
       res.status(403).json({ message: "You can delete only your post" });
     } else {
+      // Delete the associated files from appFirebase Storage
       const imageUrls = post.data().img;
-      console.log("Image URLs:", imageUrls);
       const deletePromises = imageUrls.map((imageUrl) => {
         const fileRef = storage.refFromURL(imageUrl);
         return fileRef.delete();
       });
-      if (imageUrls.length > 0) {
-        await Promise.all(deletePromises);
-      }
-      await deleteDoc(postRef);
+      await Promise.all(deletePromises);
+
+      // Delete the post from Firestore
+      await postRef.delete();
+
       res.status(200).json({ message: "Post deleted successfully" });
     }
   } catch (err) {
-    console.error("Error:", err);
     res.status(500).json({ message: "Failed to delete post", error: err });
   }
 });
-
 
 export default router;

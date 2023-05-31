@@ -1,6 +1,5 @@
 import { Router } from 'express';
-import { appFirebase, db, storage } from "../routes/firebase.js";
-
+import { appFirebase, db, storage as appStorage } from "../routes/firebase.js";
 import { 
   collection, 
   getDocs, 
@@ -12,14 +11,15 @@ import {
   arrayUnion, 
   getDoc,
   setDoc,
-  deleteDoc
+  deleteDoc,
 } from 'firebase/firestore';
 
 const postsCollection = collection(db, "Posts");
 const usersCollection = collection(db, "Users");
 
-const router = Router();
+const storage = appFirebase.storage(); // Rename appStorage to storage
 
+const router = Router();
 
 
 // Like / Dislike a post
