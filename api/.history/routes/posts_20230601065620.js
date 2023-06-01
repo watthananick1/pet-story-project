@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { db, storage, ref, deleteObject } from "../routes/firebase.js";
+import { appFirebase, db, storage } from "../routes/firebase.js";
 
 import { 
   collection, 
@@ -14,12 +14,14 @@ import {
   setDoc,
   deleteDoc
 } from 'firebase/firestore';
-import { getMetadata } from "firebase/storage";
+import { ref, deleteObject, getMetadata } from "firebase/storage";
 
 const postsCollection = collection(db, "Posts");
 const usersCollection = collection(db, "Users");
 
 const router = Router();
+
+
 
 // Like / Dislike a post
 router.put("/:id/like", async (req, res) => {
@@ -170,30 +172,30 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// Delete a post
+// delete a post
 router.delete("/:id", async (req, res) => {
   try {
     const postId = req.params.id;
     const postRef = doc(postsCollection, postId);
     const post = await getDoc(postRef);
-
+    console.log("Post:", post);
     if (!post.exists()) {
       res.status(404).json({ message: "Post not found" });
     } else if (post.data().member_id !== req.body.member_id) {
       res.status(403).json({ message: "You can delete only your post" });
     } else {
       const imageUrls = post.data().img;
-
+      console.log("Image URLs:", imageUrls);
       const deletePromises = imageUrls.map(async (imageUrl) => {
         const fileRef = ref(storage, imageUrl);
-        try {
+        const fileSnapshot = await getMetadata(fileRef);
+        if (fileSnapshot.exists()) {
           await deleteObject(fileRef);
           console.log("File deleted:", imageUrl);
-        } catch (error) {
-          console.log("Failed to delete file:", imageUrl, error);
+        } else {
+          console.log("File not found:", imageUrl);
         }
       });
-      
       await Promise.all(deletePromises);
       await deleteDoc(postRef);
       res.status(200).json({ message: "Post deleted successfully" });

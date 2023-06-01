@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { db, storage, ref, deleteObject } from "../routes/firebase.js";
+import { db, storage } from "../routes/firebase.js";
 
 import { 
   collection, 
@@ -15,11 +15,12 @@ import {
   deleteDoc
 } from 'firebase/firestore';
 import { getMetadata } from "firebase/storage";
-
 const postsCollection = collection(db, "Posts");
 const usersCollection = collection(db, "Users");
 
 const router = Router();
+
+
 
 // Like / Dislike a post
 router.put("/:id/like", async (req, res) => {
@@ -187,13 +188,13 @@ router.delete("/:id", async (req, res) => {
       const deletePromises = imageUrls.map(async (imageUrl) => {
         const fileRef = ref(storage, imageUrl);
         try {
-          await deleteObject(fileRef);
+          await storage.deleteObject(fileRef);
           console.log("File deleted:", imageUrl);
         } catch (error) {
           console.log("Failed to delete file:", imageUrl, error);
         }
       });
-      
+
       await Promise.all(deletePromises);
       await deleteDoc(postRef);
       res.status(200).json({ message: "Post deleted successfully" });

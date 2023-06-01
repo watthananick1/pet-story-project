@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { db, storage, ref, deleteObject } from "../routes/firebase.js";
+import { appFirebase, db, storage } from "../routes/firebase.js";
 
 import { 
   collection, 
@@ -14,12 +14,13 @@ import {
   setDoc,
   deleteDoc
 } from 'firebase/firestore';
-import { getMetadata } from "firebase/storage";
 
 const postsCollection = collection(db, "Posts");
 const usersCollection = collection(db, "Users");
 
 const router = Router();
+
+
 
 // Like / Dislike a post
 router.put("/:id/like", async (req, res) => {
@@ -170,31 +171,27 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// Delete a post
+//delete a post
 router.delete("/:id", async (req, res) => {
   try {
     const postId = req.params.id;
     const postRef = doc(postsCollection, postId);
     const post = await getDoc(postRef);
-
+    console.log("Post:", post);
     if (!post.exists()) {
       res.status(404).json({ message: "Post not found" });
     } else if (post.data().member_id !== req.body.member_id) {
       res.status(403).json({ message: "You can delete only your post" });
     } else {
       const imageUrls = post.data().img;
-
-      const deletePromises = imageUrls.map(async (imageUrl) => {
+      console.log("Image URLs:", imageUrls);
+      const deletePromises = imageUrls.map((imageUrl) => {
         const fileRef = ref(storage, imageUrl);
-        try {
-          await deleteObject(fileRef);
-          console.log("File deleted:", imageUrl);
-        } catch (error) {
-          console.log("Failed to delete file:", imageUrl, error);
-        }
+        return deleteObject(fileRef);
       });
-      
-      await Promise.all(deletePromises);
+      if (imageUrls.length > 0) {
+        await Promise.all(deletePromises);
+      }
       await deleteDoc(postRef);
       res.status(200).json({ message: "Post deleted successfully" });
     }
@@ -203,6 +200,5 @@ router.delete("/:id", async (req, res) => {
     res.status(500).json({ message: "Failed to delete post", error: err });
   }
 });
-
 
 export default router;

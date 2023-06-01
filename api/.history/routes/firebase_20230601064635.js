@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, collection } from 'firebase/firestore';
-import { getStorage, ref, deleteObject } from 'firebase/storage';
+import { getStorage, ref, deleteObject } from 'firebase/storage'; // Update import statement
 
 import dotenv from 'dotenv';
 

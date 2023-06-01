@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, collection } from 'firebase/firestore';
-import { getStorage, ref, deleteObject } from 'firebase/storage';
+import { getStorage, ref } from 'firebase/storage';
 
 import dotenv from 'dotenv';
 
@@ -21,4 +21,4 @@ const appFirebase = initializeApp(firebaseConfig);
 const db = getFirestore(appFirebase);
 const storage = getStorage(appFirebase);
 
-export { appFirebase, db, storage, collection, ref, deleteObject };
+export { appFirebase, db, storage, collection, ref };
