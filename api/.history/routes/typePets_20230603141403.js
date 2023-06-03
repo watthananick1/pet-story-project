@@ -13,18 +13,18 @@ router.get("/", async (req, res) => {
   try {
     const typePetRef = await typePetCollection.get();
     const typePet = [];
-    typePetRef.docs.forEach((doc) => {
-      const typePetData = doc.data();
-      if (typePetData.status) {
-        typePet.push({ id_TypePet: doc.id, ...typePetData });
-      }
+    const typePetData = typePetRef.docs.map((doc) => {
+    if (doc.data().status) {
+      typePet.push(doc.data());
+    } else {
+    
+    }
     });
-    res.status(200).json(typePet);
+    res.status(200).json(typePetData);
   } catch (err) {
     res.status(500).json(err);
   }
 });
-
 
 // Create a typePet
 router.post("/", async (req, res) => {
