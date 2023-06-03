@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import bcrypt from "bcrypt";
 import {
   appFirebase, 
   auth, 
@@ -8,37 +9,38 @@ import {
 } from "./firebase.js";
 
 const usersCollection = db.collection("Users");
+
+
 const router = Router();
 
-// Update user
-router.put("/updateUser", async (req, res) => {
-  const user = await usersCollection.doc(req.body.member_id).get();
-  
-  if (!user.exists) {
-    res.status(404).json({ message: "User not found" });
-  } else if (user.id !== req.body.member_id) {
-    res.status(403).json({ message: "You can update only your user" });
-  } else {
-    try {
-      await usersCollection.doc(req.body.member_id).update({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        email: req.body.email,
-        dateOfBirth: req.body.dateOfBirth,
-        updatedAt: new Date()
-      });
-      res.status(200).json({ message: "User updated successfully" });
-    } catch (err) {
-      res.status(500).json({ message: "Failed to update user", error: err });
+//update user
+router.put("/:id", async (req, res) => {
+  const { userId, isAdmin, ...userData } = req.body;
+  if (userId === req.params.id || isAdmin) {
+    if (userData.password) {
+      try {
+        const salt = await bcrypt.genSalt(10);
+        userData.password = await bcrypt.hash(userData.password, salt);
+      } catch (err) {
+        return res.status(500).json(err);
+      }
     }
+    try {
+      await usersCollection.doc(req.params.id).update(userData);
+      res.status(200).json("Account has been updated");
+    } catch (err) {
+      return res.status(500).json(err);
+    }
+  } else {
+    return res.status(403).json("You can update only your account!");
   }
 });
 
-// Delete user
+//delete user
 router.delete("/:id", async (req, res) => {
-  if (req.body.member_id === req.params.id) {
+  if (req.body.member_id === req.params.id || req.body.isAdmin) {
     try {
-      await usersCollection.doc(req.params.id).delete();
+      await User.findByIdAndDelete(req.params.id);
       res.status(200).json("Account has been deleted");
     } catch (err) {
       return res.status(500).json(err);
@@ -124,7 +126,7 @@ router.get("/friends/:member_id", async (req, res) => {
   }
 });
 
-// Follow a user
+
 router.put("/:id/follow", async (req, res) => {
   if (req.body.member_id !== req.params.id) {
     try {
@@ -135,20 +137,14 @@ router.put("/:id/follow", async (req, res) => {
       
       if (!user.followers.includes(req.body.member_id)) {
         await usersCollection.doc(req.params.id).update({
-          followers: FieldValue.arrayUnion(req.body.member_id)
+          followers: FieldValue.arrayRemove(req.body.member_id)
         });
         await usersCollection.doc(req.body.member_id).update({
           followings: FieldValue.arrayUnion(req.params.id)
         });
         res.status(200).json("User has been followed");
       } else {
-        await usersCollection.doc(req.params.id).update({
-          followers: FieldValue.arrayRemove(req.body.member_id)
-        });
-        await usersCollection.doc(req.body.member_id).update({
-          followings: FieldValue.arrayRemove(req.params.id)
-        });
-        res.status(200).json("User has been unfollowed");
+        res.status(403).json("You already follow this user");
       }
     } catch (err) {
       console.error(err);
@@ -159,7 +155,7 @@ router.put("/:id/follow", async (req, res) => {
   }
 });
 
-// Unfollow a user
+// unfollow a user
 router.put("/:id/unfollow", async (req, res) => {
   if (req.body.member_id !== req.params.id) {
     try {
@@ -167,7 +163,6 @@ router.put("/:id/unfollow", async (req, res) => {
       const currentUserDoc = await usersCollection.doc(req.body.member_id).get();
       const user = userDoc.data();
       const currentUser = currentUserDoc.data();
-      
       if (user.followers.includes(req.body.member_id)) {
         await usersCollection.doc(req.params.id).update({
           followers: user.followers.filter(follower => follower !== req.body.member_id)
@@ -175,19 +170,18 @@ router.put("/:id/unfollow", async (req, res) => {
         await usersCollection.doc(req.body.member_id).update({
           followings: currentUser.followings.filter(following => following !== req.params.id)
         });
-        res.status(200).json("User has been unfollowed");
+        res.status(200).json("user has been unfollowed");
       } else {
-        res.status(403).json("You don't follow this user");
+        res.status(403).json("you don't follow this user");
       }
     } catch (err) {
       console.error(err);
       res.status(500).json({ error: "Something went wrong" });
     }
   } else {
-    res.status(403).json("You can't unfollow yourself");
+    res.status(403).json("you can't unfollow yourself");
   }
 });
-
 
 // Update profile picture of a user
 router.put("/:id/profilePicture", async (req, res) => {
@@ -239,7 +233,6 @@ router.put('/:id/typePets', async (req, res) => {
     }
 
     const updatedData = {
-      updatedAt: new Date(),
       typePets: FieldValue.arrayUnion(...req.body.typePets) // Use FieldValue.arrayUnion to add elements
     };
 

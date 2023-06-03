@@ -48,6 +48,7 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+
 //get a user
 router.get("/", async (req, res) => {
   const member_id = req.query.member_id;
@@ -239,7 +240,7 @@ router.put('/:id/typePets', async (req, res) => {
     }
 
     const updatedData = {
-      updatedAt: new Date(),
+      updatedAt: new Date()
       typePets: FieldValue.arrayUnion(...req.body.typePets) // Use FieldValue.arrayUnion to add elements
     };
 

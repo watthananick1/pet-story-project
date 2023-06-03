@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import bcrypt from "bcrypt";
 import {
   appFirebase, 
   auth, 
@@ -8,6 +9,8 @@ import {
 } from "./firebase.js";
 
 const usersCollection = db.collection("Users");
+
+
 const router = Router();
 
 // Update user
@@ -25,7 +28,6 @@ router.put("/updateUser", async (req, res) => {
         lastName: req.body.lastName,
         email: req.body.email,
         dateOfBirth: req.body.dateOfBirth,
-        updatedAt: new Date()
       });
       res.status(200).json({ message: "User updated successfully" });
     } catch (err) {
@@ -34,11 +36,11 @@ router.put("/updateUser", async (req, res) => {
   }
 });
 
-// Delete user
+//Delete user
 router.delete("/:id", async (req, res) => {
-  if (req.body.member_id === req.params.id) {
+  if (req.body.member_id === req.params.id ) {
     try {
-      await usersCollection.doc(req.params.id).delete();
+      await User.findByIdAndDelete(req.params.id);
       res.status(200).json("Account has been deleted");
     } catch (err) {
       return res.status(500).json(err);
@@ -239,7 +241,6 @@ router.put('/:id/typePets', async (req, res) => {
     }
 
     const updatedData = {
-      updatedAt: new Date(),
       typePets: FieldValue.arrayUnion(...req.body.typePets) // Use FieldValue.arrayUnion to add elements
     };
 

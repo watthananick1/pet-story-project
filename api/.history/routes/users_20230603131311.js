@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import bcrypt from "bcrypt";
 import {
   appFirebase, 
   auth, 
@@ -8,37 +9,38 @@ import {
 } from "./firebase.js";
 
 const usersCollection = db.collection("Users");
+
+
 const router = Router();
 
 // Update user
 router.put("/updateUser", async (req, res) => {
-  const user = await usersCollection.doc(req.body.member_id).get();
-  
-  if (!user.exists) {
-    res.status(404).json({ message: "User not found" });
-  } else if (user.id !== req.body.member_id) {
+  const user = await usersCollection.doc(req.body.member_id).get()
+  if (!user.exists()) {
+    res.status(404).json({ message: "Post not found" });
+  } else if (user.data().member_id !== req.body.member_id) {
     res.status(403).json({ message: "You can update only your user" });
   } else {
-    try {
-      await usersCollection.doc(req.body.member_id).update({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        email: req.body.email,
-        dateOfBirth: req.body.dateOfBirth,
-        updatedAt: new Date()
-      });
-      res.status(200).json({ message: "User updated successfully" });
-    } catch (err) {
-      res.status(500).json({ message: "Failed to update user", error: err });
-    }
+    await updateDoc(user, {
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.email,
+      dateOfBirth: req.body.dateOfBirth,
+    });
+    res.status(200).json({ message: "Post updated successfully" });
+  }
+  if (req.body.member_id) {
+    
+  } else {
+    return res.status(403).json("You can update only your account!");
   }
 });
 
-// Delete user
+//delete user
 router.delete("/:id", async (req, res) => {
-  if (req.body.member_id === req.params.id) {
+  if (req.body.member_id === req.params.id ) {
     try {
-      await usersCollection.doc(req.params.id).delete();
+      await User.findByIdAndDelete(req.params.id);
       res.status(200).json("Account has been deleted");
     } catch (err) {
       return res.status(500).json(err);
@@ -239,7 +241,6 @@ router.put('/:id/typePets', async (req, res) => {
     }
 
     const updatedData = {
-      updatedAt: new Date(),
       typePets: FieldValue.arrayUnion(...req.body.typePets) // Use FieldValue.arrayUnion to add elements
     };
 
