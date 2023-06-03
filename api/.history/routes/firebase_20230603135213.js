@@ -2,7 +2,11 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import 'firebase/compat/storage';
-import { getStorage, ref, deleteObject } from "firebase/storage";
+import { getStorage, ref, deleteObject } from "firebase/compat/storage";
+
+// ...
+
+const storage = getStorage(appFirebase);
 
 import dotenv from 'dotenv';
 
@@ -20,7 +24,7 @@ const firebaseConfig = {
 
 const appFirebase = firebase.initializeApp(firebaseConfig);
 const db = appFirebase.firestore();
-const storage = getStorage(appFirebase);
+const storage = appFirebase.storage();
 const auth = appFirebase.auth();
 const FieldValue = firebase.firestore.FieldValue; // Add this line
 

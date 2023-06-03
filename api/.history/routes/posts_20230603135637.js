@@ -227,7 +227,7 @@ router.delete("/:id", async (req, res) => {
       const imageUrls = postSnapshot.data().img;
 
       const deletePromises = imageUrls.map(async (imageUrl) => {
-        const fileRef = ref(storage, imageUrl);
+        const fileRef = storage(imageUrl);
         try {
           await deleteObject(fileRef);
           console.log("File deleted:", imageUrl);

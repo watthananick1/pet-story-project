@@ -3,10 +3,11 @@ import {
   appFirebase,
   auth,
   db,
+  storage,
   FieldValue,
 } from "../routes/firebase.js";
-import { getStorage, ref, deleteObject } from "firebase/storage";
-const storage = getStorage(appFirebase);
+import { getMetadata } from "firebase/storage";
+
 const postsCollection = db.collection("Posts");
 const usersCollection = db.collection("Users");
 
@@ -191,15 +192,15 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const postId = req.params.id;
-    const postRef = postsCollection.doc(postId);
-    const postSnapshot = await postRef.get();
+    const postRef = postsCollection.doc();
+
     
-    if (!postSnapshot.exists) {
+    if (!post.exists()) {
       res.status(404).json({ message: "Post not found" });
-    } else if (postSnapshot.data().member_id !== req.body.member_id) {
+    } else if (post.data().member_id !== req.body.member_id) {
       res.status(403).json({ message: "You can update only your post" });
     } else {
-      await postRef.update({
+      await updateDoc(postRef, {
         content: req.body.content,
         status: req.body.status,
         updatedAt: new Date(),
@@ -212,19 +213,19 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// Delete a post
+//delete post
 router.delete("/:id", async (req, res) => {
   try {
     const postId = req.params.id;
-    const postRef = postsCollection.doc(postId);
-    const postSnapshot = await postRef.get();
+    const postRef = doc(postsCollection, postId);
+    const post = await getDoc(postRef);
 
-    if (!postSnapshot.exists) {
+    if (!post.exists()) {
       res.status(404).json({ message: "Post not found" });
-    } else if (postSnapshot.data().member_id !== req.body.member_id) {
+    } else if (post.data().member_id !== req.body.member_id) {
       res.status(403).json({ message: "You can delete only your post" });
     } else {
-      const imageUrls = postSnapshot.data().img;
+      const imageUrls = post.data().img;
 
       const deletePromises = imageUrls.map(async (imageUrl) => {
         const fileRef = ref(storage, imageUrl);
@@ -237,7 +238,7 @@ router.delete("/:id", async (req, res) => {
       });
 
       await Promise.all(deletePromises);
-      await postRef.delete();
+      await deleteDoc(postRef);
       res.status(200).json({ message: "Post deleted successfully" });
     }
   } catch (err) {
@@ -245,5 +246,6 @@ router.delete("/:id", async (req, res) => {
     res.status(500).json({ message: "Failed to delete post", error: err });
   }
 });
+
 
 export default router;

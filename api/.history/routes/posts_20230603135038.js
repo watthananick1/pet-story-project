@@ -3,10 +3,11 @@ import {
   appFirebase,
   auth,
   db,
+  storage,
   FieldValue,
 } from "../routes/firebase.js";
-import { getStorage, ref, deleteObject } from "firebase/storage";
-const storage = getStorage(appFirebase);
+import { getMetadata } from "firebase/storage";
+
 const postsCollection = db.collection("Posts");
 const usersCollection = db.collection("Users");
 
@@ -227,7 +228,7 @@ router.delete("/:id", async (req, res) => {
       const imageUrls = postSnapshot.data().img;
 
       const deletePromises = imageUrls.map(async (imageUrl) => {
-        const fileRef = ref(storage, imageUrl);
+        const fileRef = storage(, )imageUrl);
         try {
           await deleteObject(fileRef);
           console.log("File deleted:", imageUrl);

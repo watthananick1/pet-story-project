@@ -3,10 +3,11 @@ import {
   appFirebase,
   auth,
   db,
+  storage,
   FieldValue,
 } from "../routes/firebase.js";
-import { getStorage, ref, deleteObject } from "firebase/storage";
-const storage = getStorage(appFirebase);
+import { getMetadata } from "firebase/storage";
+
 const postsCollection = db.collection("Posts");
 const usersCollection = db.collection("Users");
 
@@ -212,14 +213,14 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// Delete a post
+//delete post
 router.delete("/:id", async (req, res) => {
   try {
     const postId = req.params.id;
     const postRef = postsCollection.doc(postId);
     const postSnapshot = await postRef.get();
 
-    if (!postSnapshot.exists) {
+    if (!postSnapshot.exists()) {
       res.status(404).json({ message: "Post not found" });
     } else if (postSnapshot.data().member_id !== req.body.member_id) {
       res.status(403).json({ message: "You can delete only your post" });

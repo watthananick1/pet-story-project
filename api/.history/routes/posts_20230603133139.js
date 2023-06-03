@@ -3,10 +3,11 @@ import {
   appFirebase,
   auth,
   db,
+  storage,
   FieldValue,
 } from "../routes/firebase.js";
-import { getStorage, ref, deleteObject } from "firebase/storage";
-const storage = getStorage(appFirebase);
+import { getMetadata } from "firebase/storage";
+
 const postsCollection = db.collection("Posts");
 const usersCollection = db.collection("Users");
 
@@ -159,13 +160,9 @@ router.get("/:id/:sort", async (req, res) => {
   }
 });
 
-//Create new post
 router.post("/", async (req, res) => {
   try {
-    const postRef = postsCollection.doc();
-    const postId = postRef.id;
     const newPost = {
-      id: postId,
       title: req.body.title,
       content: req.body.content,
       member_id: req.body.member_id,
@@ -177,9 +174,9 @@ router.post("/", async (req, res) => {
       comment: req.body.comment,
       status: req.body.status,
     };
-    
-    await postRef.set(newPost);
-    
+
+
+
     res.status(201).json(newPost);
   } catch (err) {
     console.error(err);
@@ -187,19 +184,19 @@ router.post("/", async (req, res) => {
   }
 });
 
+
 //update a post
 router.put("/:id", async (req, res) => {
   try {
     const postId = req.params.id;
-    const postRef = postsCollection.doc(postId);
-    const postSnapshot = await postRef.get();
-    
-    if (!postSnapshot.exists) {
+    const postRef = doc(postsCollection, postId);
+    const post = await getDoc(postRef);
+    if (!post.exists()) {
       res.status(404).json({ message: "Post not found" });
-    } else if (postSnapshot.data().member_id !== req.body.member_id) {
+    } else if (post.data().member_id !== req.body.member_id) {
       res.status(403).json({ message: "You can update only your post" });
     } else {
-      await postRef.update({
+      await updateDoc(postRef, {
         content: req.body.content,
         status: req.body.status,
         updatedAt: new Date(),
@@ -207,7 +204,6 @@ router.put("/:id", async (req, res) => {
       res.status(200).json({ message: "Post updated successfully" });
     }
   } catch (err) {
-    console.error(err);
     res.status(500).json({ message: "Failed to update post", error: err });
   }
 });
@@ -216,15 +212,15 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     const postId = req.params.id;
-    const postRef = postsCollection.doc(postId);
-    const postSnapshot = await postRef.get();
+    const postRef = doc(postsCollection, postId);
+    const post = await getDoc(postRef);
 
-    if (!postSnapshot.exists) {
+    if (!post.exists()) {
       res.status(404).json({ message: "Post not found" });
-    } else if (postSnapshot.data().member_id !== req.body.member_id) {
+    } else if (post.data().member_id !== req.body.member_id) {
       res.status(403).json({ message: "You can delete only your post" });
     } else {
-      const imageUrls = postSnapshot.data().img;
+      const imageUrls = post.data().img;
 
       const deletePromises = imageUrls.map(async (imageUrl) => {
         const fileRef = ref(storage, imageUrl);
@@ -237,11 +233,11 @@ router.delete("/:id", async (req, res) => {
       });
 
       await Promise.all(deletePromises);
-      await postRef.delete();
+      await deleteDoc(postRef);
       res.status(200).json({ message: "Post deleted successfully" });
     }
   } catch (err) {
-    console.error(err);
+    console.error("Error:", err);
     res.status(500).json({ message: "Failed to delete post", error: err });
   }
 });
