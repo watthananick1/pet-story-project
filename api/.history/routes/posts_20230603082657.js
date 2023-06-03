@@ -4,7 +4,7 @@ import {
   auth, 
   db, 
   storage,
-  FieldValue
+  
 } from "../routes/firebase.js";
 import { getMetadata } from "firebase/storage";
 
@@ -38,13 +38,13 @@ router.put("/:id/like", async (req, res) => {
 
     if (postLikes.includes(memberId)) {
       await updateDoc(postRef, {
-        likes: FieldValue.arrayRemove(memberId)
+        likes: arrayRemove(memberId)
       });
       console.log("Post disliked");
       res.status(200).json("The post has been disliked");
     } else {
       await updateDoc(postRef, {
-        likes: FieldValue.arrayUnion(memberId)
+        likes: arrayUnion(memberId)
       });
       console.log("Post liked");
       res.status(200).json("The post has been liked");

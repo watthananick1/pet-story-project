@@ -85,7 +85,7 @@ router.put("/:postId/Comments/:commentId", async (req, res) => {
         res.status(403).json({ message: "You can update only your comment" });
       } else {
         await commentRef.update({
-          content: req.body.content,
+          contents: req.body.content,
         });
         res.status(200).json({ message: "Comment updated successfully" });
       }
@@ -115,7 +115,7 @@ router.delete("/:postId/comments/:commentId", async (req, res) => {
         await commentRef.delete();
 
         await postRef.update({
-          comment: FieldValue.arrayRemove(commentId)
+          comments: FieldValue.arrayRemove(commentId)
         });
 
         const commentsSnapshot = await commentCollection
@@ -130,7 +130,7 @@ router.delete("/:postId/comments/:commentId", async (req, res) => {
 
         res.status(200).json({
           message: "Comment deleted successfully",
-          comment: comments
+          comments: comments
         });
       }
     }

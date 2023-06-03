@@ -130,7 +130,7 @@ router.delete("/:postId/comments/:commentId", async (req, res) => {
 
         res.status(200).json({
           message: "Comment deleted successfully",
-          comment: comments
+          comments: comments
         });
       }
     }
