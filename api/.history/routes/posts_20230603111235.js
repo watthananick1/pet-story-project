@@ -254,7 +254,7 @@ router.post("/reportPost", async (req, res) => {
   try {
     const memberId = req.body.member_id;
     const postId = req.body.post_id;
-    const comment = req.body.comment;
+    const comment = req.body.comments;
     const status = req.body.status;
 
     const reportRef = db.collection("Report_Post").doc();
@@ -268,6 +268,8 @@ router.post("/reportPost", async (req, res) => {
       res.status(404).json({ message: "Post not found" });
       return;
     } else {
+      
+  
       const reportData = {
         report_id: reportId,
         member_id: memberId,
@@ -286,6 +288,5 @@ router.post("/reportPost", async (req, res) => {
     res.status(500).json({ message: "Failed to report post", error: err });
   }
 });
-
 
 export default router;

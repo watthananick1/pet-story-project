@@ -99,7 +99,7 @@ app.use("/api/posts", postRoute);
 app.use("/api/comments", commentRoute);
 app.use("/api/typePets", typePetRoute);
 app.use("/api/search", searchRoute);
-app.use("/api/report", reportRoute);
+app.use("/api/search", searchRoute);
 
 app.use("*", (request, response, next) => {
   logger.warn(`Undefined route: ${request.originalUrl}`);

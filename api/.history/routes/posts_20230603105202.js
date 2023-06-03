@@ -249,17 +249,13 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-// Create report for a Post
-router.post("/reportPost", async (req, res) => {
+// Report a Post
+router.post("/report", async (req, res) => {
   try {
-    const memberId = req.body.member_id;
+    const reportId = req.body.report_id;
     const postId = req.body.post_id;
-    const comment = req.body.comment;
+    const comments = req.body.comments;
     const status = req.body.status;
-
-    const reportRef = db.collection("Report_Post").doc();
-    const reportId = reportRef.id;
-    const reportSnapshot = await reportRef.get();
 
     const postRef = db.collection("Posts").doc(postId);
     const postSnapshot = await postRef.get();
@@ -267,25 +263,27 @@ router.post("/reportPost", async (req, res) => {
     if (!postSnapshot.exists) {
       res.status(404).json({ message: "Post not found" });
       return;
-    } else {
-      const reportData = {
-        report_id: reportId,
-        member_id: memberId,
-        post_id: postId,
-        comment: comment,
-        status: status
-      };
-  
-      // Save report data to the report document
-      await reportRef.set(reportData);
-  
-      res.status(200).json({ message: "Post reported successfully" });
     }
+
+    const reportData = {
+      report_id: reportId,
+      post_id: postId,
+      comments: comments,
+      status: status
+    };
+
+    // Save report data to the post document
+    await postRef.update({
+      reports: FieldValue.arrayUnion(reportData)
+    });
+
+    res.status(200).json({ message: "Post reported successfully" });
   } catch (err) {
     console.error("Error:", err);
     res.status(500).json({ message: "Failed to report post", error: err });
   }
 });
+
 
 
 export default router;

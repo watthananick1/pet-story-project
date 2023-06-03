@@ -19,7 +19,7 @@ import postRoute from "../api/routes/posts.js";
 import commentRoute from "../api/routes/comments.js";
 import typePetRoute from "../api/routes/typePets.js";
 import searchRoute from "../api/routes/search.js";
-import reportRoute from "../api/routes/report.js";
+import searchRoute from "../api/routes/";
 
 import validateToken from './models/authMiddleware.js';
 
@@ -99,7 +99,6 @@ app.use("/api/posts", postRoute);
 app.use("/api/comments", commentRoute);
 app.use("/api/typePets", typePetRoute);
 app.use("/api/search", searchRoute);
-app.use("/api/report", reportRoute);
 
 app.use("*", (request, response, next) => {
   logger.warn(`Undefined route: ${request.originalUrl}`);
