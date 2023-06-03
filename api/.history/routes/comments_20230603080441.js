@@ -56,7 +56,9 @@ router.post("/Comment/:postId", async (req, res) => {
     await postRef.update({ comments: FieldValue.arrayUnion(commentId) });
 
     // Refresh the comments after successful creation
-    const commentsSnapshot = await commentCollection.where('postId', '==', postId).get();
+    const commentsSnapshot = await commentCollection
+      .where('postId', '==', postId)
+      .get();
 
     const comments = [];
     commentsSnapshot.forEach((doc) => {
@@ -71,6 +73,7 @@ router.post("/Comment/:postId", async (req, res) => {
   }
   
 });
+
 
 //update a comment
 router.put("/:postId/Comments/:commentId", async (req, res) => {
@@ -94,49 +97,46 @@ router.put("/:postId/Comments/:commentId", async (req, res) => {
     }
 });
   
-router.delete("/:postId/comments/:commentId", async (req, res) => {
-  try {
-    const postId = req.params.postId;
-    const commentId = req.params.commentId;
 
-    const commentRef = commentCollection.doc(commentId);
-    const postRef = db.collection("Posts").doc(postId);
+router.delete("/:postId/comments/:commentId", (req, res) => {
+  const postId = req.params.postId;
+  const commentId = req.params.commentId;
 
-    const postSnapshot = await postRef.get();
-    if (!postSnapshot.exists) {
-      res.status(404).json({ message: "Post not found" });
-    } else {
-      const commentSnapshot = await commentRef.get();
-      if (!commentSnapshot.exists) {
-        res.status(404).json({ message: "Comment not found" });
-      } else if (commentSnapshot.data().memberId !== req.body.member_id) {
-        res.status(403).json({ message: "You can delete only your comment" });
-      } else {
-        await commentRef.delete();
+  const commentRef = commentCollection.doc(commentId);
+  const postRef = db.collection("Posts").doc(postId);
 
-        await postRef.update({
-          comments: FieldValue.arrayRemove(commentId)
-        });
+  commentRef
+    .delete()
+    .then(() => {
+      return postRef.update({
+        comment: appFirebase.firestore.FieldValue.arrayRemove(commentId)
+      });
+    })
+    .then(() => {
+      return commentCollection
+        .where("postId", "==", postId)
+        .get();
+    })
+    .then((commentsSnapshot) => {
+      const comments = [];
+      commentsSnapshot.forEach((doc) => {
+        const comment = doc.data();
+        comments.push(comment);
+      });
 
-        const commentsSnapshot = await commentCollection
-          .where("postId", "==", postId)
-          .get();
-
-        const comments = [];
-        commentsSnapshot.forEach((doc) => {
-          const comment = doc.data();
-          comments.push(comment);
-        });
-
-        res.status(200).json({
-          message: "Comment deleted successfully",
-          comments: comments
-        });
-      }
-    }
-  } catch (err) {
-    res.status(500).json({ message: "Failed to delete comment", error: err });
-  }
+      res.status(200).json({
+        message: "Comment deleted successfully",
+        comments: comments // Include the comments array in the response
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({ message: "Failed to delete comment", error: err });
+    });
 });
+
+
+
+
+
 
 export default router;
