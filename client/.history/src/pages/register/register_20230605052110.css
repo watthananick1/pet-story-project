@@ -1,0 +1,16 @@
+.register {
+  min-height: 100vh;
+  background-color: #E2D7F0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.registerWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+
