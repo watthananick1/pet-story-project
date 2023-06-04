@@ -40,7 +40,7 @@ router.post('/register', async (req, res) => {
     const userRef = usersCollection.doc(user.uid);
     await userRef.set(cleanedUserData);
 
-    res.status(200).json({ userId: user.uid });
+    res.status(200).json({userId: user.uid});
   } catch (error) {
     res.status(500).json(error);
     const errorCode = error.code;
