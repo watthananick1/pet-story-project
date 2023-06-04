@@ -69,7 +69,7 @@ router.post('/Login', async (req, res) => {
     //   expiresIn: '1h',
     // });
 
-    res.status(200).json({ userId: user.uid});
+    res.status(200).json({ user: user.uid});
   } catch (err) {
     res.status(500).json({ error: 'Internal server error' });
   }
