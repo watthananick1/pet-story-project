@@ -51,7 +51,7 @@ router.post('/register', async (req, res) => {
   }
 });
 
-router.post('/Login', async (req, res) => {
+router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
   try {
@@ -69,7 +69,7 @@ router.post('/Login', async (req, res) => {
       expiresIn: '1h',
     });
 
-    res.status(200).json({ user });
+    res.status(200).json({ user.data });
   } catch (err) {
     res.status(500).json({ error: 'Internal server error' });
   }
