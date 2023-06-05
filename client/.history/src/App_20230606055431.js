@@ -23,7 +23,6 @@ function App() {
         <Route path="/login">{user ? <Redirect to="/" /> : <Login />}</Route>
         <Route path="/typepet">
           {/* {user ? <Redirect to="/typepet" /> : <TypePet />} */}
-          <TypePet />
         </Route>
         <Route path="/register">
           {user ? <Redirect to="/" /> : <Register />}

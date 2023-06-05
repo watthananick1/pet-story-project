@@ -56,44 +56,41 @@ export default function TypePet(props) {
       <Grid container spacing={2} className="typePetContainer">
         <div className="typePetContainerCard">
           <h1>What type of pet are you interested in?</h1>
-          <p>( you can choose more than 1 type )</p>
-          <Grid container spacing={2}>
-            {typePets.map((typePet) =>
-              typePet.status !== false ? (
-                <Grid item key={typePet.id_TypePet} xs={12} sm={12} md={12} lg={4}>
-                  <div
-                    className="typePetCard"
-                    style={{ backgroundImage: `url(${typePet.imgPet})` }}
-                  >
-                    <div className="typePetCardBody">
-                      <button
-                        className={`typePetButton ${
-                          isButtonPressed(typePet.nameType) ? "pressed" : ""
-                        }`}
-                        onClick={() => handleSelect(typePet.nameType)}
-                      >
-                        {isButtonPressed(typePet.nameType) ? (
-                          <>
-                            <span className="checkmark">&#10003;</span>
-                            <span className="typePetButtonText">
-                              {typePet.nameType}
-                            </span>
-                          </>
-                        ) : (
-                          <>
-                            <span className="plusSymbol">+</span>
-                            <span className="typePetButtonText">
-                              {typePet.nameType}
-                            </span>
-                          </>
-                        )}
-                      </button>
-                    </div>
+          {typePets.map((typePet) =>
+            typePet.status !== false ? (
+              <Grid item key={typePet.id_TypePet} xs={12} sm={6} md={4} lg={3}>
+                <div
+                  className="typePetCard"
+                  style={{ backgroundImage: `url(${typePet.imgPet})` }}
+                >
+                  <div className="typePetCardBody">
+                    <button
+                      className={`typePetButton ${
+                        isButtonPressed(typePet.nameType) ? "pressed" : ""
+                      }`}
+                      onClick={() => handleSelect(typePet.nameType)}
+                    >
+                      {isButtonPressed(typePet.nameType) ? (
+                        <>
+                          <span className="checkmark">&#10003;</span>
+                          <span className="typePetButtonText">
+                            {typePet.nameType}
+                          </span>
+                        </>
+                      ) : (
+                        <>
+                          <span className="plusSymbol">+</span>
+                          <span className="typePetButtonText">
+                            {typePet.nameType}
+                          </span>
+                        </>
+                      )}
+                    </button>
                   </div>
-                </Grid>
-              ) : null
-            )}
-          </Grid>
+                </div>
+              </Grid>
+            ) : null
+          )}
           <button className="typePetButtonSubmit" onClick={handleSubmit}>
             Next
           </button>

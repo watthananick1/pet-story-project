@@ -56,7 +56,7 @@ export default function TypePet(props) {
       <Grid container spacing={2} className="typePetContainer">
         <div className="typePetContainerCard">
           <h1>What type of pet are you interested in?</h1>
-          <p>( you can choose more than 1 type )</p>
+          <p>( you can choose more than 1 type)</p>
           <Grid container spacing={2}>
             {typePets.map((typePet) =>
               typePet.status !== false ? (

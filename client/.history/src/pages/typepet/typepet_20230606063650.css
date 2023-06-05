@@ -134,7 +134,7 @@
     color: #6309DE;
 }
 
-.typePetContainerCard h1, p{
+.typePetContainerCard h1 p{
     display: flex;
     margin: 10px;
     justify-content: center;

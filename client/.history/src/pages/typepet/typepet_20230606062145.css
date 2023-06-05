@@ -1,13 +1,15 @@
 .typePet {
-  width: 100vw;
-  height: 100vh;
-  background-color: #E2D7F0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
+    width: 100vw auto;
+    height: 100vw;
+    background-color: #E2D7F0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
   .typePetContainerCard {
+    position: relative;
+    /* display: inline-grid; */
     width: 50%;
     min-width: 50%;
     min-height: 40%;
@@ -102,6 +104,7 @@
     transform: translateY(100%);
   }
 
+
   .typePetButtonSubmit {
     /* display: flex; */
     bottom: 0;
@@ -134,7 +137,7 @@
     color: #6309DE;
 }
 
-.typePetContainerCard h1, p{
+.typePetContainerCard h1{
     display: flex;
     margin: 10px;
     justify-content: center;

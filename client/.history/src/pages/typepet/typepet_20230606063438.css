@@ -102,6 +102,7 @@
     transform: translateY(100%);
   }
 
+
   .typePetButtonSubmit {
     /* display: flex; */
     bottom: 0;
@@ -134,7 +135,7 @@
     color: #6309DE;
 }
 
-.typePetContainerCard h1, p{
+.typePetContainerCard h1{
     display: flex;
     margin: 10px;
     justify-content: center;

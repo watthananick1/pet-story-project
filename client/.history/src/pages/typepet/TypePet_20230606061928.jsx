@@ -56,11 +56,10 @@ export default function TypePet(props) {
       <Grid container spacing={2} className="typePetContainer">
         <div className="typePetContainerCard">
           <h1>What type of pet are you interested in?</h1>
-          <p>( you can choose more than 1 type )</p>
           <Grid container spacing={2}>
             {typePets.map((typePet) =>
               typePet.status !== false ? (
-                <Grid item key={typePet.id_TypePet} xs={12} sm={12} md={12} lg={4}>
+                <Grid item key={typePet.id_TypePet} xs={12} sm={6} md={12} lg={4}>
                   <div
                     className="typePetCard"
                     style={{ backgroundImage: `url(${typePet.imgPet})` }}
