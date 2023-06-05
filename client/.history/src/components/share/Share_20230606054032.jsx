@@ -237,7 +237,7 @@ export default function Share({ onNewPost }) {
                     {...params}
                     variant="standard"
                     size="small"
-                    sx={{ color: "#6309DE", m: 1}}
+                    sx={{ color: "#6309DE"}}
                   />
                 )}
               />

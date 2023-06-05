@@ -222,7 +222,7 @@ export default function Share({ onNewPost }) {
                 sx={{ width: "39px", height: "39px", mr: 1 }}
               />
               <Autocomplete
-                id="margin-none"
+                id="privacy-select"
                 autoFocus
                 disableCloseOnSelect
                 fullWidth
@@ -237,7 +237,7 @@ export default function Share({ onNewPost }) {
                     {...params}
                     variant="standard"
                     size="small"
-                    sx={{ color: "#6309DE", m: 1}}
+                    sx={{ color: "#6309DE", backgroundColor: "#6309DE" }}
                   />
                 )}
               />
