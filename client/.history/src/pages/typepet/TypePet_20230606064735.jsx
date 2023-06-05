@@ -100,5 +100,5 @@ export default function TypePet(props) {
         </div>
       </Grid>
     </div>
-  );
+  );  
 }
