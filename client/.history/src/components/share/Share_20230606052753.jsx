@@ -117,7 +117,7 @@ export default function Share({ onNewPost }) {
         content: desc.current.value,
         member_id: user.member_id,
         likes: [],
-        tagpet: selectedTags.map((tag) => tag.nameType),
+        tagpet: selectedTags,
         img: fileUrls,
         comment: [],
         status: privacy,

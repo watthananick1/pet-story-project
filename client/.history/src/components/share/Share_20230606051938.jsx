@@ -117,7 +117,7 @@ export default function Share({ onNewPost }) {
         content: desc.current.value,
         member_id: user.member_id,
         likes: [],
-        tagpet: selectedTags.map((tag) => tag.nameType),
+        tagpet: selectedTags,
         img: fileUrls,
         comment: [],
         status: privacy,
@@ -211,7 +211,7 @@ export default function Share({ onNewPost }) {
   }
 
   const handleTagClick = (tag) => {
-    const tagName = tag
+    const tagName = tag;
     // Extract the nameType from the option object
     console.log(tagName);
     if (selectedTags.includes(tagName)) {

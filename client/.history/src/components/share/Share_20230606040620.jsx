@@ -117,7 +117,7 @@ export default function Share({ onNewPost }) {
         content: desc.current.value,
         member_id: user.member_id,
         likes: [],
-        tagpet: selectedTags.map((tag) => tag.nameType),
+        tagpet: selectedTags,
         img: fileUrls,
         comment: [],
         status: privacy,
@@ -144,20 +144,13 @@ export default function Share({ onNewPost }) {
     const getTypePets = async () => {
       try {
         const res = await axios.get("/api/typePets");
-        const data = res.data;
-        const typePets = data.map((item, index) => ({
-          id: index,
-          nameType: item.nameType,
-        }));
-        setTypePets(typePets);
+        setTypePets(res.data);
       } catch (err) {
         console.log(err);
       }
     };
     getTypePets();
   }, []);
-  
-  
 
   const SortableItem = SortableElement(({ item, index }) => {
     if (item.type === "image") {
@@ -211,22 +204,16 @@ export default function Share({ onNewPost }) {
   }
 
   const handleTagClick = (tag) => {
-    const tagName = tag
-    // Extract the nameType from the option object
-    console.log(tagName);
-    if (selectedTags.includes(tagName)) {
-      setSelectedTags(selectedTags.filter((t) => t !== tagName));
+    if (selectedTags.includes(tag)) {
+      setSelectedTags(selectedTags.filter((t) => t.nameType !== tag.nameType));
     } else {
       // Check if the maximum limit has been reached
       if (selectedTags.length >= MAX_TAGS_LIMIT) {
         return; // Ignore the click if the limit is reached
       }
-      setSelectedTags((prevTags) => [...prevTags, tagName]);
+      setSelectedTags([tag.nameType]);
     }
   };
-
-  console.log(typePets);
-  console.log(selectedTags);
 
   return (
     <div className="share">
@@ -312,7 +299,7 @@ export default function Share({ onNewPost }) {
                     id="type-pets-select"
                     options={typePets}
                     getOptionLabel={(option) => option.nameType}
-                    onChange={(event, value) => setSelectedTags(value)}
+                    onChange={(event, value) => setSelectedTags(value.nameType)}
                     value={selectedTags}
                     limitTags={MAX_TAGS_LIMIT} // Set the limit for the number of tags
                     renderInput={(params) => (

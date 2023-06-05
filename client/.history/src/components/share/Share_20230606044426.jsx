@@ -117,7 +117,7 @@ export default function Share({ onNewPost }) {
         content: desc.current.value,
         member_id: user.member_id,
         likes: [],
-        tagpet: selectedTags.map((tag) => tag.nameType),
+        tagpet: selectedTags,
         img: fileUrls,
         comment: [],
         status: privacy,
@@ -144,20 +144,13 @@ export default function Share({ onNewPost }) {
     const getTypePets = async () => {
       try {
         const res = await axios.get("/api/typePets");
-        const data = res.data;
-        const typePets = data.map((item, index) => ({
-          id: index,
-          nameType: item.nameType,
-        }));
-        setTypePets(typePets);
+        setTypePets(res.data);
       } catch (err) {
         console.log(err);
       }
     };
     getTypePets();
   }, []);
-  
-  
 
   const SortableItem = SortableElement(({ item, index }) => {
     if (item.type === "image") {
@@ -225,7 +218,6 @@ export default function Share({ onNewPost }) {
     }
   };
 
-  console.log(typePets);
   console.log(selectedTags);
 
   return (
@@ -306,24 +298,27 @@ export default function Share({ onNewPost }) {
                 </div>
                 {/* Share tags */}
                 <div className="shareTags">
-                  <Autocomplete
-                    multiple
-                    sx={{ m: 1 }}
-                    id="type-pets-select"
-                    options={typePets}
-                    getOptionLabel={(option) => option.nameType}
-                    onChange={(event, value) => setSelectedTags(value)}
-                    value={selectedTags}
-                    limitTags={MAX_TAGS_LIMIT} // Set the limit for the number of tags
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label="Type Pets"
-                        variant="outlined"
-                        size="small"
-                      />
-                    )}
-                  />
+                <Autocomplete
+  multiple
+  sx={{ m: 1 }}
+  id="type-pets-select"
+  options={typePets}
+  getOptionLabel={(option) => option.nameType}
+  onChange={(event, value) =>
+    setSelectedTags(selectedTags.filter((t) => t !== value.nameType))
+  }
+  value={selectedTags}
+  limitTags={MAX_TAGS_LIMIT} // Set the limit for the number of tags
+  renderInput={(params) => (
+    <TextField
+      {...params}
+      label="Type Pets"
+      variant="outlined"
+      size="small"
+    />
+  )}
+/>
+
                 </div>
                 {/* Share button */}
                 <div className="shareBottomOptions">
