@@ -1,0 +1,225 @@
+import React, { useState } from 'react';
+import { Box, Modal, IconButton, TextField } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import LoadingButton from '@mui/lab/LoadingButton';
+import SendIcon from '@mui/icons-material/Send';
+import axios from 'axios';
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  pt: 2,
+  px: 4,
+  pb: 3,
+};
+
+const NestedModal = ({
+  onContent,
+  onContentID,
+  onCommentsID,
+  onClose,
+  onTitle,
+  userId,
+  onPostUpdate,
+  isAddComment,
+}) => {
+  const [content, setContent] = useState(onContent);
+  const [loading, setLoading] = useState(false);
+
+  const handleSaveChanges = async () => {
+    if (onContent !== content) {
+      try {
+        setLoading(true);
+        
+        let endpoint = '';
+        let updatedData = null;
+        
+        if (onTitle === 'Post') {
+          endpoint = `/api/posts/${onContentID}`;
+          updatedData = { content };
+        } else if (onTitle === 'Comment') {
+          endpoint = `/api/comments/${onContentID}/comments/${onCommentsID}`;
+          updatedData = { content };
+        } else if (onTitle === 'Add Comment') {
+          endpoint = `/api/comments/${onContentID}/comments`;
+          updatedData = { content, member_id: userId };
+        } else {
+          console.log('Err Edit Type');
+          return;
+        }
+        
+        await axios.put(endpoint, updatedData);
+        
+        if (isAddComment) {
+          const resComments = await axios.get(`/api/comments/${onContentID}/comments`);
+          onPostUpdate(resComments.data);
+        } else {
+          const updatedItem = { ...onContent, content };
+          onPostUpdate(updatedItem);
+        }
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      console.log('Err Edit Content');
+    }
+    onClose();
+  };
+
+  const handleCloseModal = () => {
+    onClose();
+  };
+
+  const handleChangeContent = (event) => {
+    setContent(event.target.value);
+  };
+
+  return (
+    <Modal open={true}>
+      <Box sx={style}>
+        <IconButton
+          onClick={handleCloseModal}
+          size="small"
+          sx={{
+            position: 'absolute',
+            top: '0px',
+            right: '0px',
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+        <h2 id="nested-modal-title">Edit {onTitle}</h2>
+        <TextField
+          id="nested-modal-content"
+          label={`${onTitle} Content`}
+          multiline
+          rows={4}
+          value={content?.content}
+          onChange={handleChangeContent}
+        />
+        <LoadingButton
+          size="small"
+          onClick={handleSaveChanges}
+          endIcon={<SendIcon />}
+          loading={loading}
+          loadingPosition="end"
+          variant="contained"
+          sx={{ backgroundColor: '#6200E8' }}
+        >
+          <span>{isAddComment ? 'Add' : 'Edit'}</span>
+        </LoadingButton>
+      </Box>
+    </Modal>
+  );
+};
+const ReModal = ({
+  onContent,
+  onContentID,
+  onCommentsID,
+  onClose,
+  onTitle,
+  userId,
+  onPostUpdate,
+  isAddComment,
+}) => {
+  const [content, setContent] = useState(onContent);
+  const [loading, setLoading] = useState(false);
+
+  const handleSaveChanges = async () => {
+    if (onContent !== content) {
+      try {
+        setLoading(true);
+        
+        let endpoint = '';
+        let updatedData = null;
+        
+        if (onTitle === 'Post') {
+          endpoint = `/api/posts/${onContentID}`;
+          updatedData = { content };
+        } else if (onTitle === 'Comment') {
+          endpoint = `/api/comments/${onContentID}/comments/${onCommentsID}`;
+          updatedData = { content };
+        } else if (onTitle === 'Add Comment') {
+          endpoint = `/api/comments/${onContentID}/comments`;
+          updatedData = { content, member_id: userId };
+        } else {
+          console.log('Err Edit Type');
+          return;
+        }
+        
+        await axios.put(endpoint, updatedData);
+        
+        if (isAddComment) {
+          const resComments = await axios.get(`/api/comments/${onContentID}/comments`);
+          onPostUpdate(resComments.data);
+        } else {
+          const updatedItem = { ...onContent, content };
+          onPostUpdate(updatedItem);
+        }
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      console.log('Err Edit Content');
+    }
+    onClose();
+  };
+
+  const handleCloseModal = () => {
+    onClose();
+  };
+
+  const handleChangeContent = (event) => {
+    setContent(event.target.value);
+  };
+
+  return (
+    <Modal open={true}>
+      <Box sx={style}>
+        <IconButton
+          onClick={handleCloseModal}
+          size="small"
+          sx={{
+            position: 'absolute',
+            top: '0px',
+            right: '0px',
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+        <h2 id="nested-modal-title">Edit {onTitle}</h2>
+        <TextField
+          id="nested-modal-content"
+          label={`${onTitle} Content`}
+          multiline
+          rows={4}
+          value={content?.content}
+          onChange={handleChangeContent}
+        />
+        <LoadingButton
+          size="small"
+          onClick={handleSaveChanges}
+          endIcon={<SendIcon />}
+          loading={loading}
+          loadingPosition="end"
+          variant="contained"
+          sx={{ backgroundColor: '#6200E8' }}
+        >
+          <span>{isAddComment ? 'Add' : 'Edit'}</span>
+        </LoadingButton>
+      </Box>
+    </Modal>
+  );
+};
+
+export { NestedModal };
