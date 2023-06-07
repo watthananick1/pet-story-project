@@ -40,6 +40,13 @@ router.get('/:postId/Comments', async (req, res) => {
   }
 });
 
+
+    res.status(200).json(comments);
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to retrieve comments', error: err });
+  }
+});
+
 // Create a comment
 router.post("/Comment/:postId", async (req, res) => {
   try {

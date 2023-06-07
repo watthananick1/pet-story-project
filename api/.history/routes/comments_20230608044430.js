@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { appFirebase, db, storage, FieldValue } from "../routes/firebase.js";
 
 const commentCollection = db.collection("Comments");
-const usersCollection = db.collection('Users');
+const usersCollection = db.collection('users');
 
 const router = Router();
 
@@ -29,8 +29,8 @@ router.get('/:postId/Comments', async (req, res) => {
 
     userSnapshots.forEach((userSnapshot, index) => {
       const user = userSnapshot.data();
-      comments[index].firstName = user.firstName; // Add firstName to comment
-      comments[index].lastName = user.lastName; // Add lastName to comment
+      comments[index].push(user.firstName); // Add firstName to comment
+      comments[index].push(user.lastName); // Add lastName to comment
       comments[index].profilePicture = user.profilePicture; // Add profilePicture to comment
     });
 
@@ -39,6 +39,8 @@ router.get('/:postId/Comments', async (req, res) => {
     res.status(500).json({ message: 'Failed to retrieve comments', error: err });
   }
 });
+
+
 
 // Create a comment
 router.post("/Comment/:postId", async (req, res) => {

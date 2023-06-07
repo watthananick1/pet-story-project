@@ -51,15 +51,17 @@ const NestedModal = ({
         } else if (onTitle === "Add Comment") {
           endpoint = `/api/comments/Comment/${onContentID}`;
           updatedData = { content: content, member_id: userId };
-          await axios.post(endpoint, updatedData);
+          await axios.(endpoint, updatedData);
         } else {
           console.log("Invalid Edit Type");
           return;
         }
 
+        
+
         if (isAddComment) {
           const resComments = await axios.get(
-            `/api/comments/${onContentID}/Comments`
+            `/api/comments/${onContentID}/comments`
           );
           onPostUpdate(resComments.data);
         } else {

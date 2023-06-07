@@ -29,9 +29,9 @@ router.get('/:postId/Comments', async (req, res) => {
 
     userSnapshots.forEach((userSnapshot, index) => {
       const user = userSnapshot.data();
-      comments[index].firstName = user.firstName; // Add firstName to comment
-      comments[index].lastName = user.lastName; // Add lastName to comment
-      comments[index].profilePicture = user.profilePicture; // Add profilePicture to comment
+      comments[index].push(user.firstName); // Add firstName to comment
+      comments[index].push(user.lastName); // Add lastName to comment
+      comments[index].push(user.profilePicture); // Add profilePicture to comment
     });
 
     res.status(200).json(comments);

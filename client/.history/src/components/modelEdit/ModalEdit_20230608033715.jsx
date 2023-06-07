@@ -59,7 +59,7 @@ const NestedModal = ({
 
         if (isAddComment) {
           const resComments = await axios.get(
-            `/api/comments/${onContentID}/Comments`
+            `/api/comments/${onContentID}/comments`
           );
           onPostUpdate(resComments.data);
         } else {

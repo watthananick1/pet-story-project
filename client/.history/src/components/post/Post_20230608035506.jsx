@@ -75,7 +75,7 @@ export default function Post({ post, onPostUpdate, indexPost }) {
         const res = await axios.get(`api/users/GETuser/${post.member_id}`);
         const userData = res.data;
         // console.log('User=',userData[0]);
-        setdataPUser(userData);
+        setdataPUser(userData[0]);
       } catch (err) {
         // Handle error
         console.error("Failed to fetch user data:", err);
@@ -84,7 +84,7 @@ export default function Post({ post, onPostUpdate, indexPost }) {
     const fetchComments = async () => {
       try {
         const resComments = await axios.get(
-          `/api/comments/${post.id}/Comments`
+          `/api/comments/${post.id}/comments`
         );
         setComments(resComments.data);
         setLoadingComment(true);
@@ -103,34 +103,31 @@ export default function Post({ post, onPostUpdate, indexPost }) {
     };
   }, [post.member_id, post.id]);
 
-  // useEffect(() => {
-  //   if (showComments) {
-  //     const fetchData = async () => {
-  //       const promises = comments.map((comment) => {
-  //         console.log("comment", comment);
-  //         return axios.get(`/api/users/GETuser/${comment.memberId}`);
-  //       });
-  
-  //       try {
-  //         const responses = await Promise.all(promises);
-  //         const commentUsers = responses.map((res) => res.data);
-  //         setCommentsData(commentUsers);
-  //         setLoadingComment(true);
-  //       } catch (err) {
-  //         console.log(err);
-  //       } finally {
-  //         setLoadingComment(false);
-  //         console.log("commentsData", commentsData);
-  //       }
-  //     };
-  
-  //     fetchData();
-  //   } else {
-  //     // Clear commentsData when showComments is false
-  //     setCommentsData([]);
-  //   }
-  // }, [comments, showComments]);
-  
+  useEffect(() => {
+    if (showComments) {
+      const fetchData = async () => {
+        const promises = comments.map((comment) => {
+          return axios.get(`/api/users/GETuser/${comment.memberId}`);
+        });
+
+        try {
+          const responses = await Promise.all(promises);
+          const commentUsers = responses.map((res) => res.data);
+          setCommentsData(commentUsers[0]);
+          setLoadingComment(true);
+        } catch (err) {
+          console.log(err);
+        } finally {
+          setLoadingComment(false);
+        }
+      };
+
+      fetchData();
+    } else {
+      // Clear commentsData when showComments is false
+      setCommentsData([]);
+    }
+  }, [comments, showComments]);
 
   //++++++++++ on Click Button +++++++++++
 
@@ -445,88 +442,75 @@ export default function Post({ post, onPostUpdate, indexPost }) {
             </div>
           ) : (
             <CardContent>
-              <Typography paragraph>Comments</Typography>
-              {comments
-                .slice(
-                  0,
-                  showAllComments ? comments.length : maxDisplayedComments
-                )
-                .map((comment, index) => {
-                  // const commentData = commentsData.find(
-                  //   (data) => data.member_id === comment.memberId
-                  // );
-                  return (
-                    <div key={index} className="postComment">
-                      <div className="postCommentProfile">
-                        <CardHeader
-                          avatar={
-                            <Avatar
-                              aria-label="recipe"
-                              src={comment?.profilePicture}
-                              sx={{ width: "39px", height: "39px" }}
-                            />
-                          }
-                          title={`${comment?.firstName} ${comment?.lastName}`}
-                          subheader={`${comment.content}`}
-                          action={
-                            <>
-                              <IconButton
-                                onClick={(event) =>
-                                  handleClickComment(event, comment.id)
-                                }
-                              >
-                                <MoreHoriz fontSize="small" />
-                              </IconButton>
-                            </>
-                          }
-                        />
-                        <Menu
-                          anchorEl={anchorElComment}
-                          open={Boolean(anchorElComment)}
-                          onClose={handleCloseComment}
-                        >
-                          {dataPUser.member_id === user.member_id ? (
-                            [
-                              <MenuItem key="edit" onClick={handleEditComment}>
-                                <span>
-                                  <EditIcon fontSize="small" />
-                                </span>
-                                <span>Edit</span>
-                              </MenuItem>,
-                              <MenuItem key="delete" onClick={handleDeleteComment}>
-                                <span>
-                                  <DeleteIcon fontSize="small" />
-                                </span>
-                                <span>Delete</span>
-                              </MenuItem>,
-                            ]
-                          ) : (
-                            <MenuItem key="report" onClick={handleReportPost}>
-                              <span>
-                                <ReportIcon fontSize="small" />
-                              </span>
-                              <span>Report Post</span>
-                            </MenuItem>
-                          )}
-                        </Menu>
-                      </div>
-                    </div>
-                  );
-                })}
-              {comments.length > maxDisplayedComments && (
-                <Typography
-                  className="showMoreComments"
-                  variant="body2"
-                  color="primary"
-                  onClick={() => setShowAllComments(!showAllComments)}
-                >
-                  {showAllComments ? "Hide" : "Show More"} Comments
-                </Typography>
-              )}
-              <Button variant="contained" onClick={() => submitComment()}>
-                Comment
-              </Button>
-            </CardContent>
+  <Typography paragraph>Comments</Typography>
+  {comments.slice(0, showAllComments ? comments.length : maxDisplayedComments).map((comment, index) => {
+    const commentData = commentsData.find(data => data.member_id === comment.memberId);
+    return (
+      <div key={index} className="postComment">
+        <div className="postCommentProfile">
+          <CardHeader
+            avatar={
+              <Avatar
+                aria-label="recipe"
+                src={commentData?.profilePicture}
+                sx={{ width: '39px', height: '39px' }}
+              />
+            }
+            title={`${commentData?.firstName} ${commentData?.lastName}`}
+            subheader={`${comment.content}`}
+            action={
+              <>
+                <IconButton onClick={(event) => handleClickComment(event, comment.id)}>
+                  <MoreHoriz fontSize="small"/>
+                </IconButton>
+              </>
+            }
+          />
+          <Menu
+            anchorEl={anchorElComment}
+            open={Boolean(anchorElComment)}
+            onClose={handleCloseComment}
+          >
+            {user.member_id === comment.memberId ? (
+              <>
+                <MenuItem key="edit" onClick={() => handleEditComment(comment.id)}>
+                  <span><EditIcon fontSize="small"/></span>
+                  <span>Edit</span>
+                </MenuItem>
+                <MenuItem key="delete" onClick={() => handleDeleteComment(comment.id)}>
+                  <span><DeleteIcon fontSize="small"/></span>
+                  <span>Delete</span>
+                </MenuItem>
+              </>
+            ) : (
+              <MenuItem key="report" onClick={handleReportPost}>
+                <span><ReportIcon fontSize="small"/></span>
+                <span>Report Post</span>
+              </MenuItem>
+            )}
+          </Menu>
+        </div>
+      </div>
+    );
+  })}
+  {comments.length > maxDisplayedComments && (
+    <Typography
+      className="showMoreComments"
+      variant="body2"
+      color="primary"
+      onClick={() => setShowAllComments(!showAllComments)}
+    >
+      {showAllComments ? "Hide" : "Show More"} Comments
+    </Typography>
+  )}
+  <Button
+    variant="contained"
+    onClick={() => submitComment()}
+  >
+    Comment
+  </Button>
+</CardContent>
+
           )}
         </Collapse>
       </Card>

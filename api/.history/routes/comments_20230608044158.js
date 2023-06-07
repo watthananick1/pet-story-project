@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { appFirebase, db, storage, FieldValue } from "../routes/firebase.js";
 
 const commentCollection = db.collection("Comments");
-const usersCollection = db.collection('Users');
+const usersCollection = db.collection('users');
 
 const router = Router();
 
@@ -16,22 +16,9 @@ router.get('/:postId/Comments', async (req, res) => {
     const commentsSnapshot = await commentCollection.where('postId', '==', postId).get();
 
     const comments = [];
-    const promises = []; // Array to store the promises for fetching user data
-
     commentsSnapshot.forEach((doc) => {
       const comment = doc.data();
       comments.push(comment);
-      const userPromise = usersCollection.doc(comment.memberId).get(); // Fetch user data for each comment
-      promises.push(userPromise);
-    });
-
-    const userSnapshots = await Promise.all(promises); // Wait for all user data promises to resolve
-
-    userSnapshots.forEach((userSnapshot, index) => {
-      const user = userSnapshot.data();
-      comments[index].firstName = user.firstName; // Add firstName to comment
-      comments[index].lastName = user.lastName; // Add lastName to comment
-      comments[index].profilePicture = user.profilePicture; // Add profilePicture to comment
     });
 
     res.status(200).json(comments);
@@ -39,6 +26,7 @@ router.get('/:postId/Comments', async (req, res) => {
     res.status(500).json({ message: 'Failed to retrieve comments', error: err });
   }
 });
+
 
 // Create a comment
 router.post("/Comment/:postId", async (req, res) => {

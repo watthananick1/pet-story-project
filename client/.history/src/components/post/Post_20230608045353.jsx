@@ -103,33 +103,33 @@ export default function Post({ post, onPostUpdate, indexPost }) {
     };
   }, [post.member_id, post.id]);
 
-  // useEffect(() => {
-  //   if (showComments) {
-  //     const fetchData = async () => {
-  //       const promises = comments.map((comment) => {
-  //         console.log("comment", comment);
-  //         return axios.get(`/api/users/GETuser/${comment.memberId}`);
-  //       });
+  useEffect(() => {
+    if (showComments) {
+      const fetchData = async () => {
+        const promises = comments.map((comment) => {
+          console.log("comment", comment);
+          return axios.get(`/api/users/GETuser/${comment.memberId}`);
+        });
   
-  //       try {
-  //         const responses = await Promise.all(promises);
-  //         const commentUsers = responses.map((res) => res.data);
-  //         setCommentsData(commentUsers);
-  //         setLoadingComment(true);
-  //       } catch (err) {
-  //         console.log(err);
-  //       } finally {
-  //         setLoadingComment(false);
-  //         console.log("commentsData", commentsData);
-  //       }
-  //     };
+        try {
+          const responses = await Promise.all(promises);
+          const commentUsers = responses.map((res) => res.data);
+          setCommentsData(commentUsers);
+          setLoadingComment(true);
+        } catch (err) {
+          console.log(err);
+        } finally {
+          setLoadingComment(false);
+          console.log("commentsData", commentsData);
+        }
+      };
   
-  //     fetchData();
-  //   } else {
-  //     // Clear commentsData when showComments is false
-  //     setCommentsData([]);
-  //   }
-  // }, [comments, showComments]);
+      fetchData();
+    } else {
+      // Clear commentsData when showComments is false
+      setCommentsData([]);
+    }
+  }, [comments, showComments]);
   
 
   //++++++++++ on Click Button +++++++++++
