@@ -65,6 +65,7 @@ const NestedModal = ({
           const updatedItem = { ...onContent, content };
           onPostUpdate(updatedItem);
         }
+        
       } catch (err) {
         console.log(err);
       } finally {

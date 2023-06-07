@@ -46,13 +46,7 @@ const NestedModal = ({
         } else if (onTitle === "Comment") {
           endpoint = `/api/comments/${onContentID}/comments/${onCommentsID}`;
           updatedData = { content };
-        } else if (onTitle === "Add Comment") {
-          endpoint = `/api/comments/Comment/${onContentID}`;
-          updatedData = { content, member_id: userId };
-        } else {
-          console.log("Invalid Edit Type");
-          return;
-        }
+        
 
         await axios.put(endpoint, updatedData);
 
@@ -91,9 +85,9 @@ const NestedModal = ({
           onClick={handleCloseModal}
           size="small"
           sx={{
-            position: "absolute",
-            top: "0px",
-            right: "0px",
+            position: 'absolute',
+            top: '0px',
+            right: '0px',
           }}
         >
           <CloseIcon />
@@ -121,10 +115,10 @@ const NestedModal = ({
               loading={loading}
               loadingPosition="end"
               variant="contained"
-              sx={{ backgroundColor: "#6200E8" }}
+              sx={{ backgroundColor: '#6200E8' }}
               fullWidth
             >
-              <span>{isAddComment ? "Add" : "Edit"}</span>
+              <span>{isAddComment ? 'Add' : 'Edit'}</span>
             </LoadingButton>
           </Grid>
         </Grid>

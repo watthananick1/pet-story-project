@@ -64,6 +64,7 @@ const NestedModal = ({
         } else {
           const updatedItem = { ...onContent, content };
           onPostUpdate(updatedItem);
+
         }
       } catch (err) {
         console.log(err);
@@ -91,9 +92,9 @@ const NestedModal = ({
           onClick={handleCloseModal}
           size="small"
           sx={{
-            position: "absolute",
-            top: "0px",
-            right: "0px",
+            position: 'absolute',
+            top: '0px',
+            right: '0px',
           }}
         >
           <CloseIcon />
@@ -121,10 +122,10 @@ const NestedModal = ({
               loading={loading}
               loadingPosition="end"
               variant="contained"
-              sx={{ backgroundColor: "#6200E8" }}
+              sx={{ backgroundColor: '#6200E8' }}
               fullWidth
             >
-              <span>{isAddComment ? "Add" : "Edit"}</span>
+              <span>{isAddComment ? 'Add' : 'Edit'}</span>
             </LoadingButton>
           </Grid>
         </Grid>
