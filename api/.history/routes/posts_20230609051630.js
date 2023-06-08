@@ -143,6 +143,7 @@ router.get("/:sort", async (req, res) => {
   }
 });
 
+
 // Get posts for a specific member with sorting options
 router.get("/:id/:sort", async (req, res) => {
   try {

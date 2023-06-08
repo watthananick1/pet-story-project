@@ -88,31 +88,23 @@ router.get("/:sort", async (req, res) => {
     const querySnapshot = await postsCollection.get();
     const posts = [];
 
-    for (const doc of querySnapshot.docs) {
+    querySnapshot.forEach((doc) => {
       const post = doc.data();
-
+      // console.log('user', user.typePets);
+      // console.log('post', post.tagpet);
       if (post.status === "normal") {
-        const queryUserSnapshot = await usersCollection
+        const queryUserSnapshot = usersCollection
           .where("member_id", "==", post.member_id)
           .get();
-
         if (queryUserSnapshot.empty) {
-          console.log("User not found for post:", post.id);
-        } else {
-          const user = queryUserSnapshot.docs[0].data();
-          const postWithUser = {
-            ...post,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            profilePicture: user.profilePicture,
-          };
-          console.log("postWithUser", postWithUser);
-          posts.push(postWithUser);
-        }
+          res.status(404).json({ message: "User not found" });
+          return;
+        } 
+        posts.push(post);
       } else {
         console.log("Failed to get posts status");
       }
-    }
+    });
 
     if (sortParam === "date") {
       posts.sort((a, b) => {

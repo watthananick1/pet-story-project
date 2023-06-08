@@ -88,31 +88,16 @@ router.get("/:sort", async (req, res) => {
     const querySnapshot = await postsCollection.get();
     const posts = [];
 
-    for (const doc of querySnapshot.docs) {
+    querySnapshot.forEach((doc) => {
       const post = doc.data();
-
+      // console.log('user', user.typePets);
+      // console.log('post', post.tagpet);
       if (post.status === "normal") {
-        const queryUserSnapshot = await usersCollection
-          .where("member_id", "==", post.member_id)
-          .get();
-
-        if (queryUserSnapshot.empty) {
-          console.log("User not found for post:", post.id);
-        } else {
-          const user = queryUserSnapshot.docs[0].data();
-          const postWithUser = {
-            ...post,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            profilePicture: user.profilePicture,
-          };
-          console.log("postWithUser", postWithUser);
-          posts.push(postWithUser);
-        }
+        posts.push(post);
       } else {
         console.log("Failed to get posts status");
       }
-    }
+    });
 
     if (sortParam === "date") {
       posts.sort((a, b) => {
@@ -159,6 +144,8 @@ router.get("/:id/:sort", async (req, res) => {
 
     const user = queryUserSnapshot.docs[0].data();
 
+    // console.log('user',user);
+
     const querySnapshot = await postsCollection.get();
     const posts = [];
 
@@ -166,6 +153,8 @@ router.get("/:id/:sort", async (req, res) => {
       const post = doc.data();
 
       if (user.typePets.some((typePet) => post.tagpet.includes(typePet))) {
+        // console.log('user', user.typePets);
+        // console.log('post', post.tagpet);
         if (post.status === "normal") {
           const postWithUser = {
             ...post,
@@ -173,15 +162,36 @@ router.get("/:id/:sort", async (req, res) => {
             lastName: user.lastName,
             profilePicture: user.profilePicture,
           };
-          console.log("postWithUser", postWithUser);
+          console
           posts.push(postWithUser);
         } else {
           console.log("Failed to get posts status");
         }
+      } else {
       }
     });
 
-    // Sorting logic...
+    if (sortParam === "date") {
+      posts.sort((a, b) => {
+        const date1 = a.createdAt.toDate();
+        const date2 = b.createdAt.toDate();
+        return date2.getTime() - date1.getTime();
+      });
+    } else if (sortParam === "popularity") {
+      posts.sort((a, b) => {
+        const likesA = a.likes ? a.likes.length : 0;
+        const likesB = b.likes ? b.likes.length : 0;
+        return likesB - likesA;
+      });
+    } else if (sortParam === "relevance") {
+      posts.sort((a, b) => b.relevanceField - a.relevanceField);
+    } else {
+      posts.sort((a, b) => {
+        const date1 = a.createdAt.toDate();
+        const date2 = b.createdAt.toDate();
+        return date2.getTime() - date1.getTime();
+      });
+    }
 
     res.status(200).json(posts);
   } catch (err) {

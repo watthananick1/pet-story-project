@@ -88,31 +88,16 @@ router.get("/:sort", async (req, res) => {
     const querySnapshot = await postsCollection.get();
     const posts = [];
 
-    for (const doc of querySnapshot.docs) {
+    querySnapshot.forEach((doc) => {
       const post = doc.data();
-
+      // console.log('user', user.typePets);
+      // console.log('post', post.tagpet);
       if (post.status === "normal") {
-        const queryUserSnapshot = await usersCollection
-          .where("member_id", "==", post.member_id)
-          .get();
-
-        if (queryUserSnapshot.empty) {
-          console.log("User not found for post:", post.id);
-        } else {
-          const user = queryUserSnapshot.docs[0].data();
-          const postWithUser = {
-            ...post,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            profilePicture: user.profilePicture,
-          };
-          console.log("postWithUser", postWithUser);
-          posts.push(postWithUser);
-        }
+        posts.push(post);
       } else {
         console.log("Failed to get posts status");
       }
-    }
+    });
 
     if (sortParam === "date") {
       posts.sort((a, b) => {
@@ -173,7 +158,7 @@ router.get("/:id/:sort", async (req, res) => {
             lastName: user.lastName,
             profilePicture: user.profilePicture,
           };
-          console.log("postWithUser", postWithUser);
+          console.log('postWithUser', postWithUser);
           posts.push(postWithUser);
         } else {
           console.log("Failed to get posts status");
@@ -189,6 +174,7 @@ router.get("/:id/:sort", async (req, res) => {
     res.status(500).json({ message: "Failed to get posts", error: err });
   }
 });
+
 
 //Create new post
 router.post("/", async (req, res) => {
