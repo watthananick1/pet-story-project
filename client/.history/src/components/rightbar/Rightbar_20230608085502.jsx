@@ -16,7 +16,7 @@ export default function Rightbar({ user }) {
   const [friends, setFriends] = useState([]);
   const { user: currentUser, dispatch } = useContext(AuthContext);
   const [followed, setFollowed] = useState(
-    currentUser.followers.includes(user?.member_id)
+    user.followers.includes(user?.member_id)
   );
   
   //++++++++++++++++++ fetch Data +++++++++++++++++++
@@ -24,14 +24,14 @@ export default function Rightbar({ user }) {
   useEffect(() => {
     const getFriends = async () => {
       try {
-        const friendList = await axios.get(`/api/users/friends/${user.member_id}`);
+        const friendList = await axios.get(`/api/users/friends/${user?.member_id}`);
         setFriends(friendList.data);
       } catch (err) {
         console.log(err);
       }
     };
     getFriends();
-  }, [user]);
+  }, [currentUser]);
   
   //++++++++++ on Click Button +++++++++++
 

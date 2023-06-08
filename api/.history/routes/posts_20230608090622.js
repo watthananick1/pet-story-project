@@ -44,9 +44,7 @@ router.put("/:id/like", async (req, res) => {
 router.get("/user/:firstName", async (req, res) => {
   try {
     const firstName = req.params.firstName;
-    const querySnapshot = await usersCollection
-      .where("firstName", "==", firstName)
-      .get();
+    const querySnapshot = await usersCollection.where("firstName", "==", firstName).get();
 
     if (querySnapshot.empty) {
       res.status(404).json({ message: "User not found" });
@@ -55,30 +53,26 @@ router.get("/user/:firstName", async (req, res) => {
 
     const user = querySnapshot.docs[0].data();
 
-    const queryPostSnapshot = await postsCollection
-      .where("member_id", "==", user.member_id)
-      .get();
+    const queryPostSnapshot = await postsCollection.where("member_id", "==", user.member_id).get();
     const posts = [];
 
     queryPostSnapshot.forEach((doc) => {
       const post = doc.data();
-      const postWithUser = {
-        ...post,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        profilePicture: user.profilePicture,
-      };
-      posts.push(postWithUser);
+
+      posts.push(post);
+      if (post.status === "normal") {
+      } else {
+        console.log("Failed to get posts status");
+      }
     });
 
     res.status(200).json(posts);
   } catch (err) {
     console.error("Failed to get posts by first name:", err);
-    res
-      .status(500)
-      .json({ message: "Failed to get posts by first name", error: err });
+    res.status(500).json({ message: "Failed to get posts by first name", error: err });
   }
 });
+
 
 // Get posts for sorting options
 router.get("/:sort", async (req, res) => {

@@ -16,17 +16,17 @@ export default function Profile() {
   const [user, setUser] = useState({});
   const { firstName } = useParams();
   
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await axios.get(`/api/users/user/${firstName}`);
-        setUser(res?.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchUser();
-  }, [firstName]);
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     try {
+  //       const res = await axios.get(`/api/users/user/${firstName}`);
+  //       setUser(res?.data);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  //   fetchUser();
+  // }, [firstName]);
   
   console.log(`User =`,user[0]);
   
@@ -65,7 +65,7 @@ export default function Profile() {
             </div>
           </div>
           <div className="profileRightBottom">
-            <Feed firstName={firstName} onProfile={true} />
+            <Feed firstName={user[0]?.firstName} />
             <Rightbar user={user[0]}/>
           </div>
         </div>

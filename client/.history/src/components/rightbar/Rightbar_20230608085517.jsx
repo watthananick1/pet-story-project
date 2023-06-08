@@ -31,7 +31,7 @@ export default function Rightbar({ user }) {
       }
     };
     getFriends();
-  }, [user]);
+  }, [currentUser]);
   
   //++++++++++ on Click Button +++++++++++
 

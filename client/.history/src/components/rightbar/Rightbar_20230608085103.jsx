@@ -16,7 +16,7 @@ export default function Rightbar({ user }) {
   const [friends, setFriends] = useState([]);
   const { user: currentUser, dispatch } = useContext(AuthContext);
   const [followed, setFollowed] = useState(
-    currentUser.followers.includes(user?.member_id)
+    user.followers.includes(user?.member_id)
   );
   
   //++++++++++++++++++ fetch Data +++++++++++++++++++
@@ -31,7 +31,7 @@ export default function Rightbar({ user }) {
       }
     };
     getFriends();
-  }, [user]);
+  }, [currentUser]);
   
   //++++++++++ on Click Button +++++++++++
 

@@ -4,16 +4,16 @@ import Share from "../share/Share";
 import "./feed.css";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
-import ReactLoading from "react-loading";
+import ReactLoading from 'react-loading';
 
-export default function Feed({ firstName, onProfile }) {
+export default function Feed({ firstName, onProfl }) {
   const [posts, setPosts] = useState([]);
   const { user } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const [timestamp, setTimestamp] = useState(Date.now());
-
+  
   //++++++++++++++++++ fetch Data +++++++++++++++++++
-
+  
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -21,12 +21,8 @@ export default function Feed({ firstName, onProfile }) {
         const res = await axios.get(`/api/posts/user/${firstName}`);
         setPosts(
           res.data.sort((p1, p2) => {
-            const date1 = new Date(
-              p1.createdAt.seconds * 1000 + p1.createdAt.nanoseconds / 1000000
-            );
-            const date2 = new Date(
-              p2.createdAt.seconds * 1000 + p2.createdAt.nanoseconds / 1000000
-            );
+            const date1 = new Date(p1.createdAt.seconds * 1000 + p1.createdAt.nanoseconds / 1000000);
+            const date2 = new Date(p2.createdAt.seconds * 1000 + p2.createdAt.nanoseconds / 1000000);
             return date2.getTime() - date1.getTime();
           })
         );
@@ -36,9 +32,7 @@ export default function Feed({ firstName, onProfile }) {
       }
     };
     fetchUser();
-  }, [firstName, onProfile]);
-
-  console.log(posts);
+  }, [firstName]);
 
   useEffect(() => {
     const source = axios.CancelToken.source();
@@ -51,19 +45,15 @@ export default function Feed({ firstName, onProfile }) {
         });
         setPosts(
           res.data.sort((p1, p2) => {
-            const date1 = new Date(
-              p1.createdAt.seconds * 1000 + p1.createdAt.nanoseconds / 1000000
-            );
-            const date2 = new Date(
-              p2.createdAt.seconds * 1000 + p2.createdAt.nanoseconds / 1000000
-            );
+            const date1 = new Date(p1.createdAt.seconds * 1000 + p1.createdAt.nanoseconds / 1000000);
+            const date2 = new Date(p2.createdAt.seconds * 1000 + p2.createdAt.nanoseconds / 1000000);
             return date2.getTime() - date1.getTime();
           })
         );
         setLoading(false);
       } catch (err) {
         if (axios.isCancel(err)) {
-          console.log("Request canceled:", err.message);
+          console.log('Request canceled:', err.message);
         } else {
           console.log(err);
         }
@@ -74,11 +64,11 @@ export default function Feed({ firstName, onProfile }) {
     fetchPosts();
 
     return () => {
-      source.cancel("Component unmounted");
-      console.log("Component unmounted", source);
+      source.cancel('Component unmounted');
+      console.log('Component unmounted', source);
     };
   }, [user.member_id, timestamp]);
-
+  
   //++++++++++ function Re-Load New Post +++++++++++
 
   const handleNewPost = () => {
@@ -89,17 +79,10 @@ export default function Feed({ firstName, onProfile }) {
   return (
     <div className="feed">
       <div className="feedWrapper">
-        {!firstName || firstName === user?.firstName ? (
-          <Share onNewPost={handleNewPost} />
-        ) : null}
+        {!firstName || firstName === user?.firstName ? <Share onNewPost={handleNewPost} /> : null}
         {loading ? (
           <div className="loadingWrapper">
-            <ReactLoading
-              type="spin"
-              color="#6200E8"
-              height={"10%"}
-              width={"10%"}
-            />
+            <ReactLoading type="spin" color="#6200E8" height={'10%'} width={'10%'} />
           </div>
         ) : (
           <>
@@ -112,3 +95,4 @@ export default function Feed({ firstName, onProfile }) {
     </div>
   );
 }
+

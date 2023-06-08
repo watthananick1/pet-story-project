@@ -65,7 +65,7 @@ export default function Profile() {
             </div>
           </div>
           <div className="profileRightBottom">
-            <Feed firstName={firstName} onProfile={true} />
+            <Feed firstName={user[0]?.firstName} onProfile={t} />
             <Rightbar user={user[0]}/>
           </div>
         </div>
