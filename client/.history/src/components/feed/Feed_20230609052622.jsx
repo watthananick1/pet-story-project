@@ -40,7 +40,7 @@ export default function Feed({ firstName, onProfile }) {
     const fetchUserPosts = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(`/api/posts/user/${firstName}`);
+        const res = await axios.get(`/api/posts/user/${user.member_id}`);
         setPosts(res.data);
       } catch (error) {
         console.log(error);
@@ -61,6 +61,7 @@ export default function Feed({ firstName, onProfile }) {
     };
   }, [user.member_id, firstName]);
   
+
   //++++++++++ function Re-Load New Post +++++++++++
 
   const handleNewPost = () => {

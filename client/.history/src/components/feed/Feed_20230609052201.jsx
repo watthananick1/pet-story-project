@@ -14,18 +14,54 @@ export default function Feed({ firstName, onProfile }) {
 
   //++++++++++++++++++ fetch Data +++++++++++++++++++
 
-  useEffect(() => {}, [firstName, onProfile]);
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        setLoading(true);
+        const res = await axios.get(`/api/posts/user/${firstName}`);
+        setPosts(
+          res.data.sort((p1, p2) => {
+            const date1 = new Date(
+              p1.createdAt.seconds * 1000 + p1.createdAt.nanoseconds / 1000000
+            );
+            const date2 = new Date(
+              p2.createdAt.seconds * 1000 + p2.createdAt.nanoseconds / 1000000
+            );
+            return date2.getTime() - date1.getTime();
+          })
+        );
+      } catch (error) {
+        console.log(error);
+      } finally {
+        console.log(posts);
+        setLoading(false);
+      }
+    };
+    fetchUser();
+  }, [firstName, onProfile]);
 
   useEffect(() => {
     const source = axios.CancelToken.source();
-  
+    
+    if()
+
     const fetchPosts = async () => {
       try {
-        setLoading(true);
         const res = await axios.get(`/api/posts/${user.member_id}/date`, {
           cancelToken: source.token,
+          // params: { timestamp } // Pass the timestamp as a query parameter
         });
-        setPosts(res.data);
+        setPosts(
+          res.data.sort((p1, p2) => {
+            const date1 = new Date(
+              p1.createdAt.seconds * 1000 + p1.createdAt.nanoseconds / 1000000
+            );
+            const date2 = new Date(
+              p2.createdAt.seconds * 1000 + p2.createdAt.nanoseconds / 1000000
+            );
+            return date2.getTime() - date1.getTime();
+          })
+        );
         setLoading(false);
       } catch (err) {
         if (axios.isCancel(err)) {
@@ -36,31 +72,15 @@ export default function Feed({ firstName, onProfile }) {
         setLoading(false);
       }
     };
-  
-    const fetchUserPosts = async () => {
-      try {
-        setLoading(true);
-        const res = await axios.get(`/api/posts/user/${firstName}`);
-        setPosts(res.data);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-  
-    if (!firstName) {
-      fetchPosts();
-    } else {
-      fetchUserPosts();
-    }
-  
+
+    fetchPosts();
+
     return () => {
       source.cancel("Component unmounted");
       console.log("Component unmounted", source);
     };
-  }, [user.member_id, firstName]);
-  
+  }, [user.member_id, timestamp]);
+
   //++++++++++ function Re-Load New Post +++++++++++
 
   const handleNewPost = () => {
