@@ -316,7 +316,7 @@ export default function Post({ post, onPostUpdate, indexPost }) {
       <Card className="postWrapper">
         <CardHeader
           avatar={
-            <Link to={`/profile/${post.firstName}`}>
+            <Link to={`/profile/${dataPUser.firstName}`}>
               <Avatar
                 aria-label="recipe"
                 src={post?.profilePicture}

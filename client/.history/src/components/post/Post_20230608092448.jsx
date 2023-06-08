@@ -316,7 +316,7 @@ export default function Post({ post, onPostUpdate, indexPost }) {
       <Card className="postWrapper">
         <CardHeader
           avatar={
-            <Link to={`/profile/${post.firstName}`}>
+            <Link to={`/profile/${dataPUser.firstName}`}>
               <Avatar
                 aria-label="recipe"
                 src={post?.profilePicture}
@@ -324,7 +324,7 @@ export default function Post({ post, onPostUpdate, indexPost }) {
               ></Avatar>
             </Link>
           }
-          title={`${post?.firstName} ${post?.lastName}`}
+          title={`${post.firstName} ${post?.lastName}`}
           subheader={formattedDate}
           action={[
             <IconButton key="more" onClick={handleClick}>

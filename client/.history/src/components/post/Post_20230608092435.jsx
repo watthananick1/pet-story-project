@@ -316,15 +316,15 @@ export default function Post({ post, onPostUpdate, indexPost }) {
       <Card className="postWrapper">
         <CardHeader
           avatar={
-            <Link to={`/profile/${post.firstName}`}>
+            <Link to={`/profile/${dataPUser.firstName}`}>
               <Avatar
                 aria-label="recipe"
-                src={post?.profilePicture}
+                src={post.profilePicture}
                 style={{ width: "39px", height: "39px" }}
               ></Avatar>
             </Link>
           }
-          title={`${post?.firstName} ${post?.lastName}`}
+          title={`${dataPUser.firstName} ${dataPUser.lastName}`}
           subheader={formattedDate}
           action={[
             <IconButton key="more" onClick={handleClick}>

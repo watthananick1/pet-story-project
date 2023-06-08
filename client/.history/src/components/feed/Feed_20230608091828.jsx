@@ -30,15 +30,15 @@ export default function Feed({ firstName, onProfile }) {
             return date2.getTime() - date1.getTime();
           })
         );
+        setLoading(false);
       } catch (error) {
         console.log(error);
-      } finally {
-        console.log(posts);
-        setLoading(false);
-      }
+      } finally 
     };
     fetchUser();
   }, [firstName, onProfile]);
+
+  console.log(posts);
 
   useEffect(() => {
     const source = axios.CancelToken.source();

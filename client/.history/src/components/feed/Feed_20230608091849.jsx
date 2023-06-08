@@ -30,6 +30,7 @@ export default function Feed({ firstName, onProfile }) {
             return date2.getTime() - date1.getTime();
           })
         );
+        
       } catch (error) {
         console.log(error);
       } finally {
@@ -39,6 +40,8 @@ export default function Feed({ firstName, onProfile }) {
     };
     fetchUser();
   }, [firstName, onProfile]);
+
+  
 
   useEffect(() => {
     const source = axios.CancelToken.source();
