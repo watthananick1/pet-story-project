@@ -8,6 +8,9 @@ import ReactLoading from "react-loading";
 import io from "socket.io-client";
 
 
+(function connect()
+const socket = io.connect("http://192.168.1.12:4000"); // Replace with your server's WebSocket or Socket.io endpoint
+
 export default function Feed({ firstName, onProfile }) {
   const [posts, setPosts] = useState([]);
   const { user } = useContext(AuthContext);
@@ -15,7 +18,6 @@ export default function Feed({ firstName, onProfile }) {
 
   useEffect(() => {
     const source = axios.CancelToken.source();
-    const socket = io.connect("http://192.168.1.12:4000");
 
     const fetchPosts = async () => {
       try {

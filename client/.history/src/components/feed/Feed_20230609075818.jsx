@@ -56,6 +56,8 @@ export default function Feed({ firstName, onProfile }) {
     } else {
       fetchPosts();
     }
+    
+    co
 
     socket.on("newPost", handleNewPost);
 

@@ -56,6 +56,8 @@ export default function Feed({ firstName, onProfile }) {
     } else {
       fetchPosts();
     }
+    
+    so
 
     socket.on("newPost", handleNewPost);
 

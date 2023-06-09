@@ -173,7 +173,7 @@ router.get("/:id/:sort", async (req, res) => {
             lastName: user.lastName,
             profilePicture: user.profilePicture,
           };
-          // console.log("postWithUser", postWithUser);
+          console.log("postWithUser", postWithUser);
           posts.push(postWithUser);
         } else {
           console.log("Failed to get posts status");
