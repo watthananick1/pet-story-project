@@ -7,7 +7,7 @@ import { AuthContext } from "../../context/AuthContext";
 import ReactLoading from "react-loading";
 import io from "socket.io-client";
 
-const socket = io("http://192.168.1.12:4000"); // Replace with your server's WebSocket or Socket.io endpoint
+const socket = io("http://localhost:4000"); // Replace with your server's WebSocket or Socket.io endpoint
 
 export default function Feed({ firstName, onProfile }) {
   const [posts, setPosts] = useState([]);
