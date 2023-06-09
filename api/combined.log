@@ -6209,3 +6209,4 @@
 {"level":"warn","message":"Undefined route: /api/posts/?sort_by=date","service":"user-service"}
 {"level":"warn","message":"Undefined route: /favicon.ico","service":"user-service"}
 {"level":"warn","message":"Undefined route: /api/users/xEEI34rRfqhYJ4omAn44DWlLx4p2","service":"user-service"}
+{"level":"warn","message":"Undefined route: /","service":"user-service"}
