@@ -245,26 +245,19 @@ export default function Post({ isPost, onPostUpdate, indexPost }) {
   //ITEM OF POST ----------------------------------------------
 
   const SortableItem = SortableElement(({ item }) => {
-    const isImage = post.title === "image";
-
+    const isImage = item.title === 'image';
+  
     if (isImage) {
       return (
         <div className="shareImgItem">
           <img src={item.url} alt="Gallery Image" className="shareImg" />
-          {item.urls && (
-            <ImageList
-              sx={{ width: 500, height: 500 }}
-              variant="woven"
-              cols={3}
-              gap={8}
-            >
-              {item.urls.map((url, index) => (
-                <ImageListItem key={index}>
-                  <img src={url} alt="Gallery Image" className="shareImg" />
-                </ImageListItem>
-              ))}
-            </ImageList>
-          )}
+          <ImageList sx={{ width: 500, height: 500 }} variant="woven" cols={3} gap={8}>
+            {item.urls.map((url, index) => (
+              <ImageListItem key={index}>
+                <img src={url} alt="Gallery Image" className="shareImg" />
+              </ImageListItem>
+            ))}
+          </ImageList>
         </div>
       );
     } else {
@@ -282,6 +275,7 @@ export default function Post({ isPost, onPostUpdate, indexPost }) {
       );
     }
   });
+  
 
   const SortableList = SortableContainer(({ items }) => {
     return (

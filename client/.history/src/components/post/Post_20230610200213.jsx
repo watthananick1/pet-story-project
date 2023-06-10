@@ -7,7 +7,7 @@ import { NestedModal, ReportModal } from "../modelEdit/ModalEdit";
 import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
 import { FacebookProvider, EmbeddedPost, EmbeddedVideo } from "react-facebook";
-import { SortableContainer, SortableElement } from "react-sortable-hoc";
+import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import ReactPlayer from "react-player";
 
 import {
@@ -38,8 +38,8 @@ import {
 import { AuthContext } from "../../context/AuthContext";
 // import ReactPlayer from 'react-player';
 import ReactLoading from "react-loading";
-import ImageList from "@mui/material/ImageList";
-import ImageListItem from "@mui/material/ImageListItem";
+import ImageList from '@mui/material/ImageList';
+import ImageListItem from '@mui/material/ImageListItem';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -251,20 +251,19 @@ export default function Post({ isPost, onPostUpdate, indexPost }) {
       return (
         <div className="shareImgItem">
           <img src={item.url} alt="Gallery Image" className="shareImg" />
-          {item.urls && (
-            <ImageList
-              sx={{ width: 500, height: 500 }}
-              variant="woven"
-              cols={3}
-              gap={8}
-            >
-              {item.urls.map((url, index) => (
-                <ImageListItem key={index}>
-                  <img src={url} alt="Gallery Image" className="shareImg" />
-                </ImageListItem>
-              ))}
-            </ImageList>
-          )}
+          <ImageList sx={{ width: 500, height: 500 }} 
+                    variant="woven" cols={3} gap={8}>
+                    {item.map((idx) => (
+                        <ImageListItem key={idx.link} >
+                            <img
+                                src={`${idx.link}?w=
+                                164&h=164&fit=crop&auto=format`}
+                                srcSet={`${idx.link}?w=
+                                164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                            />
+                        </ImageListItem>
+                    ))}
+                </ImageList>
         </div>
       );
     } else {

@@ -245,7 +245,7 @@ export default function Post({ isPost, onPostUpdate, indexPost }) {
   //ITEM OF POST ----------------------------------------------
 
   const SortableItem = SortableElement(({ item }) => {
-    const isImage = post.title === "image";
+    const isImage = item.title === "image";
 
     if (isImage) {
       return (
