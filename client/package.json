@@ -21,6 +21,7 @@
     "postcss": "^8.4.23",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-facebook": "^9.0.12",
     "react-loading": "^2.0.3",
     "react-player": "^2.12.0",
     "react-router-dom": "^5.2.0",
@@ -58,7 +59,7 @@
   "react-scripts": {
     "devtool": false
   },
-  "proxy": "http://192.168.1.12:4000",
+  "proxy": "http://localhost:4000",
   "main": "index.js",
   "author": "",
   "license": "ISC",
