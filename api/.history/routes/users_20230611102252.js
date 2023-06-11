@@ -51,20 +51,15 @@ router.get("/", validateToken, async (req, res) => {
   const firstName = req.query.firstName;
   console.log(firstName);
   try {
-    const isUserDoc = await usersCollection.doc(req.user.userId).get();
-    const isUser = isUserDoc.data();
-    if (isUser) {
-      const user = member_id
-        ? await usersCollection.doc(member_id).get()
-        : await usersCollection.where("firstName", "==", firstName).get();
+  
+    const user = member_id
+      ? await usersCollection.doc(member_id).get()
+      : await usersCollection.where("firstName", "==", firstName).get();
 
-      if (user.exists) {
-        const userData = user.data();
-        const { password, updatedAt, ...other } = userData;
-        res.status(200).json(other);
-      } else {
-        res.status(404).json({ error: "User not found" });
-      }
+    if (user.exists) {
+      const userData = user.data();
+      const { password, updatedAt, ...other } = userData;
+      res.status(200).json(other);
     } else {
       res.status(404).json({ error: "User not found" });
     }
@@ -234,7 +229,7 @@ router.put("/:id/unfollow", async (req, res) => {
 });
 
 // Update profile picture of a user
-router.put("/:id/profilePicture",validateToken, async (req, res) => {
+router.put("/:id/profilePicture", async (req, res) => {
   try {
     const id = req.params.id;
     const fileExtension = req.body.file.split(";")[0].split("/")[1];
@@ -275,7 +270,7 @@ router.put("/:id/profilePicture",validateToken, async (req, res) => {
 });
 
 // Update typepets of user
-router.put("/:id/typePets",validateToken, async (req, res) => {
+router.put("/:id/typePets", async (req, res) => {
   try {
     const userId = req.params.id;
     const userRef = usersCollection.doc(userId);

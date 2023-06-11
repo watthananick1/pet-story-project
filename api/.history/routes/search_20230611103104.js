@@ -4,35 +4,30 @@ import validateToken from "../models/authMiddleware.js";
 
 const router = Router();
 
-router.post("/", validateToken, async (req, res) => {
+router.post("/",validateToken, async (req, res) => {
   try {
-    const isUserDoc = await usersCollection.doc(req.user.userId).get();
-    const isUser = isUserDoc.data();
-    if (isUser) {
-      const { searchTerm } = req.body;
-      console.log(searchTerm);
-      if (!searchTerm) {
-        return res.status(400).json({ error: "Search term is required" });
-      } else {
-        const searchResults = await Promise.all([
-          search("Users", searchTerm, ["firstName", "lastName"]),
-          search("Posts", searchTerm, ["content"]),
-          search("Posts", searchTerm, ["tagpet"]),
-        ]);
-
-        const formattedResults = [];
-
-        // Format and combine search results of different types
-        searchResults.forEach((results, index) => {
-          const type = getTypeByIndex(index);
-          const formatted = formatSearchResults(results, type);
-          formattedResults.push(...formatted);
-        });
-
-        res.json({ results: formattedResults });
-      }
+    v
+    const { searchTerm } = req.body;
+    console.log(searchTerm);
+    if (!searchTerm) {
+      return res.status(400).json({ error: "Search term is required" });
     } else {
-      res.status(404).json({ error: "User not found" });
+      const searchResults = await Promise.all([
+        search("Users", searchTerm, ["firstName", "lastName"]),
+        search("Posts", searchTerm, ["content"]),
+        search("Posts", searchTerm, ["tagpet"]),
+      ]);
+
+      const formattedResults = [];
+
+      // Format and combine search results of different types
+      searchResults.forEach((results, index) => {
+        const type = getTypeByIndex(index);
+        const formatted = formatSearchResults(results, type);
+        formattedResults.push(...formatted);
+      });
+
+      res.json({ results: formattedResults });
     }
   } catch (error) {
     console.error(error);

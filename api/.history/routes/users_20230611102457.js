@@ -234,7 +234,7 @@ router.put("/:id/unfollow", async (req, res) => {
 });
 
 // Update profile picture of a user
-router.put("/:id/profilePicture",validateToken, async (req, res) => {
+router.put("/:id/profilePicture", async (req, res) => {
   try {
     const id = req.params.id;
     const fileExtension = req.body.file.split(";")[0].split("/")[1];
@@ -275,7 +275,7 @@ router.put("/:id/profilePicture",validateToken, async (req, res) => {
 });
 
 // Update typepets of user
-router.put("/:id/typePets",validateToken, async (req, res) => {
+router.put("/:id/typePets", async (req, res) => {
   try {
     const userId = req.params.id;
     const userRef = usersCollection.doc(userId);

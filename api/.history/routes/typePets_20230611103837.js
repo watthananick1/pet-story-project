@@ -64,29 +64,24 @@ router.post("/", validateToken, async (req, res) => {
 });
 
 //Update status a TypePet
-router.put("/:id", validateToken, async (req, res) => {
+router.put("/:id",validateToken, async (req, res) => {
   try {
-    const isUserDoc = await usersCollection.doc(req.user.userId).get();
-    const isUser = isUserDoc.data();
-    if (isUser.statusUser === "ADMIN") {
-      const id = req.params.id;
-      const typePetRef = typePetCollection.doc(id);
-      const typePet = await typePetRef.get();
+  
+    const id = req.params.id;
+    const typePetRef = typePetCollection.doc(id);
+    const typePet = await typePetRef.get();
 
-      if (!typePet.exists) {
-        return res.status(404).json({ message: "TypePet not found" });
-      }
-
-      const updatedTypePet = {
-        status: req.body.status,
-      };
-
-      await typePetRef.update(updatedTypePet);
-
-      res.status(200).json({ id_TypePet: id, ...updatedTypePet });
-    } else {
-      res.status(404).json({ error: "User not found" });
+    if (!typePet.exists) {
+      return res.status(404).json({ message: "TypePet not found" });
     }
+
+    const updatedTypePet = {
+      status: req.body.status,
+    };
+
+    await typePetRef.update(updatedTypePet);
+
+    res.status(200).json({ id_TypePet: id, ...updatedTypePet });
   } catch (err) {
     res.status(500).json(err);
   }
