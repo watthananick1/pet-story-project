@@ -1875,6 +1875,11 @@
   "resolved" "https://registry.npmjs.org/jose/-/jose-4.14.1.tgz"
   "version" "4.14.1"
 
+"js-cookie@^3.0.5":
+  "integrity" "sha512-cEiJEAEoIbWfCZYKWhVwFuvPX1gETRYPw6LlaTKoxD3s2AkXzkCjnp6h0V77ozyqj0jakteJ4YqDJT830+lVGw=="
+  "resolved" "https://registry.npmjs.org/js-cookie/-/js-cookie-3.0.5.tgz"
+  "version" "3.0.5"
+
 "js2xmlparser@^4.0.2":
   "integrity" "sha512-6n4D8gLlLf1n5mNLQPRfViYzu9RATblzPEtm1SthMX1Pjao0r9YI9nw7ZIfRxQMERS87mcswrg+r/OYrPRX6jA=="
   "resolved" "https://registry.npmjs.org/js2xmlparser/-/js2xmlparser-4.0.2.tgz"

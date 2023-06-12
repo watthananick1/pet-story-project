@@ -16,6 +16,7 @@
     "axios": "^0.21.1",
     "caniuse-lite": "^1.0.30001481",
     "firebase": "^9.22.0",
+    "js-cookie": "^3.0.5",
     "jwt-decode": "^3.1.2",
     "mdb-ui-kit": "^6.3.1",
     "postcss": "^8.4.23",
