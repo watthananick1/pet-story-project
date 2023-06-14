@@ -245,9 +245,7 @@ export default function Post({ isPost, onPostUpdate, indexPost }) {
     try {
       const response = await axios.delete(`/api/posts/${post.id}`, {
         data: requestBody,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        
       });
       const message = response.data.message;
       // Handle the response message here
@@ -349,22 +347,14 @@ export default function Post({ isPost, onPostUpdate, indexPost }) {
     try {
       const response = await axios.delete(
         `/api/comments/${post.id}/comments/${commentIdToDelete}`,
-        { data: requestBody,
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { data: requestBody }
       );
       const message = response.data.message;
       // Handle the response message here
       console.log(message);
 
       // Fetch the updated comments after deleting the comment
-      const resComments = await axios.get(`/api/comments/${post.id}/Comments`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const resComments = await axios.get(`/api/comments/${post.id}/Comments`);
       setComments(resComments.data);
 
       handleClose();

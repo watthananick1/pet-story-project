@@ -79,11 +79,7 @@ const NestedModal = ({
 
         if (isAddComment) {
           const resComments = await axios.get(
-            `/api/comments/${onContentID}/Comments`, {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              }
-            }
+            `/api/comments/${onContentID}/Comments`, 
           );
           onPostUpdate(resComments.data, onTitle);
         } else {
