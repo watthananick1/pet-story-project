@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { appFirebase, db, storage, auth } from "../routes/firebase.js";
+import { appFirebase, db, storage } from "../routes/firebase.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import validateToken from "../models/authMiddleware.js";
@@ -58,16 +58,19 @@ router.post("/register", async (req, res) => {
   }
 });
 
-router.post("/login", async (req, res) => {
+router.post("/Login", async (req, res) => {
   const { email, password } = req.body;
   console.log("email", email);
   console.log("password", password);
+  var user
   try {
-    const userCredential = await appFirebase
-      .auth()
-      .signInWithEmailAndPassword(email, password);
-    const user = userCredential.user;
-    console.log(`User ${user.uid}`);
+    const userCredential = await appFirebase.signInWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+      // Signed in
+      user = userCredential.user;
+      
+
+    console.log(`User ${user.user}`);
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });
@@ -80,7 +83,6 @@ router.post("/login", async (req, res) => {
 
     res.status(200).json({ userId: user.uid, token: token });
   } catch (err) {
-    console.error("Login error:", err);
     res.status(500).json({ error: "Internal server error" });
   }
 });

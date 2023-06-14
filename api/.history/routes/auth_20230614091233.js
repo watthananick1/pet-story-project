@@ -63,11 +63,9 @@ router.post("/login", async (req, res) => {
   console.log("email", email);
   console.log("password", password);
   try {
-    const userCredential = await appFirebase
-      .auth()
-      .signInWithEmailAndPassword(email, password);
+    const userCredential = await appFirebase.auth().signInWithEmailAndPassword(email, password);
     const user = userCredential.user;
-    console.log(`User ${user.uid}`);
+    console.log(`User ${user.user}`);
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });
@@ -84,6 +82,7 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
 
 router.get("/logout", (req, res) => {
   appFirebase

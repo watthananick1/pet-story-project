@@ -65,9 +65,9 @@ router.post("/login", async (req, res) => {
   try {
     const userCredential = await appFirebase
       .auth()
-      .signInWithEmailAndPassword(email, password);
+      .dsignInWithEmailAndPasswor(email, password);
     const user = userCredential.user;
-    console.log(`User ${user.uid}`);
+    console.log(`User ${user.user}`);
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });
