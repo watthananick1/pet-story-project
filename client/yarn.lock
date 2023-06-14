@@ -8764,6 +8764,13 @@
   "resolved" "https://registry.npmjs.org/react-fast-compare/-/react-fast-compare-3.2.2.tgz"
   "version" "3.2.2"
 
+"react-image-crop@^10.1.4":
+  "integrity" "sha512-bEc/SfJRPU06ApivtzuNmofEH3rqf1WsKgWNwloiZ4ttCB37DEETwR4KsQb+KkW87srvRtWpCbOhPs0a4TVAKw=="
+  "resolved" "https://registry.npmjs.org/react-image-crop/-/react-image-crop-10.1.4.tgz"
+  "version" "10.1.4"
+  dependencies:
+    "clsx" "^1.2.1"
+
 "react-is@^16.13.1":
   "integrity" "sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ=="
   "resolved" "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz"
