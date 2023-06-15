@@ -6,7 +6,7 @@ const router = Router();
 
 router.post("/", validateToken, async (req, res) => {
   try {
-    const isUserDoc = await db.collection("Users")
+    const isUserDoc = await db.collection("Users");
       .where("member_id", "==", req.user.userId)
       .get();
     const isUser = !isUserDoc.empty;
