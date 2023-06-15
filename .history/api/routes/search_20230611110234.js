@@ -6,11 +6,8 @@ const router = Router();
 
 router.post("/", validateToken, async (req, res) => {
   try {
-    const isUserDoc = await usersCollection
-      .where("member_id", "==", req.user.userId)
-      .get();
-    const isUser = !isUserDoc.empty;
-    console.log("isUser: ", isUser);
+    const isUserDoc = await usersCollection.doc(req.user.userId).get();
+    const isUser = isUserDoc.data();
     if (isUser) {
       const { searchTerm } = req.body;
       console.log(searchTerm);
