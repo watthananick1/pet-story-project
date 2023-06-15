@@ -12,7 +12,7 @@ router.post("/", validateToken, async (req, res) => {
     const isUser = !isUserDoc.empty;
     console.log("isUser: ", isUser);
     if (isUser) {
-      const searchTerm = req.body.searchTerm;
+      const { searchTerm } = req.body.searchTerm;
       console.log(searchTerm);
       if (!searchTerm) {
         return res.status(400).json({ error: "Search term is required" });
