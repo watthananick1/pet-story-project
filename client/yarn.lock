@@ -8661,7 +8661,7 @@ react-fast-compare@^3.0.1:
 
 react-image-crop@^10.1.4:
   version "10.1.4"
-  resolved "https://registry.npmjs.org/react-image-crop/-/react-image-crop-10.1.4.tgz"
+  resolved "https://registry.yarnpkg.com/react-image-crop/-/react-image-crop-10.1.4.tgz#b625326ba55979669b08b8c3d0e3b3fd3808e5f6"
   integrity sha512-bEc/SfJRPU06ApivtzuNmofEH3rqf1WsKgWNwloiZ4ttCB37DEETwR4KsQb+KkW87srvRtWpCbOhPs0a4TVAKw==
   dependencies:
     clsx "^1.2.1"
