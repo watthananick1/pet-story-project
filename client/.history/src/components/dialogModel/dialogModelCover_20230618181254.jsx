@@ -56,36 +56,46 @@ export default function FilePreviewerCover({ onClose }) {
 
   const handleCrop = () => {
     return new Promise((resolve) => {
+      const CHUNK_SIZE = 1024; // Adjust chunk size as needed
       const image = new Image();
       image.onload = () => {
-        const MAX_WIDTH = window.innerWidth - 50; // Maximum width of the cropped image
-        const MAX_HEIGHT = window.innerHeight - 200; // Maximum height of the cropped image
-        const aspectRatio = image.width / image.height;
-        let width = image.width;
-        let height = image.height;
-
-        // Adjust width and height to fit within maximum dimensions while maintaining aspect ratio
-        if (width > MAX_WIDTH) {
-          width = MAX_WIDTH;
-          height = width / aspectRatio;
-        }
-        if (height > MAX_HEIGHT) {
-          height = MAX_HEIGHT;
-          width = height * aspectRatio;
-        }
-
         const canvas = document.createElement("canvas");
-        canvas.width = width;
-        canvas.height = height;
+        const scaleX = image.naturalWidth / image.width;
+        const scaleY = image.naturalHeight / image.height;
+        canvas.width = crop.width;
+        canvas.height = crop.height;
         const ctx = canvas.getContext("2d");
 
-        const cropX = (image.width - width) / 2; // X coordinate for cropping
-        const cropY = (image.height - height) / 2; // Y coordinate for cropping
+        const processChunk = (chunkIndex) => {
+          const startX = chunkIndex * CHUNK_SIZE;
+          const remainingWidth = image.naturalWidth - startX;
+          const chunkWidth = Math.min(CHUNK_SIZE, remainingWidth);
+          const chunkHeight = crop.height;
 
-        ctx.drawImage(image, cropX, cropY, width, height, 0, 0, width, height);
+          ctx.clearRect(0, 0, crop.width, crop.height);
+          ctx.drawImage(
+            image,
+            startX * scaleX,
+            crop.y * scaleY,
+            chunkWidth * scaleX,
+            chunkHeight * scaleY,
+            0,
+            0,
+            chunkWidth,
+            chunkHeight
+          );
 
-        const croppedImageUrl = canvas.toDataURL("image/jpeg", 1);
-        resolve(croppedImageUrl);
+          if (startX + chunkWidth < image.naturalWidth) {
+            // Process next chunk
+            setTimeout(() => processChunk(chunkIndex + 1), 0);
+          } else {
+            // All chunks processed, resolve with cropped image data URL
+            const croppedImageUrl = canvas.toDataURL("image/jpeg", 1);
+            resolve(croppedImageUrl);
+          }
+        };
+
+        processChunk(0);
       };
 
       image.src = imagePreview;

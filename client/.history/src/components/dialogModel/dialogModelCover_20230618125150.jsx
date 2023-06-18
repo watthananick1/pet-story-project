@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Button,
   Dialog,
@@ -8,11 +8,11 @@ import {
   Stack,
 } from "@mui/material";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
+import { Send as SendIcon } from "@mui/icons-material";
 import ReactCrop from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import firebase from "firebase/compat/app";
 import "firebase/compat/storage";
-import SaveIcon from "@mui/icons-material/Save";
 import LoadingButton from "@mui/lab/LoadingButton";
 
 const firebaseConfig = {
@@ -34,16 +34,29 @@ const firestore = firebase.firestore();
 
 export default function FilePreviewerCover({ onClose }) {
   const [imagePreview, setImagePreview] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [crop, setCrop] = useState({
     unit: "%",
-    width: 100,
-    height: 50,
-    aspect: 1,
+    x: 25,
+    y: 25,
+    width: 60,
+    height: 30,
   });
-  const [croppedImage, setCroppedImage] = useState(null);
-  const [loading, setLoading] = useState(false);
+
   const cropperRef = useRef(null);
   const user = JSON.parse(localStorage.getItem("user"));
+
+  useEffect(() => {
+    return () => {
+      if (cropperRef.current) {
+        cropperRef.current.destroy();
+      }
+    };
+  }, []);
+
+  const handleCropChange = (newCrop) => {
+    setCrop(newCrop);
+  };
 
   const handleClose = () => {
     onClose();
@@ -54,41 +67,49 @@ export default function FilePreviewerCover({ onClose }) {
     handleClose();
   };
 
-  const handleCrop = () => {
-    return new Promise((resolve) => {
-      const image = new Image();
-      image.onload = () => {
-        const MAX_WIDTH = window.innerWidth - 50; // Maximum width of the cropped image
-        const MAX_HEIGHT = window.innerHeight - 200; // Maximum height of the cropped image
-        const aspectRatio = image.width / image.height;
-        let width = image.width;
-        let height = image.height;
+  const previewFile = (e) => {
+    const reader = new FileReader();
+    const selectedFile = e.target.files[0];
 
-        // Adjust width and height to fit within maximum dimensions while maintaining aspect ratio
-        if (width > MAX_WIDTH) {
-          width = MAX_WIDTH;
-          height = width / aspectRatio;
-        }
-        if (height > MAX_HEIGHT) {
-          height = MAX_HEIGHT;
-          width = height * aspectRatio;
-        }
-
-        const canvas = document.createElement("canvas");
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext("2d");
-
-        const cropX = (image.width - width) / 2; // X coordinate for cropping
-        const cropY = (image.height - height) / 2; // Y coordinate for cropping
-
-        ctx.drawImage(image, cropX, cropY, width, height, 0, 0, width, height);
-
-        const croppedImageUrl = canvas.toDataURL("image/jpeg", 1);
-        resolve(croppedImageUrl);
+    if (selectedFile) {
+      reader.readAsDataURL(selectedFile);
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
       };
+    }
+  };
 
-      image.src = imagePreview;
+  const getCroppedImageBlob = async (sourceImageUrl, crop) => {
+    const image = new Image();
+    image.src = sourceImageUrl;
+
+    return new Promise((resolve) => {
+      image.onload = () => {
+        const canvas = document.createElement("canvas");
+        const scaleX = image.naturalWidth / image.width;
+        const scaleY = image.naturalHeight / image.height;
+        canvas.width = crop.width;
+        canvas.height = crop.height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(
+          image,
+          crop.x * scaleX,
+          crop.y * scaleY,
+          crop.width * scaleX,
+          crop.height * scaleY,
+          0,
+          0,
+          crop.width,
+          crop.height
+        );
+
+        // Converting to base64
+        // const base64Image = canvas.toDataURL('image/jpeg');
+        canvas.toBlob((blob) => {
+          resolve(URL.createObjectURL(blob)); // Convert the blob to a URL
+        }, "image/jpeg");
+        // handleCropChange(base64Image);
+      };
     });
   };
 
@@ -99,23 +120,26 @@ export default function FilePreviewerCover({ onClose }) {
       const storageRef = storage.ref();
       const fileName = `${Date.now()}_cover`;
       const fileRef = storageRef.child(
-        `${user.member_id}/CoverePicture/${fileName}`
+        `${user.member_id}/CovertPicture/${fileName}`
       );
 
       if (!imagePreview) {
         throw new Error("No image selected");
       }
 
-      const croppedImageDataURL = await handleCrop();
+      console.log(`Image Preview:`, crop);
 
-      if (!croppedImageDataURL) {
+      const croppedImage = await getCroppedImageBlob(imagePreview, crop);
+
+      if (!croppedImage) {
         throw new Error("Error cropping image");
       }
 
-      const response = await fetch(croppedImageDataURL);
+      const response = await fetch(croppedImage);
       const blob = await response.blob();
 
       const file = new File([blob], fileName, { type: blob.type });
+      // setImagePreview(file)
 
       const uploadTaskSnapshot = await fileRef.put(file);
 
@@ -127,31 +151,12 @@ export default function FilePreviewerCover({ onClose }) {
 
       console.log("Profile picture updated successfully:", downloadUrl);
 
-      handleClose();
+      onClose();
     } catch (error) {
-      console.log("Error uploading cover picture:", error);
+      console.log("Error uploading profile picture:", error);
     } finally {
       setLoading(false);
     }
-  };
-
-  const previewFile = (e) => {
-    const reader = new FileReader();
-    const selectedFile = e.target.files[0];
-
-    if (selectedFile) {
-      reader.readAsDataURL(selectedFile);
-      reader.onloadend = () => {
-        const imgDataUrl = reader.result;
-        setImagePreview(imgDataUrl);
-        setCrop((prevCrop) => ({ ...prevCrop, width: 30, aspect: 1 }));
-        setCroppedImage(null);
-      };
-    }
-  };
-
-  const handleCropChange = (newCrop) => {
-    setCrop(newCrop);
   };
 
   return (
@@ -174,6 +179,7 @@ export default function FilePreviewerCover({ onClose }) {
                 type="file"
                 hidden
               />
+
               <Button
                 variant="outlined"
                 className="btn"
@@ -185,28 +191,17 @@ export default function FilePreviewerCover({ onClose }) {
             </Stack>
             <Stack direction="row" spacing={2} alignItems="center" mt={2}>
               {imagePreview && (
-                <>
-                  <ReactCrop
-                    crop={crop}
-                    // locked={true}
-                    onChange={handleCropChange}
-                    onImageLoaded={setImagePreview}
-                    src={imagePreview}
-                  >
-                    <>
-                      <img src={imagePreview} />
-                      <br />
-                    </>
-                  </ReactCrop>
-                  {/* <Button onClick={handleCrop}>Crop Image</Button> */}
-                  <br />
-                  {/* {croppedImage && (
-                    <div>
-                      <h3>Cropped Image:</h3>
-                      <img src={croppedImage} alt="Cropped" />
-                    </div>
-                  )} */}
-                </>
+                <ReactCrop
+                  crop={crop}
+                  locked={true}
+                  onChange={c => handleCropChange}
+                  onImageLoaded={setImagePreview}
+                  src={imagePreview}
+                >
+                  <>
+                    <img src={imagePreview} />
+                  </>
+                </ReactCrop>
               )}
             </Stack>
           </Stack>
@@ -217,12 +212,12 @@ export default function FilePreviewerCover({ onClose }) {
             onClick={handleAvatarUpload}
             variant="outlined"
             color="success"
-            startIcon={<SaveIcon />}
+            startIcon={<SendIcon />}
             className="shareButton"
             loading={loading}
             disabled={loading}
           >
-            Save
+            Submit
           </LoadingButton>
         </DialogActions>
       </Dialog>

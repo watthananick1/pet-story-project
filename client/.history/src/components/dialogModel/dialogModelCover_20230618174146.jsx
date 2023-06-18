@@ -54,42 +54,71 @@ export default function FilePreviewerCover({ onClose }) {
     handleClose();
   };
 
+  // const getCroppedImageBlob = async (sourceImageUrl, crop, fileName) => {
+  //   return new Promise((resolve, reject) => {
+  //     const image = new Image();
+  //     image.onload = () => {
+  //       const canvas = document.createElement("canvas");
+  //       const scaleX = image.naturalWidth / image.width;
+  //       const scaleY = image.naturalHeight / image.height;
+  //       canvas.width = crop.width;
+  //       canvas.height = crop.height;
+  //       const ctx = canvas.getContext("2d");
+
+  //       ctx.drawImage(
+  //         image,
+  //         crop.x * scaleX,
+  //         crop.y * scaleY,
+  //         crop.width * scaleX,
+  //         crop.height * scaleY,
+  //         0,
+  //         0,
+  //         crop.width,
+  //         crop.height
+  //       );
+
+  //       canvas.toBlob(
+  //         (blob) => {
+  //           blob.name = fileName;
+  //           resolve(blob);
+  //         },
+  //         "image/jpeg",
+  //         1
+  //       );
+  //     };
+
+  //     image.src = sourceImageUrl;
+  //   });
+  // };
+
   const handleCrop = () => {
-    return new Promise((resolve) => {
-      const image = new Image();
-      image.onload = () => {
-        const MAX_WIDTH = window.innerWidth - 50; // Maximum width of the cropped image
-        const MAX_HEIGHT = window.innerHeight - 200; // Maximum height of the cropped image
-        const aspectRatio = image.width / image.height;
-        let width = image.width;
-        let height = image.height;
+    const image = new Image();
+    image.onload = () => {
+      const canvas = document.createElement("canvas");
+      const scaleX = image.naturalWidth / image.width;
+      const scaleY = image.naturalHeight / image.height;
+      canvas.width = crop.width;
+      canvas.height = crop.height;
+      const ctx = canvas.getContext("2d");
 
-        // Adjust width and height to fit within maximum dimensions while maintaining aspect ratio
-        if (width > MAX_WIDTH) {
-          width = MAX_WIDTH;
-          height = width / aspectRatio;
-        }
-        if (height > MAX_HEIGHT) {
-          height = MAX_HEIGHT;
-          width = height * aspectRatio;
-        }
+      ctx.drawImage(
+        image,
+        crop.x * scaleX,
+        crop.y * scaleY,
+        crop.width * scaleX,
+        crop.height * scaleY,
+        0,
+        0,
+        crop.width,
+        crop.height
+      );
 
-        const canvas = document.createElement("canvas");
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext("2d");
+      const croppedImageUrl = canvas.toDataURL("image/jpeg", 1);
+      setCroppedImage(croppedImageUrl);
+      return croppedImageUrl;
+    };
 
-        const cropX = (image.width - width) / 2; // X coordinate for cropping
-        const cropY = (image.height - height) / 2; // Y coordinate for cropping
-
-        ctx.drawImage(image, cropX, cropY, width, height, 0, 0, width, height);
-
-        const croppedImageUrl = canvas.toDataURL("image/jpeg", 1);
-        resolve(croppedImageUrl);
-      };
-
-      image.src = imagePreview;
-    });
+    image.src = imagePreview;
   };
 
   const handleAvatarUpload = async () => {
@@ -125,9 +154,9 @@ export default function FilePreviewerCover({ onClose }) {
         coverPicture: downloadUrl,
       });
 
-      console.log("Profile picture updated successfully:", downloadUrl);
+      console.log("Cover picture updated successfully:", downloadUrl);
 
-      handleClose();
+      onClose();
     } catch (error) {
       console.log("Error uploading cover picture:", error);
     } finally {

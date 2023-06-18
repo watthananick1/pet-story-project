@@ -54,41 +54,40 @@ export default function FilePreviewerCover({ onClose }) {
     handleClose();
   };
 
-  const handleCrop = () => {
-    return new Promise((resolve) => {
+  const getCroppedImageBlob = async (sourceImageUrl, crop, fileName) => {
+    return new Promise((resolve, reject) => {
       const image = new Image();
       image.onload = () => {
-        const MAX_WIDTH = window.innerWidth - 50; // Maximum width of the cropped image
-        const MAX_HEIGHT = window.innerHeight - 200; // Maximum height of the cropped image
-        const aspectRatio = image.width / image.height;
-        let width = image.width;
-        let height = image.height;
-
-        // Adjust width and height to fit within maximum dimensions while maintaining aspect ratio
-        if (width > MAX_WIDTH) {
-          width = MAX_WIDTH;
-          height = width / aspectRatio;
-        }
-        if (height > MAX_HEIGHT) {
-          height = MAX_HEIGHT;
-          width = height * aspectRatio;
-        }
-
         const canvas = document.createElement("canvas");
-        canvas.width = width;
-        canvas.height = height;
+        const scaleX = image.naturalWidth / image.width;
+        const scaleY = image.naturalHeight / image.height;
+        canvas.width = crop.width;
+        canvas.height = crop.height;
         const ctx = canvas.getContext("2d");
 
-        const cropX = (image.width - width) / 2; // X coordinate for cropping
-        const cropY = (image.height - height) / 2; // Y coordinate for cropping
+        ctx.drawImage(
+          image,
+          crop.x * scaleX,
+          crop.y * scaleY,
+          crop.width * scaleX,
+          crop.height * scaleY,
+          0,
+          0,
+          crop.width,
+          crop.height
+        );
 
-        ctx.drawImage(image, cropX, cropY, width, height, 0, 0, width, height);
-
-        const croppedImageUrl = canvas.toDataURL("image/jpeg", 1);
-        resolve(croppedImageUrl);
+        canvas.toBlob(
+          (blob) => {
+            blob.name = fileName;
+            resolve(blob);
+          },
+          "image/jpeg",
+          1
+        );
       };
 
-      image.src = imagePreview;
+      image.src = sourceImageUrl;
     });
   };
 
@@ -106,18 +105,13 @@ export default function FilePreviewerCover({ onClose }) {
         throw new Error("No image selected");
       }
 
-      const croppedImageDataURL = await handleCrop();
+      const croppedImageBlob = await getCroppedImageBlob(
+        imagePreview,
+        crop,
+        fileName
+      );
 
-      if (!croppedImageDataURL) {
-        throw new Error("Error cropping image");
-      }
-
-      const response = await fetch(croppedImageDataURL);
-      const blob = await response.blob();
-
-      const file = new File([blob], fileName, { type: blob.type });
-
-      const uploadTaskSnapshot = await fileRef.put(file);
+      const uploadTaskSnapshot = await fileRef.put(croppedImageBlob);
 
       const downloadUrl = await uploadTaskSnapshot.ref.getDownloadURL();
 
@@ -125,9 +119,9 @@ export default function FilePreviewerCover({ onClose }) {
         coverPicture: downloadUrl,
       });
 
-      console.log("Profile picture updated successfully:", downloadUrl);
+      console.log("Cover picture updated successfully:", downloadUrl);
 
-      handleClose();
+      onClose();
     } catch (error) {
       console.log("Error uploading cover picture:", error);
     } finally {
@@ -152,6 +146,35 @@ export default function FilePreviewerCover({ onClose }) {
 
   const handleCropChange = (newCrop) => {
     setCrop(newCrop);
+  };
+
+  const handleCrop = () => {
+    const image = new Image();
+    image.onload = () => {
+      const canvas = document.createElement("canvas");
+      const scaleX = image.naturalWidth / image.width;
+      const scaleY = image.naturalHeight / image.height;
+      canvas.width = crop.width;
+      canvas.height = crop.height;
+      const ctx = canvas.getContext("2d");
+
+      ctx.drawImage(
+        image,
+        crop.x * scaleX,
+        crop.y * scaleY,
+        crop.width * scaleX,
+        crop.height * scaleY,
+        0,
+        0,
+        crop.width,
+        crop.height
+      );
+
+      const croppedImageUrl = canvas.toDataURL("image/jpeg", 1);
+      setCroppedImage(croppedImageUrl);
+    };
+
+    image.src = imagePreview;
   };
 
   return (
@@ -188,24 +211,10 @@ export default function FilePreviewerCover({ onClose }) {
                 <>
                   <ReactCrop
                     crop={crop}
-                    // locked={true}
                     onChange={handleCropChange}
-                    onImageLoaded={setImagePreview}
+                    onImageLoaded={handleCrop}
                     src={imagePreview}
-                  >
-                    <>
-                      <img src={imagePreview} />
-                      <br />
-                    </>
-                  </ReactCrop>
-                  {/* <Button onClick={handleCrop}>Crop Image</Button> */}
-                  <br />
-                  {/* {croppedImage && (
-                    <div>
-                      <h3>Cropped Image:</h3>
-                      <img src={croppedImage} alt="Cropped" />
-                    </div>
-                  )} */}
+                  />
                 </>
               )}
             </Stack>

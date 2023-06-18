@@ -63,7 +63,7 @@ export default function FilePreviewerCover({ onClose }) {
         const aspectRatio = image.width / image.height;
         let width = image.width;
         let height = image.height;
-
+  
         // Adjust width and height to fit within maximum dimensions while maintaining aspect ratio
         if (width > MAX_WIDTH) {
           width = MAX_WIDTH;
@@ -73,24 +73,25 @@ export default function FilePreviewerCover({ onClose }) {
           height = MAX_HEIGHT;
           width = height * aspectRatio;
         }
-
+  
         const canvas = document.createElement("canvas");
         canvas.width = width;
         canvas.height = height;
         const ctx = canvas.getContext("2d");
-
+  
         const cropX = (image.width - width) / 2; // X coordinate for cropping
         const cropY = (image.height - height) / 2; // Y coordinate for cropping
-
+  
         ctx.drawImage(image, cropX, cropY, width, height, 0, 0, width, height);
-
+  
         const croppedImageUrl = canvas.toDataURL("image/jpeg", 1);
         resolve(croppedImageUrl);
       };
-
+  
       image.src = imagePreview;
     });
   };
+  
 
   const handleAvatarUpload = async () => {
     setLoading(true);
