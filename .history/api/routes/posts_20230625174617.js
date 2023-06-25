@@ -228,7 +228,6 @@ router.get("/:id/:sort", validateToken, async (req, res) => {
               ...post,
               firstName: userOf.firstName,
               lastName: userOf.lastName,
-              post_Status: userOf.statusUser,
               profilePicture: userOf.profilePicture,
             };
 

@@ -81,7 +81,7 @@ router.get("/user/:firstName/:sort", validateToken, async (req, res) => {
           ...post,
           firstName: userOf.firstName,
           lastName: userOf.lastName,
-          post_Status: userOf.statusUser,
+          Po
           profilePicture: userOf.profilePicture,
         });
       }
@@ -148,7 +148,6 @@ router.get("/:sort", validateToken, async (req, res) => {
             ...post,
             firstName: user.firstName,
             lastName: user.lastName,
-            post_Status: userOf.statusUser,
             profilePicture: user.profilePicture,
           };
           posts.push(postWithUser);
@@ -228,7 +227,6 @@ router.get("/:id/:sort", validateToken, async (req, res) => {
               ...post,
               firstName: userOf.firstName,
               lastName: userOf.lastName,
-              post_Status: userOf.statusUser,
               profilePicture: userOf.profilePicture,
             };
 
