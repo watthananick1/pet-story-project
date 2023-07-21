@@ -45,17 +45,17 @@ const logger = winston.createLogger({
   ],
 });
 
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = path.dirname(__filename);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config();
 
 app.use(cors()); // Enable CORS
 
-// app.use(
-//   "/images",
-//   express.static(new URL("./public/images", import.meta.url).pathname)
-// );
+app.use(
+  "/images",
+  express.static(new URL("./public/images", import.meta.url).pathname)
+);
 
 app.use(express.json());
 app.use(helmet());

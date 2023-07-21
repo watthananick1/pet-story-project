@@ -9,25 +9,19 @@ import bodyParser from "body-parser";
 import { Server as SocketIOServer } from "socket.io";
 import cors from "cors";
 
-import usersRouter from "../api/routes/users.js";
-import authRoute from "../api/routes/auth.js";
-import postRoute from "../api/routes/posts.js";
-import commentRoute from "../api/routes/comments.js";
-import typePetRoute from "../api/routes/typePets.js";
-import searchRoute from "../api/routes/search.js";
-import reportRoute from "../api/routes/report.js";
+import usersRouter from './routes/users.js';
+import authRoute from './routes/users.js';
+import postRoute from './routes/users.js';
+import commentRoute from './routes/users.js';
+import typePetRoute from './routes/users.js';
+import searchRoute from './routes/users.js';
+import reportRoute from './routes/users.js';
 
 import validateToken from "./models/authMiddleware.js";
 
 const app = express();
-
-app.get('/api/auth/test', (req, res) => {
-  res.send('This is a test endpoint for authentication.');
-});
-
-const port = 4000;
-const server = app.listen(port, () => {
-  console.log(`Backend server is running on port ${port}!`);
+const server = app.listen(4000, () => {
+  console.log("Backend server is running!");
 });
 
 const io = new SocketIOServer(server);
@@ -45,17 +39,17 @@ const logger = winston.createLogger({
   ],
 });
 
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = path.dirname(__filename);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config();
 
 app.use(cors()); // Enable CORS
 
-// app.use(
-//   "/images",
-//   express.static(new URL("./public/images", import.meta.url).pathname)
-// );
+app.use(
+  "/images",
+  express.static(new URL("./public/images", import.meta.url).pathname)
+);
 
 app.use(express.json());
 app.use(helmet());

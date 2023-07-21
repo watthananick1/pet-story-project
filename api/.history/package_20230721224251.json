@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "nodemon --exec ./node_modules/.bin/babel-node -- index.js",
     "dev": "nodemon index.js"
   },
-  "author": "",
+  "author": "63011212052@m",
   "license": "ISC",
   "type": "module",
   "dependencies": {

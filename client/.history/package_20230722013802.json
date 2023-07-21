@@ -64,7 +64,7 @@
   "react-scripts": {
     "devtool": false
   },
-  "proxy": "http://54.252.162.123",
+  "proxy": "http://54.252.162.123/",
   "main": "index.js",
   "author": "",
   "license": "ISC",

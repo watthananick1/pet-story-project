@@ -21,9 +21,7 @@ import validateToken from "./models/authMiddleware.js";
 
 const app = express();
 
-app.get('/api/auth/test', (req, res) => {
-  res.send('This is a test endpoint for authentication.');
-});
+
 
 const port = 4000;
 const server = app.listen(port, () => {
@@ -45,17 +43,17 @@ const logger = winston.createLogger({
   ],
 });
 
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = path.dirname(__filename);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config();
 
 app.use(cors()); // Enable CORS
 
-// app.use(
-//   "/images",
-//   express.static(new URL("./public/images", import.meta.url).pathname)
-// );
+app.use(
+  "/images",
+  express.static(new URL("./public/images", import.meta.url).pathname)
+);
 
 app.use(express.json());
 app.use(helmet());
