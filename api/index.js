@@ -20,7 +20,7 @@ import reportRoute from "../api/routes/report.js";
 import validateToken from "./models/authMiddleware.js";
 
 const app = express();
-const server = app.listen(80, () => {
+const server = app.listen(4000, () => {
   console.log("Backend server is running!");
 });
 
