@@ -272,7 +272,6 @@ export default function Share({ onNewPost }) {
                     <label htmlFor="file" className="shareOptionLabel">
                       <PhotoCameraBackIcon />
                       {/* <PermMedia htmlColor="tomato" className="shareIcon" /> */}
-                      <br></br>
                       <span className="shareOptionText">Photo or Video</span>
                       <input
                         style={{ display: "none" }}

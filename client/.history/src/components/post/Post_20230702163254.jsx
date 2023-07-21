@@ -567,7 +567,7 @@ export default function Post({ isPost, onPostUpdate, indexPost }) {
                   key={i}
                   label={`#${pet}`}
                   // className="postChip"
-                  sx={{ color: "#6200E8", m: 0.5 }}
+                  style={{ color: "#6200E8", m:10 }}
                 />
               </span>
             ))}

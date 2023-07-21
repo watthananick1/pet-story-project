@@ -52,7 +52,7 @@ export default function Share({ onNewPost }) {
   const token = Cookies.get("token");
 
   const privacyOptions = [
-    { label: "สาธารณะ", value: "normal" },
+    [ label: "สาธารณะ", value: "normal" ],
     { label: "ส่วนตัว", value: "private" },
     { label: "เฉพาะผู้ติดตาม", value: "followers" },
   ];
@@ -236,10 +236,7 @@ export default function Share({ onNewPost }) {
                 selectOnFocus
                 autoHighlight
                 options={privacyOptions}
-                isOptionEqualToValue={(option, value) => option.value === value.value}
-                defaultValue={privacyOptions.find(
-                  (option) => option.value === "normal"
-                )}
+                defaultValue={privacyOptions[0]}
                 getOptionLabel={(option) => option.label}
                 onChange={handlePrivacyChange}
                 renderInput={(params) => (
@@ -272,7 +269,6 @@ export default function Share({ onNewPost }) {
                     <label htmlFor="file" className="shareOptionLabel">
                       <PhotoCameraBackIcon />
                       {/* <PermMedia htmlColor="tomato" className="shareIcon" /> */}
-                      <br></br>
                       <span className="shareOptionText">Photo or Video</span>
                       <input
                         style={{ display: "none" }}

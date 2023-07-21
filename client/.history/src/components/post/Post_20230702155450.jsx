@@ -304,11 +304,8 @@ export default function Post({ isPost, onPostUpdate, indexPost }) {
   //ITEM OF POST ----------------------------------------------
 
   const SortableList = SortableContainer(({ items }) => {
-    
-    // console.log(items)
-  
     const setImage = (image) => ({
-      title: image.title,
+      title: image.type,
       img: image.url,
       imgThumbnail: image.url,
     });
@@ -382,10 +379,9 @@ export default function Post({ isPost, onPostUpdate, indexPost }) {
     return (
       <Box style={{ "& > *": { height: "100%", width: "100%" } }}>
         {items.map((item, index) => {
-          const isImage = item.type === "image"? true : false;
+          const isImage = item.title === "image";
           
-          // console.log(isImage)
-          // console.log(item.type)
+          console.log(isImage)
 
           if (isImage) {
             const imageCount = Math.min(items.length, GROUP_NUM_IMAGE.length);
@@ -560,14 +556,14 @@ export default function Post({ isPost, onPostUpdate, indexPost }) {
           <Typography variant="body1" className="postText">
             <span>{post?.content}</span>
           </Typography>
-          <Typography variant="body2" style={{ width: "100%", alignItems: "right", display: "flex", justifyContent: "flex-start"}}>
+          <Typography variant="body2" className="postText">
             {post?.tagpet.map((pet, i) => (
               <span>
                 <Chip
                   key={i}
                   label={`#${pet}`}
-                  // className="postChip"
-                  sx={{ color: "#6200E8", m: 0.5 }}
+                  className="postChip"
+                  style={{ color: "#6200E8" }}
                 />
               </span>
             ))}
@@ -576,7 +572,7 @@ export default function Post({ isPost, onPostUpdate, indexPost }) {
         <CardMedia component="div" style={{ width: "100%" }}>
           <SortableList
             items={post.img.map((item) => ({
-              type: post.title,
+              type: item.endsWith(".mp4") ? "video" : "image",
               url: item,
             }))}
             axis="xy"

@@ -560,20 +560,20 @@ export default function Post({ isPost, onPostUpdate, indexPost }) {
           <Typography variant="body1" className="postText">
             <span>{post?.content}</span>
           </Typography>
-          <Typography variant="body2" style={{ width: "100%", alignItems: "right", display: "flex", justifyContent: "flex-start"}}>
+          <Typography variant="body2" className="postText" sx={{}}>
             {post?.tagpet.map((pet, i) => (
               <span>
                 <Chip
                   key={i}
                   label={`#${pet}`}
                   // className="postChip"
-                  sx={{ color: "#6200E8", m: 0.5 }}
+                  style={{ color: "#6200E8", m:1 }}
                 />
               </span>
             ))}
           </Typography>
         </CardContent>
-        <CardMedia component="div" style={{ width: "100%" }}>
+        <CardMedia component="div" https://firebasestorage.googleapis.com/v0/b/pet-story-f51e3.appspot.com/o/xEEI34rRfqhYJ4omAn44DWlLx4p2%2F1688287622536ELZH2390.MP4?alt=media&token=8fa407c7-b43b-48d5-9caa-c69a7ee9f724>
           <SortableList
             items={post.img.map((item) => ({
               type: post.title,

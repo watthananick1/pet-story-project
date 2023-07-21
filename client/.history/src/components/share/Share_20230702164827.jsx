@@ -236,7 +236,6 @@ export default function Share({ onNewPost }) {
                 selectOnFocus
                 autoHighlight
                 options={privacyOptions}
-                isOptionEqualToValue={(option, value) => option.value === value.value}
                 defaultValue={privacyOptions.find(
                   (option) => option.value === "normal"
                 )}
@@ -272,7 +271,6 @@ export default function Share({ onNewPost }) {
                     <label htmlFor="file" className="shareOptionLabel">
                       <PhotoCameraBackIcon />
                       {/* <PermMedia htmlColor="tomato" className="shareIcon" /> */}
-                      <br></br>
                       <span className="shareOptionText">Photo or Video</span>
                       <input
                         style={{ display: "none" }}

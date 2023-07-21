@@ -229,28 +229,26 @@ export default function Share({ onNewPost }) {
                 sx={{ width: "39px", height: "39px", mr: 1 }}
               />
               <Autocomplete
-                id="margin-none"
-                autoFocus
-                disableCloseOnSelect
-                fullWidth
-                selectOnFocus
-                autoHighlight
-                options={privacyOptions}
-                isOptionEqualToValue={(option, value) => option.value === value.value}
-                defaultValue={privacyOptions.find(
-                  (option) => option.value === "normal"
-                )}
-                getOptionLabel={(option) => option.label}
-                onChange={handlePrivacyChange}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    variant="standard"
-                    size="small"
-                    sx={{ color: "#6309DE", m: 1 }}
-                  />
-                )}
-              />
+  id="margin-none"
+  autoFocus
+  disableCloseOnSelect
+  fullWidth
+  selectOnFocus
+  autoHighlight
+  options={privacyOptions}
+  defaultValue={privacyOptions.find(option => option.value === "normal")}
+  getOptionLabel={(option) => option.label}
+  onChange={handlePrivacyChange}
+  renderInput={(params) => (
+    <TextField
+      {...params}
+      variant="standard"
+      size="small"
+      sx={{ color: "#6309DE", m: 1 }}
+    />
+  )}
+/>
+
             </Grid>
             <Grid item xs={12} sm={12} md={12}>
               <TextField
@@ -272,7 +270,6 @@ export default function Share({ onNewPost }) {
                     <label htmlFor="file" className="shareOptionLabel">
                       <PhotoCameraBackIcon />
                       {/* <PermMedia htmlColor="tomato" className="shareIcon" /> */}
-                      <br></br>
                       <span className="shareOptionText">Photo or Video</span>
                       <input
                         style={{ display: "none" }}

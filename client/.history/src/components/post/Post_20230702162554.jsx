@@ -560,14 +560,14 @@ export default function Post({ isPost, onPostUpdate, indexPost }) {
           <Typography variant="body1" className="postText">
             <span>{post?.content}</span>
           </Typography>
-          <Typography variant="body2" style={{ width: "100%", alignItems: "right", display: "flex", justifyContent: "flex-start"}}>
+          <Typography variant="body2" style={{ width: "100%" }}>
             {post?.tagpet.map((pet, i) => (
               <span>
                 <Chip
                   key={i}
                   label={`#${pet}`}
                   // className="postChip"
-                  sx={{ color: "#6200E8", m: 0.5 }}
+                  style={{ color: "#6200E8", m:1 }}
                 />
               </span>
             ))}
