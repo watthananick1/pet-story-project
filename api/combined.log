@@ -8308,3 +8308,14 @@
 {"level":"warn","message":"Undefined route: /profile/assets/person/8.jpeg","service":"user-service"}
 {"level":"warn","message":"Undefined route: /profile/assets/person/9.jpeg","service":"user-service"}
 {"level":"warn","message":"Undefined route: /profile/assets/person/10.jpeg","service":"user-service"}
+{"level":"warn","message":"Undefined route: /favicon.ico","service":"user-service"}
+{"level":"warn","message":"Undefined route: /profile/assets/person/1.jpeg","service":"user-service"}
+{"level":"warn","message":"Undefined route: /profile/assets/person/2.jpeg","service":"user-service"}
+{"level":"warn","message":"Undefined route: /profile/assets/person/3.jpeg","service":"user-service"}
+{"level":"warn","message":"Undefined route: /profile/assets/person/4.jpeg","service":"user-service"}
+{"level":"warn","message":"Undefined route: /profile/assets/person/5.jpeg","service":"user-service"}
+{"level":"warn","message":"Undefined route: /profile/assets/person/6.jpeg","service":"user-service"}
+{"level":"warn","message":"Undefined route: /profile/assets/person/7.jpeg","service":"user-service"}
+{"level":"warn","message":"Undefined route: /profile/assets/person/8.jpeg","service":"user-service"}
+{"level":"warn","message":"Undefined route: /profile/assets/person/9.jpeg","service":"user-service"}
+{"level":"warn","message":"Undefined route: /profile/assets/person/10.jpeg","service":"user-service"}
