@@ -83,7 +83,7 @@ const NestedModal = ({
         let updatedData = null;
 
         if (onTitle === "Post") {
-          endpoint = `${path}/api/posts/${onContentID}`;
+          endpoint = `${/api/posts/${onContentID}`;
           updatedData = {
             content: content,
             member_id: userId,

@@ -81,7 +81,7 @@ function Register() {
         coverPicture: "",
       };
       try {
-        const res = await axios.post(`${path}/api/auth/register`, user);
+        const res = await axios.post(`${pa}/api/auth/register`, user);
         if (res.status === 200) {
           localStorage.setItem("Uid", res.data.member_id);
           history.push({

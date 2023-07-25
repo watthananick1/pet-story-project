@@ -153,7 +153,7 @@ export default function Share({ onNewPost }) {
   useEffect(() => {
     const getTypePets = async () => {
       try {
-        const res = await axios.get(`${path}/api/typePets`);
+        const res = await axios.get(`/api/typePets`);
         const data = res.data;
         const typePets = data.map((item, index) => ({
           id: index,

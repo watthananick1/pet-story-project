@@ -123,7 +123,7 @@ export default function Post({ isPost, onPostUpdate, indexPost }) {
 
   const likeHandler = async () => {
     try {
-      await axios.put(`${path}/api/posts/${post.id}/like`, {
+      await axios.put(`/api/posts/${post.id}/like`, {
         member_id: currentUser.member_id,
       });
     } catch (err) {

@@ -65,7 +65,7 @@
     "devtool": false
   },
   "homepage": "/",
-  "proxy": "http://54.255.213.254:4000",
+  "proxy": "http://54.255.213.254:",
   "main": "index.js",
   "author": "",
   "license": "ISC",

@@ -28,7 +28,7 @@ export default function Rightbar({ user }) {
   useEffect(() => {
     const getFriends = async () => {
       try {
-        const friendList = await axios.get(`${path}/api/users/friends/${user.member_id}`, {
+        const friendList = await axios.get(`/api/users/friends/${user.member_id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

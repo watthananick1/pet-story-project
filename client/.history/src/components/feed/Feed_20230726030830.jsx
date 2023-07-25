@@ -41,7 +41,7 @@ export default function Feed({ firstName, onProfile }) {
         setPosts(sortedPosts);
       } catch (err) {
         if (axios.isCancel(err)) {
-          //console.log("Request canceled:", err.message);
+          console.log("Request canceled:", err.message);
         } else {
           console.log(err);
         }

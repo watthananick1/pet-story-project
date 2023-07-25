@@ -40,7 +40,6 @@ export default function Profile() {
   const [isUser, setIsUser] = useState(false);
   const token = Cookies.get("token");
   const dataUser = JSON.parse(localStorage.getItem("user"));
-  const path = process.env.REACT_APP_PATH_ID;
 
   useEffect(() => {
     setIsUser(firstName === dataUser?.firstName);
@@ -92,7 +91,7 @@ export default function Profile() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`${path}/api/users/user/${firstName}`, {
+        const res = await axios.get(`/api/users/user/${firstName}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

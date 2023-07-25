@@ -136,7 +136,7 @@ export default function Topbar() {
 
   const handleLogout = async () => {
     try {
-      const response = await axios.get(`${path}/api/auth/logout`, {
+      const response = await axios.get(`"/api/auth/logout`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

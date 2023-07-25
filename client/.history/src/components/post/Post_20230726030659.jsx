@@ -123,7 +123,7 @@ export default function Post({ isPost, onPostUpdate, indexPost }) {
 
   const likeHandler = async () => {
     try {
-      await axios.put(`${path}/api/posts/${post.id}/like`, {
+      await axios.put(`/api/posts/${post.id}/like`, {
         member_id: currentUser.member_id,
       });
     } catch (err) {
@@ -146,7 +146,7 @@ export default function Post({ isPost, onPostUpdate, indexPost }) {
     const fetchComments = async () => {
       try {
         const resComments = await axios.get(
-          `${path}/api/comments/${post.id}/Comments`,
+          `/api/comments/${post.id}/Comments`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -286,7 +286,7 @@ export default function Post({ isPost, onPostUpdate, indexPost }) {
     };
 
     try {
-      const response = await axios.delete(`${path}/api/posts/${post.id}`, {
+      const response = await axios.delete(`/api/posts/${post.id}`, {
         data: requestBody,
         headers: {
           Authorization: `Bearer ${token}`,

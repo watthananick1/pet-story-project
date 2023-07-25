@@ -92,7 +92,7 @@ export default function Profile() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`${path}/api/users/user/${firstName}`, {
+        const res = await axios.get(`${pa}/api/users/user/${firstName}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

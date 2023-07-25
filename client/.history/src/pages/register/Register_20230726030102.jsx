@@ -19,8 +19,6 @@ import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import Card from "@mui/material/Card";
 
-const path = process.env.REACT_APP_PATH_ID;
-
 function Copyright(props) {
   return (
     <Typography
@@ -81,7 +79,7 @@ function Register() {
         coverPicture: "",
       };
       try {
-        const res = await axios.post(`${path}/api/auth/register`, user);
+        const res = await axios.post("/api/auth/register", user);
         if (res.status === 200) {
           localStorage.setItem("Uid", res.data.member_id);
           history.push({

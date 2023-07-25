@@ -83,7 +83,7 @@ const NestedModal = ({
         let updatedData = null;
 
         if (onTitle === "Post") {
-          endpoint = `${path}/api/posts/${onContentID}`;
+          endpoint = `/api/posts/${onContentID}`;
           updatedData = {
             content: content,
             member_id: userId,
@@ -97,7 +97,7 @@ const NestedModal = ({
           const updatedPost = { ...onContent, ...updatedData };
           onPostUpdate(updatedPost);
         } else if (onTitle === "Comment") {
-          endpoint = `${path}/api/comments/${onContentID}/Comments/${onCommentsID}`;
+          endpoint = `/api/comments/${onContentID}/Comments/${onCommentsID}`;
           updatedData = { content: content, member_id: userId };
           await axios.put(endpoint, updatedData, {
             headers: {
@@ -105,7 +105,7 @@ const NestedModal = ({
             },
           });
         } else if (onTitle === "Add Comment") {
-          endpoint = `${path}/api/comments/Comment/${onContentID}`;
+          endpoint = `/api/comments/Comment/${onContentID}`;
           updatedData = { content: content, member_id: userId };
           await axios.post(endpoint, updatedData, {
             headers: {

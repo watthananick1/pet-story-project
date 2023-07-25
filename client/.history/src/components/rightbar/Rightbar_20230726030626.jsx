@@ -28,7 +28,7 @@ export default function Rightbar({ user }) {
   useEffect(() => {
     const getFriends = async () => {
       try {
-        const friendList = await axios.get(`${path}/api/users/friends/${user.member_id}`, {
+        const friendList = await axios.get(`/api/users/friends/${user.member_id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -46,7 +46,7 @@ export default function Rightbar({ user }) {
   const handleClick = async () => {
     try {
       if (followed) {
-        await axios.put(`${path}/api/users/${user?.member_id}/unfollow`, {
+        await axios.put(`/api/users/${user?.member_id}/unfollow`, {
           member_id: currentUser?.member_id,
         });
         dispatch({ type: "UNFOLLOW", payload: user?.member_id });
