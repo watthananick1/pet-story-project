@@ -468,7 +468,7 @@ export default function Post({ isPost, onPostUpdate, indexPost }) {
       //console.log(message);
 
       // Fetch the updated comments after deleting the comment
-      const resComments = await axios.get(`/api/comments/${post.id}/Comments`, {
+      const resComments = await axios.get(`${path}/api/comments/${post.id}/Comments`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

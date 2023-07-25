@@ -83,7 +83,7 @@ const NestedModal = ({
         let updatedData = null;
 
         if (onTitle === "Post") {
-          endpoint = `/api/posts/${onContentID}`;
+          endpoint = `${/api/posts/${onContentID}`;
           updatedData = {
             content: content,
             member_id: userId,
@@ -97,7 +97,7 @@ const NestedModal = ({
           const updatedPost = { ...onContent, ...updatedData };
           onPostUpdate(updatedPost);
         } else if (onTitle === "Comment") {
-          endpoint = `/api/comments/${onContentID}/Comments/${onCommentsID}`;
+          endpoint = `${path}/api/comments/${onContentID}/Comments/${onCommentsID}`;
           updatedData = { content: content, member_id: userId };
           await axios.put(endpoint, updatedData, {
             headers: {
@@ -105,7 +105,7 @@ const NestedModal = ({
             },
           });
         } else if (onTitle === "Add Comment") {
-          endpoint = `/api/comments/Comment/${onContentID}`;
+          endpoint = `${path}/api/comments/Comment/${onContentID}`;
           updatedData = { content: content, member_id: userId };
           await axios.post(endpoint, updatedData, {
             headers: {
@@ -120,7 +120,7 @@ const NestedModal = ({
 
         if (isAddComment) {
           const resComments = await axios.get(
-            `/api/comments/${onContentID}/Comments`, {
+            `${path}/api/comments/${onContentID}/Comments`, {
               headers: {
                 Authorization: `Bearer ${token}`,
               }

@@ -129,7 +129,7 @@ export default function Share({ onNewPost }) {
         status: privacy,
       };
 
-      const res = await axios.post(`/api/posts`, newPost, {
+      const res = await axios.post(`${path}/api/posts`, newPost, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

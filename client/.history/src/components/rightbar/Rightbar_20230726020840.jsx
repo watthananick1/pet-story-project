@@ -51,7 +51,7 @@ export default function Rightbar({ user }) {
         });
         dispatch({ type: "UNFOLLOW", payload: user?.member_id });
       } else {
-        await axios.put(`/api/users/${user?.member_id}/follow`, {
+        await axios.put(`${path}/api/users/${user?.member_id}/follow`, {
           member_id: currentUser?.member_id,
         });
         dispatch({ type: "FOLLOW", payload: user?.member_id });

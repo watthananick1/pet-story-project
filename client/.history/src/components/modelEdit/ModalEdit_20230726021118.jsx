@@ -105,7 +105,7 @@ const NestedModal = ({
             },
           });
         } else if (onTitle === "Add Comment") {
-          endpoint = `/api/comments/Comment/${onContentID}`;
+          endpoint = `${path}/api/comments/Comment/${onContentID}`;
           updatedData = { content: content, member_id: userId };
           await axios.post(endpoint, updatedData, {
             headers: {
@@ -120,7 +120,7 @@ const NestedModal = ({
 
         if (isAddComment) {
           const resComments = await axios.get(
-            `/api/comments/${onContentID}/Comments`, {
+            `${path}/api/comments/${onContentID}/Comments`, {
               headers: {
                 Authorization: `Bearer ${token}`,
               }

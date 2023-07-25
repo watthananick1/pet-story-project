@@ -55,7 +55,7 @@ export default function Feed({ firstName, onProfile }) {
         const currentTime = new Date().getTime();
 
         setLoading(true);
-        const res = await axios.get(`/api/posts/user/${firstName}/date`, {
+        const res = await axios.get(`${path}/api/posts/user/${firstName}/date`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
