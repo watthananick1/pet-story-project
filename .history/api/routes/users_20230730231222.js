@@ -330,16 +330,16 @@ router.put("/typePets", validateToken, async (req, res) => {
         // };
       } else {
         // If dataType does not exist, add it to the array
-        updatedData = {
+        const updatedData = {
           updatedAt: new Date(),
-          typePets: dataType,
+          typePets: admin.firestore.FieldValue.arrayUnion(dataType),
         };
         
       }
 
       console.log(updatedData.typePets);
 
-      await userRef.update(updatedData);
+      // await userRef.update(updatedData);
       res.status(200).json({ message: "อัปเดตข้อมูลผู้ใช้สำเร็จ" });
     } else {
       res.status(404).json({ error: "User not found" });

@@ -8319,3 +8319,4 @@
 {"level":"warn","message":"Undefined route: /profile/assets/person/8.jpeg","service":"user-service"}
 {"level":"warn","message":"Undefined route: /profile/assets/person/9.jpeg","service":"user-service"}
 {"level":"warn","message":"Undefined route: /profile/assets/person/10.jpeg","service":"user-service"}
+{"level":"warn","message":"Undefined route: /api/users/xEEI34rRfqhYJ4omAn44DWlLx4p2/typePets","service":"user-service"}

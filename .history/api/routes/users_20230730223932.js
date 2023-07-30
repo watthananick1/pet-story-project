@@ -291,8 +291,8 @@ router.put("/:id/profilePicture", validateToken, async (req, res) => {
 // Update typepets of user
 router.put("/typePets", validateToken, async (req, res) => {
   try {
-  //console.log(req.body);
-    const userId = req.body.member_id;
+  console.log(req.body.data);
+    const userId = req.body.data.member_id;
     const dataType = req.body.typePets;
     const userRef = usersCollection.doc(userId);
     const isUserDoc = await usersCollection
@@ -332,9 +332,8 @@ router.put("/typePets", validateToken, async (req, res) => {
         // If dataType does not exist, add it to the array
         updatedData = {
           updatedAt: new Date(),
-          typePets: dataType,
+          typePets: [...existingTypePets, ...dataType],
         };
-        
       }
 
       console.log(updatedData.typePets);

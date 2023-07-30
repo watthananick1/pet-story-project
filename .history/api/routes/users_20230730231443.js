@@ -332,7 +332,7 @@ router.put("/typePets", validateToken, async (req, res) => {
         // If dataType does not exist, add it to the array
         updatedData = {
           updatedAt: new Date(),
-          typePets: dataType,
+          typePets: dataType),
         };
         
       }

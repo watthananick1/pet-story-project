@@ -289,14 +289,12 @@ router.put("/:id/profilePicture", validateToken, async (req, res) => {
 });
 
 // Update typepets of user
-router.put("/typePets", validateToken, async (req, res) => {
+router.put("/typePets/:id", validateToken, async (req, res) => {
   try {
-  //console.log(req.body);
-    const userId = req.body.member_id;
-    const dataType = req.body.typePets;
+    const userId = req.params.id;
     const userRef = usersCollection.doc(userId);
     const isUserDoc = await usersCollection
-      .where("member_id", "==", userId)
+      .where("member_id", "==", req.user.userId)
       .get();
     const isUser = !isUserDoc.empty;
     console.log("isUser: ", isUser);
@@ -304,49 +302,24 @@ router.put("/typePets", validateToken, async (req, res) => {
       console.log("user_id: ", isUserDoc.docs[0].id);
 
       const userSnapshot = await userRef.get();
-      
-      //console.log(userSnapshot.data())
 
       if (!userSnapshot.exists) {
         res.status(404).json({ message: "User not found" });
         return;
       }
-      
-      console.log(dataType)
-      
-      const existingTypePets = userSnapshot.data().typePets || [];
-      console.log("existingTypePets: ", existingTypePets);
 
-      // Check if dataType already exists in existingTypePets
-      const dataTypeExists = existingTypePets.includes(dataType);
-      console.log("dataTypeExists: ", dataTypeExists);
-
-      let updatedData;
-      if (dataTypeExists) {
-        // If dataType already exists, remove it from the array
-        // updatedData = {
-        //   updatedAt: new Date(),
-        //   typePets: FieldValue.arrayRemove(dataType),
-        // };
-      } else {
-        // If dataType does not exist, add it to the array
-        updatedData = {
-          updatedAt: new Date(),
-          typePets: dataType,
-        };
-        
-      }
-
-      console.log(updatedData.typePets);
+      const updatedData = {
+        updatedAt: new Date(),
+        typePets: FieldValue.arrayUnion(...req.body.typePets),
+      };
 
       await userRef.update(updatedData);
-      res.status(200).json({ message: "อัปเดตข้อมูลผู้ใช้สำเร็จ" });
+      res.status(200).json({ message: "User data updated successfully" });
     } else {
       res.status(404).json({ error: "User not found" });
-      console.error("เกิดข้อผิดพลาดในการอัปเดตข้อมูลผู้ใช้:", err);
     }
   } catch (err) {
-    res.status(500).json({ message: "ล้มเหลวในการอัปเดตข้อมูลผู้ใช้", error: err });
+    res.status(500).json({ message: "Failed to update user data", error: err });
   }
 });
 

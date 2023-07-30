@@ -289,14 +289,13 @@ router.put("/:id/profilePicture", validateToken, async (req, res) => {
 });
 
 // Update typepets of user
-router.put("/typePets", validateToken, async (req, res) => {
+router.put("/typePets/:id", validateToken, async (req, res) => {
   try {
-  //console.log(req.body);
-    const userId = req.body.member_id;
+    const userId = req.params.id;
     const dataType = req.body.typePets;
     const userRef = usersCollection.doc(userId);
     const isUserDoc = await usersCollection
-      .where("member_id", "==", userId)
+      .where("member_id", "==", req.user.userId)
       .get();
     const isUser = !isUserDoc.empty;
     console.log("isUser: ", isUser);
@@ -305,14 +304,14 @@ router.put("/typePets", validateToken, async (req, res) => {
 
       const userSnapshot = await userRef.get();
       
-      //console.log(userSnapshot.data())
+      console.log(userSnapshot.data())
 
       if (!userSnapshot.exists) {
         res.status(404).json({ message: "User not found" });
         return;
       }
       
-      console.log(dataType)
+      //console.log(dataType)
       
       const existingTypePets = userSnapshot.data().typePets || [];
       console.log("existingTypePets: ", existingTypePets);
@@ -332,12 +331,12 @@ router.put("/typePets", validateToken, async (req, res) => {
         // If dataType does not exist, add it to the array
         updatedData = {
           updatedAt: new Date(),
-          typePets: dataType,
+          typePets: FieldValue.arrayUnion(dataType),
         };
         
       }
 
-      console.log(updatedData.typePets);
+      console.log(updatedData);
 
       await userRef.update(updatedData);
       res.status(200).json({ message: "อัปเดตข้อมูลผู้ใช้สำเร็จ" });
