@@ -36,9 +36,9 @@ router.post("/register", async (req, res) => {
     };
 
     // Remove undefined values from userData
-    const cleanedUserData = Object.fromEntries(
-      Object.entries(userData).filter(([_, value]) => value !== undefined)
-    );
+    // const cleanedUserData = Object.fromEntries(
+    //   Object.entries(userData).filter(([_, value]) => value !== undefined)
+    // );
 
     const userRef = usersCollection.doc(user.uid);
     await userRef.set(cleanedUserData);
