@@ -324,6 +324,7 @@ router.put("/typePets", validateToken, async (req, res) => {
       let updatedData;
       if (dataTypeExists) {
         // If dataType already exists, remove it from the array
+
       } else {
         // If dataType does not exist, add it to the array
         updatedData = {
