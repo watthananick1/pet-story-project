@@ -41,7 +41,7 @@ router.post("/register", async (req, res) => {
     // );
 
     const userRef = usersCollection.doc(user.uid);
-    await userRef.set(cleanedUserData);
+    await userRef.set(userData);
 
     const token = jwt.sign({ userId: user.uid }, process.env.JWT_SECRET, {
       expiresIn: "1h",
