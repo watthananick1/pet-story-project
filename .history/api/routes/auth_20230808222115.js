@@ -86,7 +86,7 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/loginFacebook", async (req, res) => {
-  const { provider } = req.body;
+  const { uid, provider } = req.body;
 
   try {
     // Authenticate using the Facebook provider
@@ -102,8 +102,11 @@ router.post("/loginFacebook", async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
     
-    const token = jwt.sign({ userId: user.uid }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ userId: uid }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
 

@@ -103,6 +103,10 @@ router.post("/loginFacebook", async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
     
+    if (user.uid != uid) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    
     const token = jwt.sign({ userId: user.uid }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });

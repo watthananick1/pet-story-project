@@ -86,7 +86,7 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/loginFacebook", async (req, res) => {
-  const { provider } = req.body;
+  const { uid, provider } = req.body;
 
   try {
     // Authenticate using the Facebook provider
@@ -102,19 +102,54 @@ router.post("/loginFacebook", async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
-    
-    const token = jwt.sign({ userId: user.uid }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
 
-    res.status(200).json({ userId: user.uid, token: token });
+    // Firebase generates a token, you don't need to manually create one
+    // The user's token can be retrieved using `user.getIdToken()` if needed
+
+    res.status(200).json({ userId: user.uid });
   } catch (error) {
     console.error("Facebook login error:", error);
 
+    // Handle different errors and send appropriate responses
     if (error.code === "auth/account-exists-with-different-credential") {
       return res.status(400).json({ error: "Account already exists with a different credential" });
     }
 
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.post("/loginFacebook", async (req, res) => {
+  const { uid, provider } = req.body;
+  // console.log("email", email);
+  // console.log("password", password);
+  try {
+    // const userCredential = await appFirebase
+    //   .auth()
+    //   .signInWithEmailAndPassword(email, password);
+    // const user = userCredential.user;
+    // console.log(`User ${user.uid}`);
+    firebase.auth().signInWithRedirect(provider).then((result) => {
+      if (result.credential) {
+      }
+      var user = result.user;
+      
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+      
+     
+      
+      res.status(200).json({ userId: user.uid, token: token });
+    }).catch((error) => {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      var email = error.email;
+      var credential = error.credential;
+    });
+    
+  } catch (err) {
+    console.error("Login error:", err);
     res.status(500).json({ error: "Internal server error" });
   }
 });

@@ -86,35 +86,45 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/loginFacebook", async (req, res) => {
-  const { provider } = req.body;
-
+  const { uid, provider } = req.body;
+  // console.log("email", email);
+  // console.log("password", password);
   try {
-    // Authenticate using the Facebook provider
-    const result = await appFirebase.auth().signInWithRedirect(provider);
+    // const userCredential = await appFirebase
+    //   .auth()
+    //   .signInWithEmailAndPassword(email, password);
+    // const user = userCredential.user;
+    // console.log(`User ${user.uid}`);
+    firebase.auth().signInWithRedirect(provider).then((result) => {
+      if (result.credential) {
+      }
+     
+      var user = result.user;
+      // IdP data available in result.additionalUserInfo.profile.
+        // ...
+    }).catch((error) => {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      // The email of the user's account used.
+      var email = error.email;
+      // The firebase.auth.AuthCredential type that was used.
+      var credential = error.credential;
+      // ...
+    });
 
-    // Handle the authentication result
-    if (result.credential) {
-      // Do something with the credential if needed
-    }
-
-    const user = result.user;
-
-    if (!user) {
+    if (!uid) {
       return res.status(404).json({ error: "User not found" });
     }
-    
-    const token = jwt.sign({ userId: user.uid }, process.env.JWT_SECRET, {
+
+    // Generate the JWT token
+    const token = jwt.sign({ userId: uid }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
 
     res.status(200).json({ userId: user.uid, token: token });
-  } catch (error) {
-    console.error("Facebook login error:", error);
-
-    if (error.code === "auth/account-exists-with-different-credential") {
-      return res.status(400).json({ error: "Account already exists with a different credential" });
-    }
-
+  } catch (err) {
+    console.error("Login error:", err);
     res.status(500).json({ error: "Internal server error" });
   }
 });

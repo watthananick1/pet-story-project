@@ -86,35 +86,28 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/loginFacebook", async (req, res) => {
-  const { provider } = req.body;
-
+  const { uid } = req.body;
+  // console.log("email", email);
+  // console.log("password", password);
   try {
-    // Authenticate using the Facebook provider
-    const result = await appFirebase.auth().signInWithRedirect(provider);
-
-    // Handle the authentication result
-    if (result.credential) {
-      // Do something with the credential if needed
-    }
-
-    const user = result.user;
+    const userCredential = await appFirebase
+      .auth()
+      .signInWithEmailAndPassword(email, password);
+    const user = userCredential.user;
+    console.log(`User ${user.uid}`);
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
-    
+
+    // Generate the JWT token
     const token = jwt.sign({ userId: user.uid }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
 
     res.status(200).json({ userId: user.uid, token: token });
-  } catch (error) {
-    console.error("Facebook login error:", error);
-
-    if (error.code === "auth/account-exists-with-different-credential") {
-      return res.status(400).json({ error: "Account already exists with a different credential" });
-    }
-
+  } catch (err) {
+    console.error("Login error:", err);
     res.status(500).json({ error: "Internal server error" });
   }
 });

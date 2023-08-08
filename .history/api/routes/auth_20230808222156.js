@@ -86,7 +86,7 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/loginFacebook", async (req, res) => {
-  const { provider } = req.body;
+  const { uid, provider } = req.body;
 
   try {
     // Authenticate using the Facebook provider
@@ -100,6 +100,10 @@ router.post("/loginFacebook", async (req, res) => {
     const user = result.user;
 
     if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    
+    if (user.uid != uid) {
       return res.status(404).json({ error: "User not found" });
     }
     

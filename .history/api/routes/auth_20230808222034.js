@@ -86,7 +86,7 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/loginFacebook", async (req, res) => {
-  const { provider } = req.body;
+  const { uid, provider } = req.body;
 
   try {
     // Authenticate using the Facebook provider
@@ -102,8 +102,11 @@ router.post("/loginFacebook", async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
+
+    // Firebase generates a token, you don't need to manually create one
+    // The user's token can be retrieved using `user.getIdToken()` if needed
     
-    const token = jwt.sign({ userId: user.uid }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ userId: uid }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
 
@@ -111,6 +114,7 @@ router.post("/loginFacebook", async (req, res) => {
   } catch (error) {
     console.error("Facebook login error:", error);
 
+    // Handle different errors and send appropriate responses
     if (error.code === "auth/account-exists-with-different-credential") {
       return res.status(400).json({ error: "Account already exists with a different credential" });
     }
