@@ -95,10 +95,10 @@ router.post("/loginGoogle", async (req, res) => {
     if (isUser) {
       const user = isUserDoc.data(); // Use isUserDoc.data() here
       console.log(user.member_id);
-      const token = jwt.sign({ userId: user.member_id }, process.env.JWT_SECRET, {
+      const token = jwt.sign({ userId: user.uid }, process.env.JWT_SECRET, {
         expiresIn: "1h",
       });
-      res.status(200).json({ userId: user.member_id, token: token });
+      res.status(200).json({ userId: userData.member_id, token: token });
     } else {
       res.status(404).json({ error: "User not found" });
     }
