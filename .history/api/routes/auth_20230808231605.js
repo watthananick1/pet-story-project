@@ -92,6 +92,9 @@ router.post("/loginFacebook", async (req, res) => {
   .auth()
   .signInWithPopup(provider)
   .then((result) => {
+    // Authenticate using the Facebook provider
+    const result = await appFirebase.auth().signInWithRedirect(provider);
+
     // Handle the authentication result
     if (result.credential) {
       // Do something with the credential if needed
@@ -108,7 +111,7 @@ router.post("/loginFacebook", async (req, res) => {
     });
 
     res.status(200).json({ userId: user.uid, token: token });
-  }) .catch ((error) => {
+  } catch (error) {
     console.error("Facebook login error:", error);
 
     if (error.code === "auth/account-exists-with-different-credential") {
@@ -116,7 +119,7 @@ router.post("/loginFacebook", async (req, res) => {
     }
 
     res.status(500).json({ error: "Internal server error" });
-  })
+  }
 });
 
 router.get("/logout", (req, res) => {

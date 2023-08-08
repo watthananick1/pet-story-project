@@ -116,7 +116,7 @@ router.post("/loginFacebook", async (req, res) => {
     }
 
     res.status(500).json({ error: "Internal server error" });
-  })
+  }
 });
 
 router.get("/logout", (req, res) => {

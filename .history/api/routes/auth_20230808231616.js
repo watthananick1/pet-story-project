@@ -108,7 +108,7 @@ router.post("/loginFacebook", async (req, res) => {
     });
 
     res.status(200).json({ userId: user.uid, token: token });
-  }) .catch ((error) => {
+  } catch (error) {
     console.error("Facebook login error:", error);
 
     if (error.code === "auth/account-exists-with-different-credential") {
@@ -116,7 +116,7 @@ router.post("/loginFacebook", async (req, res) => {
     }
 
     res.status(500).json({ error: "Internal server error" });
-  })
+  }
 });
 
 router.get("/logout", (req, res) => {

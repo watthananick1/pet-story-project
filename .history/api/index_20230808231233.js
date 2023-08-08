@@ -25,7 +25,7 @@ app.get('/api/auth/test', (req, res) => {
   res.send('This is a test endpoint for authentication.');
 });
 
-const port = 4000;
+const port = 000;
 const server = app.listen(port, () => {
   console.log(`Backend server is running on port ${port}!`);
 });
