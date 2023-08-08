@@ -94,7 +94,7 @@ router.post("/loginGoogle", async (req, res) => {
 
     if (isUser) {
       const userData = isUserDoc.data(); // Use isUserDoc.data() here
-      console.log(userData.member_id);
+      console.log(userData);
       const token = jwt.sign({ userId: userData.uid }, process.env.JWT_SECRET, {
         expiresIn: "1h",
       });

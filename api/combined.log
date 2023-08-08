@@ -8331,3 +8331,5 @@
 {"level":"warn","message":"Undefined route: /profile/assets/person/8.jpeg","service":"user-service"}
 {"level":"warn","message":"Undefined route: /profile/assets/person/9.jpeg","service":"user-service"}
 {"level":"warn","message":"Undefined route: /profile/assets/person/10.jpeg","service":"user-service"}
+{"level":"warn","message":"Undefined route: /","service":"user-service"}
+{"level":"warn","message":"Undefined route: /","service":"user-service"}

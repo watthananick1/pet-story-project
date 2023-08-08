@@ -90,15 +90,18 @@ router.post("/loginGoogle", async (req, res) => {
 
   try {
     const isUserDoc = await usersCollection.doc(uid).get();
-    const isUser = isUserDoc.data();
 
+    const isUser = isUserDoc.data();
     if (isUser) {
-      const userData = isUserDoc.data(); // Use isUserDoc.data() here
-      console.log(userData.member_id);
-      const token = jwt.sign({ userId: userData.uid }, process.env.JWT_SECRET, {
-        expiresIn: "1h",
-      });
-      res.status(200).json({ userId: userData.member_id, token: token });
+      if (isUser.exists) {
+        const userData = user.data();
+        const token = jwt.sign({ userId: userData.uid }, process.env.JWT_SECRET, {
+          expiresIn: "1h",
+        });
+        res.status(200).json({ userId: userData.uid, token: token });
+      } else {
+        res.status(404).json({ error: "User not found" });
+      }
     } else {
       res.status(404).json({ error: "User not found" });
     }
@@ -108,6 +111,42 @@ router.post("/loginGoogle", async (req, res) => {
   }
 });
 
+router.post("/loginFacebook", async (req, res) => {
+  const { uid, provider } = req.body;
+  // console.log("email", email);
+  // console.log("password", password);
+  try {
+    // const userCredential = await appFirebase
+    //   .auth()
+    //   .signInWithEmailAndPassword(email, password);
+    // const user = userCredential.user;
+    // console.log(`User ${user.uid}`);
+    firebase.auth().signInWithRedirect(provider).then((result) => {
+      if (result.credential) {
+      }
+      var user = result.user;
+      
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+      
+      const token = jwt.sign({ userId: uid }, process.env.JWT_SECRET, {
+        expiresIn: "1h",
+      });
+      
+      res.status(200).json({ userId: user.uid, token: token });
+    }).catch((error) => {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      var email = error.email;
+      var credential = error.credential;
+    });
+    
+  } catch (err) {
+    console.error("Login error:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
 
 router.get("/logout", (req, res) => {
   appFirebase

@@ -85,29 +85,43 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.post("/loginGoogle", async (req, res) => {
-  const { uid } = req.body;
+router.post("/loginFacebook", async (req, res) => {
+  const { uid, provider } = req.body;
 
   try {
-    const isUserDoc = await usersCollection.doc(uid).get();
-    const isUser = isUserDoc.data();
+    // Authenticate using the Facebook provider
+    const result = await appFirebase.auth().signInWithRedirect(provider);
 
-    if (isUser) {
-      const userData = isUserDoc.data(); // Use isUserDoc.data() here
-      console.log(userData.member_id);
-      const token = jwt.sign({ userId: userData.uid }, process.env.JWT_SECRET, {
-        expiresIn: "1h",
-      });
-      res.status(200).json({ userId: userData.member_id, token: token });
-    } else {
-      res.status(404).json({ error: "User not found" });
+    // Handle the authentication result
+    if (result.credential) {
+      // Do something with the credential if needed
     }
+
+    const user = result.user;
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    
+    if (user.uid != uid) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    
+    const token = jwt.sign({ userId: user.uid }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
+
+    res.status(200).json({ userId: user.uid, token: token });
   } catch (error) {
-    console.error("Login error:", error);
+    console.error("Facebook login error:", error);
+
+    if (error.code === "auth/account-exists-with-different-credential") {
+      return res.status(400).json({ error: "Account already exists with a different credential" });
+    }
+
     res.status(500).json({ error: "Internal server error" });
   }
 });
-
 
 router.get("/logout", (req, res) => {
   appFirebase

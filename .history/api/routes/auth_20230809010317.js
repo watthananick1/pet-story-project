@@ -87,21 +87,20 @@ router.post("/login", async (req, res) => {
 
 router.post("/loginGoogle", async (req, res) => {
   const { uid } = req.body;
-
+  //console.log(uid);
   try {
     const isUserDoc = await usersCollection.doc(uid).get();
     const isUser = isUserDoc.data();
-
-    if (isUser) {
-      const userData = isUserDoc.data(); // Use isUserDoc.data() here
-      console.log(userData.member_id);
-      const token = jwt.sign({ userId: userData.uid }, process.env.JWT_SECRET, {
-        expiresIn: "1h",
-      });
-      res.status(200).json({ userId: userData.member_id, token: token });
-    } else {
-      res.status(404).json({ error: "User not found" });
-    }
+      if (isUser) {
+        const userData = user.data();
+        console.log(userData.uid);
+        const token = jwt.sign({ userId: userData.uid }, process.env.JWT_SECRET, {
+          expiresIn: "1h",
+        });
+        res.status(200).json({ userId: userData.uid, token: token });
+      } else {
+        res.status(404).json({ error: "User not found" });
+      }
   } catch (error) {
     console.error("Login error:", error);
     res.status(500).json({ error: "Internal server error" });
