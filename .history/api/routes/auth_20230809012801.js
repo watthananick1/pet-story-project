@@ -87,7 +87,7 @@ router.post("/login", async (req, res) => {
 
 router.post("/loginGoogle", async (req, res) => {
   const { uid } = req.body;
-  console.log(uid);
+  console.log()
   try {
     const isUserDoc = await usersCollection.doc(uid).get();
     const isUser = isUserDoc.data();

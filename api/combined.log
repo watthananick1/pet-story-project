@@ -8333,3 +8333,7 @@
 {"level":"warn","message":"Undefined route: /profile/assets/person/10.jpeg","service":"user-service"}
 {"level":"warn","message":"Undefined route: /","service":"user-service"}
 {"level":"warn","message":"Undefined route: /","service":"user-service"}
+{"level":"warn","message":"Undefined route: /main.ccabd5737a7b61887ad3.hot-update.js.map","service":"user-service"}
+{"level":"warn","message":"Undefined route: /main.ccabd5737a7b61887ad3.hot-update.json","service":"user-service"}
+{"level":"warn","message":"Undefined route: /main.66b74c7fb6fc20e0645c.hot-update.js.map","service":"user-service"}
+{"level":"warn","message":"Undefined route: /","service":"user-service"}
