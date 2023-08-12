@@ -30,14 +30,7 @@ const server = app.listen(port, () => {
   console.log(`Backend server is running on port ${port}!`);
 });
 
-const io = new SocketIOServer(server, {
-  transports: ["polling"],
-  cors: {
-    origin: process.env.FRONTEND_URL, // Set your frontend URL here
-    methods: ["GET", "POST"],
-    credentials: true, // Allow cookies to be sent
-  },
-});
+const io = new SocketIOServer(server);
 
 const logger = winston.createLogger({
   level: "info",
@@ -131,13 +124,15 @@ app.use("*", (request, response, next) => {
   next();
 });
 
+// ...
+
 io.on("connection", (socket) => {
   console.log("Connected....");
 
   // Handle socket events
   socket.on("newPost", (newPost) => {
     // Emit the new post to all connected clients
-    console.log("newPost");
+    console.log(newPost);
     io.emit("newPost", newPost);
   });
 
@@ -163,4 +158,3 @@ io.on("connection", (socket) => {
 
   // Handle other socket events...
 });
-

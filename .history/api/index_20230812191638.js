@@ -132,7 +132,7 @@ app.use("*", (request, response, next) => {
 });
 
 io.on("connection", (socket) => {
-  console.log("Connected....");
+  console.log("Connected....1");
 
   // Handle socket events
   socket.on("newPost", (newPost) => {

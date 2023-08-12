@@ -25,19 +25,12 @@ app.get('/api/auth/test', (req, res) => {
   res.send('This is a test endpoint for authentication.');
 });
 
-const port = 4000;
+const port = 3000;
 const server = app.listen(port, () => {
   console.log(`Backend server is running on port ${port}!`);
 });
 
-const io = new SocketIOServer(server, {
-  transports: ["polling"],
-  cors: {
-    origin: process.env.FRONTEND_URL, // Set your frontend URL here
-    methods: ["GET", "POST"],
-    credentials: true, // Allow cookies to be sent
-  },
-});
+const io = new SocketIOServer(server);
 
 const logger = winston.createLogger({
   level: "info",
@@ -131,30 +124,22 @@ app.use("*", (request, response, next) => {
   next();
 });
 
+// ...
+
 io.on("connection", (socket) => {
   console.log("Connected....");
 
   // Handle socket events
   socket.on("newPost", (newPost) => {
     // Emit the new post to all connected clients
-    console.log("newPost");
     io.emit("newPost", newPost);
   });
 
   socket.on("likeUpdate", ({ id, member_id }) => {
     // Handle the like update logic here, e.g., update the like count in the database
-    // You can emit an event to the specific post's room or to all connected clients
-    // Example:
-    // io.to(`post-${id}`).emit("likeUpdated", { id, member_id });
-    socket.broadcast.emit("likeUpdated", { id, member_id });
-  });
 
-  socket.on("commentAdded", ({ postId, comment }) => {
-    // Handle the new comment logic here
-    // You can emit an event to the specific post's room or to all connected clients
-    // Example:
-    // io.to(`post-${postId}`).emit("commentAdded", { postId, comment });
-    socket.broadcast.emit("commentAdded", { postId, comment });
+    // Broadcast the updated like count to other connected clients
+    socket.broadcast.emit("likeUpdated", { id, member_id });
   });
 
   socket.on("disconnect", () => {
@@ -163,4 +148,3 @@ io.on("connection", (socket) => {
 
   // Handle other socket events...
 });
-

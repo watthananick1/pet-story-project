@@ -31,12 +31,12 @@ const server = app.listen(port, () => {
 });
 
 const io = new SocketIOServer(server, {
-  transports: ["polling"],
   cors: {
     origin: process.env.FRONTEND_URL, // Set your frontend URL here
     methods: ["GET", "POST"],
     credentials: true, // Allow cookies to be sent
   },
+  transports: ["websocket"],
 });
 
 const logger = winston.createLogger({
@@ -137,7 +137,7 @@ io.on("connection", (socket) => {
   // Handle socket events
   socket.on("newPost", (newPost) => {
     // Emit the new post to all connected clients
-    console.log("newPost");
+    console.log(newPost);
     io.emit("newPost", newPost);
   });
 
